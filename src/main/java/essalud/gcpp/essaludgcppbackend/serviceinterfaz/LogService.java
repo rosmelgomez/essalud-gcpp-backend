@@ -1,6 +1,8 @@
 package essalud.gcpp.essaludgcppbackend.serviceinterfaz;
 
+import essalud.gcpp.essaludgcppbackend.dtos.LogFilter;
 import essalud.gcpp.essaludgcppbackend.dtos.LogUsersDto;
+import essalud.gcpp.essaludgcppbackend.dtos.UsersDto;
 import essalud.gcpp.essaludgcppbackend.model.Logs;
 import essalud.gcpp.essaludgcppbackend.model.Users;
 import essalud.gcpp.essaludgcppbackend.repositories.LogsRepository;
@@ -8,6 +10,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class LogService {
@@ -18,6 +22,25 @@ public class LogService {
         this.logsRepository = logsRepository;
     }
 
+    public List<LogFilter>  getLogFilters() {
+        List<Logs> logs = logsRepository.findAll();
+        List<LogFilter> logFilters = new ArrayList<>();
+        for (Logs log : logs) {
+            LogFilter logFilter = new LogFilter();
+            logFilter.setDni(log.getUser_logs().getDni());
+            logFilter.setName(log.getUser_logs().getName());
+            logFilter.setLastname(log.getUser_logs().getLastname());
+            logFilter.setIp_user(log.getIp_user());
+            logFilter.setUrl(log.getUrl());
+            logFilter.setBrowser(log.getBrowser());
+            logFilter.setUser_role(log.getUser_logs().getRol());
+            logFilter.setCodcas(log.getUser_logs().getCenasicod());
+            logFilter.setCode_red(log.getUser_logs().getRedasiscod());
+            logFilter.setDate(log.getDate_creation());
+            logFilters.add(logFilter);
+        }
+        return logFilters;
+    }
 
     public void registerLogs(LogUsersDto dto, Users user, HttpServletRequest request) {
 

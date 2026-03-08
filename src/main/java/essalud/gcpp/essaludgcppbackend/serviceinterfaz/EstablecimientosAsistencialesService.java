@@ -23,4 +23,11 @@ public class EstablecimientosAsistencialesService {
         return this.EAR.getCentrosByCodeRed(code_red);
     }
 
+    public List<Map<String, Object>> getRedes(){
+        return this.EAR.getRedes();
+    }
+
+    public List<Map<String, Object>>getRedesWithCentros(){
+        return this.EAR.getRedesWithCentros();
+    }
 }

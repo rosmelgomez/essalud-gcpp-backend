@@ -1,5 +1,6 @@
 package essalud.gcpp.essaludgcppbackend.serviceinterfaz;
 
+import essalud.gcpp.essaludgcppbackend.dtos.UserLoginDto;
 import essalud.gcpp.essaludgcppbackend.dtos.UsersDto;
 import essalud.gcpp.essaludgcppbackend.model.Users;
 import essalud.gcpp.essaludgcppbackend.repositories.UsersRepository;
@@ -27,6 +28,7 @@ public class UsersService {
             String encodedPassword = passwordEncoder.encode(usersDto.getPassword());
             newUser.setName(usersDto.getUsername());
             newUser.setLastname(usersDto.getLastname());
+            newUser.setDni(usersDto.getDni());
             newUser.setCenasicod(usersDto.getCenasicod());
             newUser.setRedasiscod(usersDto.getRedasiscod());
             newUser.setUsername(usersDto.getUsername());
@@ -53,10 +55,44 @@ public class UsersService {
         return usersDtos;
     }
 
+    public void changePassword(UserLoginDto userLoginDto) {
+        Users user = usersRepository.findByUsername(userLoginDto.getUsername());
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode(userLoginDto.getPassword());
+        user.setPassword(encodedPassword);
+        user.setDate_update(LocalDateTime.now());
+        usersRepository.save(user);
+    }
+
+    public void updateUser(UsersDto usersDto) {
+        Users user = usersRepository.findById(usersDto.getId()).orElse(null);
+        if (user != null) {
+            user.setName(usersDto.getName());
+            user.setLastname(usersDto.getLastname());
+            user.setDni(usersDto.getDni());
+            user.setCenasicod(usersDto.getCenasicod());
+            user.setRedasiscod(usersDto.getRedasiscod());
+            user.setUsername(usersDto.getUsername());
+            user.setFlag(usersDto.getFlag());
+            user.setRol(usersDto.getRol());
+            if (usersDto.getPassword() != null) {
+                PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+                String encodedPassword = passwordEncoder.encode(usersDto.getPassword());
+                user.setPassword(encodedPassword);
+            }
+            usersRepository.save(user);
+        }
+    }
+
+    public void deleteUser(Integer id) {
+        usersRepository.findById(id).ifPresent(usersRepository::delete);
+    }
     private UsersDto user (Users  user) {
         UsersDto usersDto = new UsersDto();
-        usersDto.setUsername(user.getUsername());
+        usersDto.setId(user.getId());
+        usersDto.setName(user.getName());
         usersDto.setLastname(user.getLastname());
+        usersDto.setDni(user.getDni());
         usersDto.setCenasicod(user.getCenasicod());
         usersDto.setRedasiscod(user.getRedasiscod());
         usersDto.setUsername(user.getUsername());
@@ -67,5 +103,6 @@ public class UsersService {
         usersDto.setDate_update(user.getDate_update());
         return usersDto;
     }
+
 
 }

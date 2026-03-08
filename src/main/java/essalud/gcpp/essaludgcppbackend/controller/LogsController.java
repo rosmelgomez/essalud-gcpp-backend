@@ -1,5 +1,6 @@
 package essalud.gcpp.essaludgcppbackend.controller;
 
+import essalud.gcpp.essaludgcppbackend.dtos.LogFilter;
 import essalud.gcpp.essaludgcppbackend.dtos.LogUsersDto;
 import essalud.gcpp.essaludgcppbackend.model.Users;
 import essalud.gcpp.essaludgcppbackend.repositories.UsersRepository;
@@ -10,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -33,6 +36,12 @@ public class LogsController {
         logService.registerLogs(dto, user, request);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/getlogusers")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<List<LogFilter>> getLogUsers(){
+        return ResponseEntity.ok(logService.getLogFilters());
     }
 
     @GetMapping("/debug-ip")
