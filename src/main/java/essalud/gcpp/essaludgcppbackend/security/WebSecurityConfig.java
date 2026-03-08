@@ -29,7 +29,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
 
-    @Value("${app.security.cors.allowed-origins:http://localhost:4200}")
+    @Value("${app.security.cors.allowed-origins:http://192.168.0.102:4200}")
     private List<String> allowedOrigins;
 
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;

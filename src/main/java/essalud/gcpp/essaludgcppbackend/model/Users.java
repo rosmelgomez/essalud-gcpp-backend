@@ -1,4 +1,5 @@
 package essalud.gcpp.essaludgcppbackend.model;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -49,10 +50,10 @@ public class Users {
     private String password;
 
     @Column(name = "date_creation", nullable = false)
-    private Date date_creation;
+    private LocalDateTime date_creation;
 
     @Column(name = "date_update", nullable = false)
-    private Date date_update;
+    private LocalDateTime date_update;
 
     @Column(name = "flag", nullable = false)
     private Boolean flag;
