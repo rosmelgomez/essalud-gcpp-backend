@@ -1,7 +1,6 @@
 package essalud.gcpp.essaludgcppbackend.controller;
 
 import essalud.gcpp.essaludgcppbackend.dtos.LogUsersDto;
-import essalud.gcpp.essaludgcppbackend.model.Logs;
 import essalud.gcpp.essaludgcppbackend.model.Users;
 import essalud.gcpp.essaludgcppbackend.repositories.UsersRepository;
 import essalud.gcpp.essaludgcppbackend.serviceinterfaz.LogService;

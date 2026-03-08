@@ -1,8 +1,5 @@
 package essalud.gcpp.essaludgcppbackend.serviceimplements;
 
-import java.util.List;
-import java.util.Map;
-
 import javax.sql.DataSource;
 
 import org.slf4j.Logger;
@@ -14,7 +11,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.stereotype.Component;
 
-import essalud.gcpp.essaludgcppbackend.repositories.EstablecimientosAsistencialesRepository;
 
 @Component
 public class ExecuteUserQuery implements ApplicationRunner {
@@ -22,13 +18,9 @@ public class ExecuteUserQuery implements ApplicationRunner {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ExecuteUserQuery.class);
 
 	private final DataSource firstDataSource;
-	private final EstablecimientosAsistencialesRepository establecimientosAsistencialesRepository;
 
-	public ExecuteUserQuery(
-			@Qualifier("firstDataSource") DataSource firstDataSource,
-			EstablecimientosAsistencialesRepository establecimientosAsistencialesRepository) {
+	public ExecuteUserQuery(@Qualifier("firstDataSource") DataSource firstDataSource) {
 		this.firstDataSource = firstDataSource;
-		this.establecimientosAsistencialesRepository = establecimientosAsistencialesRepository;
 	}
 
 	@Override
