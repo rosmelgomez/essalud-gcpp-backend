@@ -30,16 +30,15 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Value("${app.security.cookie.access.name:access_token}")
     private String accessCookieName;
 
-    @Value("${app.security.cookie.refresh.name:api_token}")
-    private String refreshCookieName;
+    @Value("${app.security.cookie.api.name:api_token}")
+    private String apiCookieName;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        final String authHeader = request.getHeader("Authorization");
         final boolean useAccessToken = requiresAccessToken(request);
         String username = null;
-        String jwtToken = resolveToken(request, authHeader, useAccessToken);
+        String jwtToken = resolveToken(request, useAccessToken);
 
         if (jwtToken != null) {
             try {
@@ -72,16 +71,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private String resolveToken(HttpServletRequest request, String authHeader, boolean useAccessToken) {
-        String tokenFromCookie = getTokenFromCookie(request, useAccessToken ? accessCookieName : refreshCookieName);
+    private String resolveToken(HttpServletRequest request, boolean useAccessToken) {
+        String tokenFromCookie = getTokenFromCookie(request, useAccessToken ? accessCookieName : apiCookieName);
         if (tokenFromCookie != null && !tokenFromCookie.isBlank()) {
             return tokenFromCookie;
         }
-
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            return authHeader.split(" ")[1].trim();
-        }
-
         return null;
     }
 
@@ -102,6 +96,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     private boolean requiresAccessToken(HttpServletRequest request) {
         String requestPath = request.getRequestURI();
-        return !"/ggi/refresh-token".equals(requestPath);
+        return requestPath.endsWith("/access-token")
+            || requestPath.endsWith("/refresh-token")
+            || requestPath.endsWith("/logout");
     }
 }

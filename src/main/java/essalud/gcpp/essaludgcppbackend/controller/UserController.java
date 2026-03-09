@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/ggi")
+@RequestMapping("/user")
 public class UserController {
 
     private final AuthenticationManager authenticationManager;

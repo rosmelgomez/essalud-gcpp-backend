@@ -38,13 +38,13 @@ public class JwtTokenUtil implements Serializable {
     @Value("${app.security.jwt.access-token-validity-ms:" + DEFAULT_ACCESS_TOKEN_VALIDITY + "}")
     private long accessTokenValidity;
 
-    @Value("${app.security.jwt.refresh-token-validity-ms:" + DEFAULT_REFRESH_TOKEN_VALIDITY + "}")
+    @Value("${app.security.jwt.api-token-validity-ms:${app.security.jwt.refresh-token-validity-ms:" + DEFAULT_REFRESH_TOKEN_VALIDITY + "}}")
     private long refreshTokenValidity;
 
     @Value("${app.security.jwt.access-secret-base64:}")
     private String accessSecretBase64;
 
-    @Value("${app.security.jwt.refresh-secret-base64:}")
+    @Value("${app.security.jwt.api-secret-base64:${app.security.jwt.refresh-secret-base64:}}")
     private String refreshSecretBase64;
 
     // Legacy fallback for compatibility in environments that still use jwt.secret.

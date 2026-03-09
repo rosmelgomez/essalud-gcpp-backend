@@ -17,9 +17,9 @@ public class UsersDto {
 
     private String dni;
 
-    private String cenasicod;
+    private String codcas;
 
-    private String redasiscod;
+    private String code_red;
 
     private String username;
 

@@ -2,7 +2,6 @@ package essalud.gcpp.essaludgcppbackend.serviceinterfaz;
 
 import essalud.gcpp.essaludgcppbackend.dtos.LogFilter;
 import essalud.gcpp.essaludgcppbackend.dtos.LogUsersDto;
-import essalud.gcpp.essaludgcppbackend.dtos.UsersDto;
 import essalud.gcpp.essaludgcppbackend.model.Logs;
 import essalud.gcpp.essaludgcppbackend.model.Users;
 import essalud.gcpp.essaludgcppbackend.repositories.LogsRepository;
@@ -34,8 +33,8 @@ public class LogService {
             logFilter.setUrl(log.getUrl());
             logFilter.setBrowser(log.getBrowser());
             logFilter.setUser_role(log.getUser_logs().getRol());
-            logFilter.setCodcas(log.getUser_logs().getCenasicod());
-            logFilter.setCode_red(log.getUser_logs().getRedasiscod());
+            logFilter.setCodcas(log.getUser_logs().getCodcas());
+            logFilter.setCode_red(log.getUser_logs().getCode_red());
             logFilter.setDate(log.getDate_creation());
             logFilters.add(logFilter);
         }

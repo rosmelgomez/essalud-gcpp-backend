@@ -13,7 +13,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import essalud.gcpp.essaludgcppbackend.dtos.UserLoginDto;
@@ -23,14 +22,14 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("/ggi")
+///@RequestMapping("/ggi")
 public class AuthController {
 
     @Value("${app.security.cookie.access.name:access_token}")
     private String accessCookieName;
 
-    @Value("${app.security.cookie.refresh.name:api_token}")
-    private String refreshCookieName;
+    @Value("${app.security.cookie.api.name:api_token}")
+    private String apiCookieName;
 
     @Value("${app.security.cookie.secure:false}")
     private boolean secureCookie;
@@ -38,8 +37,8 @@ public class AuthController {
     @Value("${app.security.cookie.same-site:Lax}")
     private String sameSite;
 
-    @Value("${app.security.cookie.refresh.path:/ggi/refresh-token}")
-    private String refreshCookiePath;
+    @Value("${app.security.cookie.api.path:/}")
+    private String apiCookiePath;
 
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
@@ -67,10 +66,10 @@ public class AuthController {
             .maxAge(jwtTokenUtil.getAccessTokenValiditySeconds())
             .build();
 
-        ResponseCookie refreshCookie = ResponseCookie.from(refreshCookieName, refreshToken)
+        ResponseCookie refreshCookie = ResponseCookie.from(apiCookieName, refreshToken)
             .httpOnly(true)
             .secure(secureCookie)
-            .path(refreshCookiePath)
+            .path(apiCookiePath)
             .sameSite(sameSite)
             .maxAge(jwtTokenUtil.getRefreshTokenValiditySeconds())
             .build();
@@ -107,7 +106,7 @@ public class AuthController {
     @PostMapping("/refresh-token")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
     public ResponseEntity<?> refreshAccessToken(HttpServletRequest request) {
-        String refreshToken = getCookieValue(request, refreshCookieName);
+        String refreshToken = getCookieValue(request, apiCookieName);
         if (refreshToken == null || refreshToken.isBlank()) {
             return ResponseEntity.status(401).body("Refresh token requerido");
         }
@@ -149,17 +148,17 @@ public class AuthController {
             .maxAge(0)
             .build();
 
-        ResponseCookie deleteRefreshCookie = ResponseCookie.from(refreshCookieName, "")
+        ResponseCookie deleteApiCookie = ResponseCookie.from(apiCookieName, "")
             .httpOnly(true)
             .secure(secureCookie)
-            .path(refreshCookiePath)
+            .path(apiCookiePath)
             .sameSite(sameSite)
             .maxAge(0)
             .build();
 
         return ResponseEntity.ok()
             .header(HttpHeaders.SET_COOKIE, deleteAccessCookie.toString())
-            .header(HttpHeaders.SET_COOKIE, deleteRefreshCookie.toString())
+            .header(HttpHeaders.SET_COOKIE, deleteApiCookie.toString())
             .body("Logout Successfull");
     }
 

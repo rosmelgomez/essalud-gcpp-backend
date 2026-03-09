@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/ggi/log")
+@RequestMapping("/log")
 @RequiredArgsConstructor
 public class LogsController {
 

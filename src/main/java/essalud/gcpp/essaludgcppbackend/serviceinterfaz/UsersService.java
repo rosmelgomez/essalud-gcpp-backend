@@ -29,8 +29,8 @@ public class UsersService {
             newUser.setName(usersDto.getUsername());
             newUser.setLastname(usersDto.getLastname());
             newUser.setDni(usersDto.getDni());
-            newUser.setCenasicod(usersDto.getCenasicod());
-            newUser.setRedasiscod(usersDto.getRedasiscod());
+            newUser.setCodcas(usersDto.getCodcas());
+            newUser.setCode_red(usersDto.getCode_red());
             newUser.setUsername(usersDto.getUsername());
             newUser.setPassword(encodedPassword);
             newUser.setRol(usersDto.getRol());
@@ -70,8 +70,8 @@ public class UsersService {
             user.setName(usersDto.getName());
             user.setLastname(usersDto.getLastname());
             user.setDni(usersDto.getDni());
-            user.setCenasicod(usersDto.getCenasicod());
-            user.setRedasiscod(usersDto.getRedasiscod());
+            user.setCodcas(usersDto.getCodcas());
+            user.setCode_red(usersDto.getCode_red());
             user.setUsername(usersDto.getUsername());
             user.setFlag(usersDto.getFlag());
             user.setRol(usersDto.getRol());
@@ -93,8 +93,8 @@ public class UsersService {
         usersDto.setName(user.getName());
         usersDto.setLastname(user.getLastname());
         usersDto.setDni(user.getDni());
-        usersDto.setCenasicod(user.getCenasicod());
-        usersDto.setRedasiscod(user.getRedasiscod());
+        usersDto.setCodcas(user.getCodcas());
+        usersDto.setCode_red(user.getCode_red());
         usersDto.setUsername(user.getUsername());
         usersDto.setPassword("");
         usersDto.setRol(user.getRol());

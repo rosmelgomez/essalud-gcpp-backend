@@ -1,6 +1,5 @@
 package essalud.gcpp.essaludgcppbackend.model;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -37,11 +36,11 @@ public class Users {
     @Column(name = "dni", nullable = false)
     private String dni;
 
-    @Column(name = "cenasicod")
-    private String cenasicod;
+    @Column(name = "codcas")
+    private String codcas;
 
-    @Column(name = "redasiscod")
-    private String redasiscod;
+    @Column(name = "code_red")
+    private String code_red;
 
     @Column(name = "username", nullable = false)
     private String username;
