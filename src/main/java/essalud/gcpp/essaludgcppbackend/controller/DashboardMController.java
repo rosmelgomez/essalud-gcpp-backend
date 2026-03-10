@@ -253,10 +253,92 @@ public class DashboardMController {
         return ResponseEntity.ok(DMS.queryDMCADTCS(anio, periodo, codcas, codasegu));
     }
 
+    /// Indicadores de atenciones medicas
+    /// total_atenciones - servicio - subactividad
+    @GetMapping("/query0DMAMTASS/{anio}/{periodo}/{codcas}/{codasegu}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    public ResponseEntity<List<Map<String, Object>>> query0DMAMTASS(@PathVariable String anio,@PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
+        return ResponseEntity.ok(DMS.query0DMAMTASS(anio, periodo, codcas, codasegu));
+    }
+    /// total_atenciones - agrupador - especialidad
+    @GetMapping("/query1DMAMTAAE/{anio}/{periodo}/{codcas}/{codasegu}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    public ResponseEntity<List<Map<String, Object>>> query1DMAMTAAE(@PathVariable String anio,@PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
+        return ResponseEntity.ok(DMS.query1DMAMTAAE(anio, periodo, codcas, codasegu));
+    }
+    /// total_atenciones  - no considerados
+    @GetMapping("/query2DMAMTANC/{anio}/{periodo}/{codcas}/{codasegu}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    public ResponseEntity<List<Map<String, Object>>> query2DMAMTANC(@PathVariable String anio,@PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
+        return ResponseEntity.ok(DMS.query2DMAMTANC(anio, periodo, codcas, codasegu));
+    }
+    /// total_atenciones  - sexo grupo etario
+    @GetMapping("/query3DMAMTASGE/{anio}/{periodo}/{codcas}/{codasegu}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    public ResponseEntity<List<Map<String, Object>>> query3DMAMTASGE(@PathVariable String anio,@PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
+        return ResponseEntity.ok(DMS.query3DMAMTASGE(anio, periodo, codcas, codasegu));
+    }
+    /// total_atenciones  - CSV
+    @GetMapping("/query4DMAMTACSV/{anio}/{periodo}/{codcas}/{codasegu}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    public ResponseEntity<List<Map<String, Object>>> query4DMAMTACSV(@PathVariable String anio,@PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
+        return ResponseEntity.ok(DMS.query4DMAMTACSV(anio, periodo, codcas, codasegu));
+    }
+    /// total_medicos - query 0
+    @GetMapping("/query0DMAMTM/{anio}/{periodo}/{codcas}/{codasegu}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    public ResponseEntity<List<Map<String, Object>>> query0DMAMTM(@PathVariable String anio,@PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
+        return ResponseEntity.ok(DMS.query0DMAMTM(anio, periodo, codcas, codasegu));
+    }
+    /// total_medicos - query 1
+    @GetMapping("/query1DMAMTM/{anio}/{periodo}/{codcas}/{codasegu}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    public ResponseEntity<List<Map<String, Object>>> query1DMAMTM(@PathVariable String anio,@PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
+        return ResponseEntity.ok(DMS.query1DMAMTM(anio, periodo, codcas, codasegu));
+    }
+    /// total_medicos - query 2 csv
+    @GetMapping("/query2DMAMTMCSV/{anio}/{periodo}/{codcas}/{codasegu}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    public ResponseEntity<List<Map<String, Object>>> query2DMAMTMCSV(@PathVariable String anio,@PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
+        return ResponseEntity.ok(DMS.query2DMAMTMCSV(anio, periodo, codcas, codasegu));
+    }
+    /// total_horas_efectivas
+    @GetMapping("/query0DMAMHE/{anio}/{periodo}/{codcas}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    public ResponseEntity<List<Map<String, Object>>> query0DMAMHE(@PathVariable String anio,@PathVariable String periodo, @PathVariable String codcas) {
+        return ResponseEntity.ok(DMS.query0DMAMHE(anio, periodo, codcas));
+    }
+    /// total_horas_programadas
+    @GetMapping("/query0DMAMHP/{anio}/{periodo}/{codcas}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    public ResponseEntity<List<Map<String, Object>>> query0DMAMHP(@PathVariable String anio,@PathVariable String periodo, @PathVariable String codcas) {
+        return ResponseEntity.ok(DMS.query0DMAMHP(anio, periodo, codcas));
+    }
+    /// total_citados
+    @GetMapping("/query0DMAMTC/{anio}/{periodo}/{codcas}/{codasegu}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    public ResponseEntity<List<Map<String, Object>>> query0DMAMTC(@PathVariable String anio,@PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
+        return ResponseEntity.ok(DMS.query0DMAMTC(anio, periodo, codcas, codasegu));
+    }
 
-
-
-
+    /// total_deserción - query 0
+    @GetMapping("/query0DMAMTD/{anio}/{periodo}/{codcas}/{codasegu}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    public ResponseEntity<List<Map<String, Object>>> query0DMAMTD(@PathVariable String anio,@PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
+        return ResponseEntity.ok(DMS.query0DMAMTD(anio, periodo, codcas, codasegu));
+    }
+    /// total_deserción - query 1
+    @GetMapping("/query1DMAMTD/{anio}/{periodo}/{codcas}/{codasegu}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    public ResponseEntity<List<Map<String, Object>>> query1DMAMTD(@PathVariable String anio,@PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
+        return ResponseEntity.ok(DMS.query1DMAMTD(anio, periodo, codcas, codasegu));
+    }
+    /// total_deserción - query 2 csv
+    @GetMapping("/query2DMAMTDCSV/{anio}/{periodo}/{codcas}/{codasegu}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    public ResponseEntity<List<Map<String, Object>>> query2DMAMTDCSV(@PathVariable String anio,@PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
+        return ResponseEntity.ok(DMS.query2DMAMTDCSV(anio, periodo, codcas, codasegu));
+    }
 
 
 
