@@ -3455,17 +3455,38 @@ public class DashboardMRepository {
 
         String sql = """
         SELECT 
+            ce.cod_servicio,
+            ce.cod_especialidad,
+            ca.cenasides,
+            am.actdes AS actividad,
+            ag.agrupador AS agrupador,
+            a.actespnom AS subactividad,
+            ce.cod_tipo_consulta,
+            ce.cod_diag,
+            d.diagdes AS descripcion_diagnostico,
             c.servhosdes AS descripcion_servicio,
-            a.actespnom AS descripcion_subactividad
+            e.especialidad AS descripcion_especialidad,
+            t.tipcondes AS descripcion_tipo_consulta,
+            dni_medico,
+            doc_paciente,
+            anio_edad,
+            cod_tipdoc_paciente,
+            sexo,
+            fecha_atencion,
+            acto_med
         FROM %s AS ce
         LEFT JOIN dwsge.sgss_cmsho10 AS c ON ce.cod_servicio = c.servhoscod
+        LEFT JOIN dwsge.dim_especialidad AS e ON ce.cod_especialidad = e.cod_especialidad
+        LEFT JOIN dwsge.sgss_cmtco10 AS t ON ce.cod_tipo_consulta = t.tipconcod
+        LEFT JOIN dwsge.sgss_cmdia10 AS d ON ce.cod_diag = d.diagcod
         LEFT JOIN dwsge.sgss_cmace10 AS a ON ce.cod_actividad = a.actcod AND ce.cod_subactividad = a.actespcod
+        LEFT JOIN dwsge.sgss_cmact10 AS am ON ce.cod_actividad = am.actcod
+        LEFT JOIN dwsge.sgss_cmcas10 AS ca ON ce.cod_oricentro = ca.oricenasicod AND ce.cod_centro = ca.cenasicod
+        LEFT JOIN dwsge.dim_agrupador as ag ON ce.cod_agrupador = ag.cod_agrupador
         WHERE ce.cod_centro = ?
-          AND ce.cod_actividad = '91'
-          AND ce.cod_subactividad = '682'
-          AND ce.cod_servicio = 'L16'
+          AND a.actespcod = '002' 
           AND ce.clasificacion in (2,4,6)
-          AND (
+              AND (
                     CASE 
                         WHEN ce.cod_tipo_paciente = '4' THEN '2'
                         ELSE '1'
@@ -3483,23 +3504,20 @@ public class DashboardMRepository {
         String code_asegurado = code_asegurado(codasegu);
 
         String sql = """
-        SELECT 
-            c.servhosdes AS descripcion_servicio,
-            a.actespnom AS descripcion_subactividad
+         SELECT c.servhosdes AS descripcion_servicio,
+             ce.dni_medico,
+             ce.fecha_atencion
         FROM %s AS ce
         LEFT JOIN dwsge.sgss_cmsho10 AS c ON ce.cod_servicio = c.servhoscod
-        LEFT JOIN dwsge.sgss_cmace10 AS a ON ce.cod_actividad = a.actcod AND ce.cod_subactividad = a.actespcod
         WHERE ce.cod_centro = ?
-          AND ce.cod_actividad = '91'
-          AND ce.cod_subactividad = '682'
-          AND ce.cod_servicio = 'L16'
           AND ce.clasificacion in (2,4,6)
+          AND ce.cod_subactividad = '002' 
           AND (
-                    CASE 
-                        WHEN ce.cod_tipo_paciente = '4' THEN '2'
-                        ELSE '1'
-                    END
-                    ) IN %s
+                            CASE 
+                                WHEN ce.cod_tipo_paciente = '4' THEN '2'
+                                ELSE '1'
+                            END
+                            ) IN %s
         """.formatted(tabla, code_asegurado);
 
         return secondJdbcTemplate.queryForList(sql,codcas);
@@ -3511,23 +3529,18 @@ public class DashboardMRepository {
         String code_asegurado = code_asegurado(codasegu);
 
         String sql = """
-        SELECT 
-            c.servhosdes AS descripcion_servicio,
-            a.actespnom AS descripcion_subactividad
+         SELECT ce.dni_medico,
+             ce.fecha_atencion
         FROM %s AS ce
-        LEFT JOIN dwsge.sgss_cmsho10 AS c ON ce.cod_servicio = c.servhoscod
-        LEFT JOIN dwsge.sgss_cmace10 AS a ON ce.cod_actividad = a.actcod AND ce.cod_subactividad = a.actespcod
         WHERE ce.cod_centro = ?
-          AND ce.cod_actividad = '91'
-          AND ce.cod_subactividad = '682'
-          AND ce.cod_servicio = 'L16'
           AND ce.clasificacion in (2,4,6)
+          AND ce.cod_subactividad = '002'
           AND (
-                    CASE 
-                        WHEN ce.cod_tipo_paciente = '4' THEN '2'
-                        ELSE '1'
-                    END
-                    ) IN %s
+                            CASE 
+                                WHEN ce.cod_tipo_paciente = '4' THEN '2'
+                                ELSE '1'
+                            END
+                            ) IN %s
         """.formatted(tabla, code_asegurado);
 
         return secondJdbcTemplate.queryForList(sql,codcas);
@@ -3540,15 +3553,132 @@ public class DashboardMRepository {
 
         String sql = """
         SELECT 
+            ce.cod_servicio,
+            ce.cod_especialidad,
+            ca.cenasides,
+            am.actdes AS actividad,
+            ag.agrupador AS agrupador,
+            a.actespnom AS subactividad,
+            ce.cod_tipo_consulta,
+            ce.cod_diag,
+            c.servhosdes AS descripcion_servicio,
+            e.especialidad AS descripcion_especialidad,
+            t.tipcondes AS descripcion_tipo_consulta,
+            d.diagdes AS descripcion_diagnostico,
+            dni_medico,
+            doc_paciente,
+            cod_tipdoc_paciente,
+            sexo,
+            fecha_atencion,
+            acto_med
+        FROM %s AS ce
+        LEFT JOIN dwsge.sgss_cmsho10 AS c ON ce.cod_servicio = c.servhoscod
+        LEFT JOIN dwsge.dim_especialidad AS e ON ce.cod_especialidad = e.cod_especialidad
+        LEFT JOIN dwsge.sgss_cmtco10 AS t ON ce.cod_tipo_consulta = t.tipconcod
+        LEFT JOIN dwsge.sgss_cmdia10 AS d ON ce.cod_diag = d.diagcod
+        LEFT JOIN dwsge.sgss_cmace10 AS a ON ce.cod_actividad = a.actcod AND ce.cod_subactividad = a.actespcod
+        LEFT JOIN dwsge.sgss_cmact10 AS am ON ce.cod_actividad = am.actcod
+        LEFT JOIN dwsge.sgss_cmcas10 AS ca ON ce.cod_oricentro = ca.oricenasicod AND ce.cod_centro = ca.cenasicod
+        LEFT JOIN dwsge.dim_agrupador as ag ON ce.cod_agrupador = ag.cod_agrupador
+        WHERE ce.cod_centro = ?
+          AND a.actespcod = '002' 
+          AND ce.clasificacion in (2,4,6)
+          AND (
+                            CASE 
+                                WHEN ce.cod_tipo_paciente = '4' THEN '2'
+                                ELSE '1'
+                            END
+                            ) IN %s
+        """.formatted(tabla, code_asegurado);
+
+        return secondJdbcTemplate.queryForList(sql,codcas);
+    }
+
+    ///Total - horas- programadas
+    public List<Map<String, Object>> queryDMCAITHP(String anio, String periodo, String codcas) {
+        String tabla= "dwsge.dwe_consulta_externa_programacion_" + anio + "_" + periodo;
+
+        String sql = """
+    SELECT 
+	    ce.cod_servicio,
+        ce.cod_especialidad,
+        ca.cenasides,
+        ce.cod_tipdoc_medico,
+        ce.dni_medico,
+        am.actdes AS actividad,
+        ag.agrupador AS agrupador,
+        a.actespnom AS detalle_subactividad,
+        c.servhosdes AS descripcion_servicio,
+        e.especialidad AS descripcion_especialidad,
+		ce.total_horas,
+        ce.fecha_prog
+    FROM %s ce
+    LEFT JOIN dwsge.sgss_cmsho10 AS c ON ce.cod_servicio = c.servhoscod
+    LEFT JOIN dwsge.dim_especialidad AS e ON ce.cod_especialidad = e.cod_especialidad
+    LEFT JOIN dwsge.sgss_cmace10 AS a ON ce.cod_actividad = a.actcod AND ce.cod_subactividad = a.actespcod
+    LEFT JOIN dwsge.sgss_cmact10 AS am ON ce.cod_actividad = am.actcod
+    LEFT JOIN dwsge.sgss_cmcas10 AS ca ON ce.cod_oricentro = ca.oricenasicod AND ce.cod_centro = ca.cenasicod
+    LEFT JOIN dwsge.dim_agrupador AS ag ON ce.cod_agrupador = ag.cod_agrupador
+    WHERE ce.cod_centro = ?
+        AND (
+            ce.cod_motivo_suspension IS NULL 
+            OR ce.cod_motivo_suspension NOT IN ('04','09','10','99','13','16','11')
+        )
+          AND a.actespcod = '002' 
+        """.formatted(tabla);
+        return secondJdbcTemplate.queryForList(sql,codcas);
+    }
+    ///Total - horas- efectivas
+    public List<Map<String, Object>> queryDMCAITHE(String anio, String periodo, String codcas) {
+        String tabla= "dwsge.dwe_consulta_externa_horas_efectivas_" + anio + "_" + periodo;
+
+        String sql = """
+        SELECT 
+            ce.dni_medico,
+            c.servhosdes as servicio,
+            ag.agrupador,
+            e.especialidad,
+            a.actespnom as subactividad,
+            ce.fecha_prog,
+            ce.horas_efec_def
+        FROM %s AS ce
+        LEFT JOIN dwsge.sgss_cmsho10 AS c 
+            ON ce.cod_servicio = c.servhoscod
+        LEFT JOIN dwsge.dim_especialidad AS e
+            ON ce.cod_especialidad = e.cod_especialidad
+        LEFT JOIN dwsge.sgss_cmace10 AS a
+            ON ce.cod_actividad = a.actcod
+            AND ce.cod_subactividad = a.actespcod
+        LEFT JOIN dwsge.sgss_cmact10 AS am
+            ON ce.cod_actividad = am.actcod
+        LEFT JOIN dwsge.sgss_cmcas10 AS ca
+            ON ce.cod_oricentro = ca.oricenasicod
+            AND ce.cod_centro = ca.cenasicod
+        LEFT JOIN dwsge.dim_agrupador AS ag ON ce.cod_agrupador = ag.cod_agrupador
+        WHERE ce.cod_centro = ?
+          AND a.actespcod = '002' 
+          AND ce.ate>0
+        """.formatted(tabla);
+        return secondJdbcTemplate.queryForList(sql,codcas);
+    }
+
+    ///Indicadores de cons apoyo desc
+    /// total - atenciones- servicio - subactividad
+    public List<Map<String, Object>> query0DMCADTASS(String anio, String periodo, String codcas, String codasegu ) {
+        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+
+        String code_asegurado = code_asegurado(codasegu);
+
+        String sql = """
+        SELECT 
             c.servhosdes AS descripcion_servicio,
             a.actespnom AS descripcion_subactividad
         FROM %s AS ce
         LEFT JOIN dwsge.sgss_cmsho10 AS c ON ce.cod_servicio = c.servhoscod
         LEFT JOIN dwsge.sgss_cmace10 AS a ON ce.cod_actividad = a.actcod AND ce.cod_subactividad = a.actespcod
         WHERE ce.cod_centro = ?
-          AND ce.cod_actividad = '91'
-          AND ce.cod_subactividad = '682'
-          AND ce.cod_servicio = 'L16'
+                        AND ce.cod_actividad = '91'
+                        AND ce.cod_subactividad = '003'
           AND ce.clasificacion in (2,4,6)
           AND (
                     CASE 
@@ -3560,34 +3690,346 @@ public class DashboardMRepository {
 
         return secondJdbcTemplate.queryForList(sql,codcas);
     }
-
-    ///Total - horas- programadas
-
-    ///Total - horas- efectivas
-
-
-    ///Indicadores de cons apoyo desc
-    /// total - atenciones- servicio - subactividad
-
     /// total - atenciones- agrupador - especialidad
+    public List<Map<String, Object>> query1DMCADTAAE(String anio, String periodo, String codcas, String codasegu ) {
+        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
 
+        String code_asegurado = code_asegurado(codasegu);
+
+        String sql = """
+        SELECT 
+            ce.cod_servicio,
+            ce.cod_especialidad,
+            ca.cenasides,
+            am.actdes AS actividad,
+            ag.agrupador AS agrupador,
+            a.actespnom AS subactividad,
+            ce.cod_tipo_consulta,
+            ce.cod_diag,
+            d.diagdes AS descripcion_diagnostico,
+            c.servhosdes AS descripcion_servicio,
+            e.especialidad AS descripcion_especialidad,
+            t.tipcondes AS descripcion_tipo_consulta,
+            dni_medico,
+            doc_paciente,
+            cod_tipdoc_paciente,
+            sexo,
+            fecha_atencion,
+            acto_med
+        FROM %s AS ce
+        LEFT JOIN dwsge.sgss_cmsho10 AS c ON ce.cod_servicio = c.servhoscod
+        LEFT JOIN dwsge.dim_especialidad AS e ON ce.cod_especialidad = e.cod_especialidad
+        LEFT JOIN dwsge.sgss_cmtco10 AS t ON ce.cod_tipo_consulta = t.tipconcod
+        LEFT JOIN dwsge.sgss_cmdia10 AS d ON ce.cod_diag = d.diagcod
+        LEFT JOIN dwsge.sgss_cmace10 AS a ON ce.cod_actividad = a.actcod AND ce.cod_subactividad = a.actespcod
+        LEFT JOIN dwsge.sgss_cmact10 AS am ON ce.cod_actividad = am.actcod
+        LEFT JOIN dwsge.sgss_cmcas10 AS ca ON ce.cod_oricentro = ca.oricenasicod AND ce.cod_centro = ca.cenasicod
+        LEFT JOIN dwsge.dim_agrupador as ag ON ce.cod_agrupador = ag.cod_agrupador
+        WHERE ce.cod_centro = ?
+                        AND ce.cod_actividad = '91'
+                        AND ce.cod_subactividad = '003'
+          AND ce.clasificacion in (2,4,6)
+          AND (
+                    CASE 
+                        WHEN ce.cod_tipo_paciente = '4' THEN '2'
+                        ELSE '1'
+                    END
+                    ) IN %s
+        """.formatted(tabla, code_asegurado);
+
+        return secondJdbcTemplate.queryForList(sql,codcas);
+    }
     /// Total - atenciones - no considerados
+    public List<Map<String, Object>> query2DMCADTANC(String anio, String periodo, String codcas, String codasegu ) {
+        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
 
-    /// Total - atenciones - no considerados
+        String code_asegurado = code_asegurado(codasegu);
 
+        String sql = """
+        SELECT 
+            c.servhosdes AS Servicio2,
+            am.actdes AS Actividad2,
+            a.actespnom AS Subactividad2,
+            t.tipcondes AS Tipo_consulta2,
+            ce.cod_diag as CodDiag2,
+            d.diagdes AS Diagnostico2,
+            dni_medico as dni_medico2,
+            acto_med as acto_med2,
+            sexo as sexo2,
+            fecha_atencion as fecha_atencion2,
+            cl.desc_cl AS desc_cl2
+        FROM %s AS ce
+        LEFT JOIN dwsge.sgss_cmsho10 AS c ON ce.cod_servicio = c.servhoscod
+        LEFT JOIN dwsge.dim_especialidad AS e ON ce.cod_especialidad = e.cod_especialidad
+        LEFT JOIN dwsge.sgss_cmtco10 AS t ON ce.cod_tipo_consulta = t.tipconcod
+        LEFT JOIN dwsge.sgss_cmdia10 AS d ON ce.cod_diag = d.diagcod
+        LEFT JOIN dwsge.sgss_cmace10 AS a ON ce.cod_actividad = a.actcod AND ce.cod_subactividad = a.actespcod
+        LEFT JOIN dwsge.sgss_cmact10 AS am ON ce.cod_actividad = am.actcod
+        LEFT JOIN dwsge.sgss_cmcas10 AS ca ON ce.cod_oricentro = ca.oricenasicod AND ce.cod_centro = ca.cenasicod
+        LEFT JOIN dwsge.dim_agrupador as ag ON ce.cod_agrupador = ag.cod_agrupador
+        LEFT JOIN dwsge.dwe_cl10 as cl ON ce.clasificacion = cl.id_cl
+        WHERE ce.cod_centro = ?
+                        AND ce.cod_actividad = '91'
+                        AND ce.cod_subactividad = '003'
+          AND ce.clasificacion in (1,3,5,0)
+          AND (
+                    CASE 
+                        WHEN ce.cod_tipo_paciente = '4' THEN '2'
+                        ELSE '1'
+                    END
+                    ) IN %s
+        """.formatted(tabla, code_asegurado);
+
+        return secondJdbcTemplate.queryForList(sql,codcas);
+    }
     /// Total - atenciones- sexo y grupo etario vs atenciones
+    public List<Map<String, Object>> query3DMCADTASGEA(String anio, String periodo, String codcas, String codasegu ) {
+        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
 
+        String code_asegurado = code_asegurado(codasegu);
+
+        String sql = """
+        SELECT 
+            ge.grupo_etario,
+            ce.sexo,
+            COUNT(*) AS atenciones
+        FROM %s AS ce
+        LEFT JOIN dwsge.dim_grupo_etario as ge ON ce.anio_edad = ge.edad
+        WHERE ce.cod_centro = '{codcas}'
+                        AND ce.cod_actividad = '91'
+                        AND ce.cod_subactividad = '003'
+          AND ce.clasificacion in (2,4,6)
+          AND (
+                    CASE 
+                        WHEN ce.cod_tipo_paciente = '4' THEN '2'
+                        ELSE '1'
+                    END
+                    ) IN %s
+        GROUP BY ge.grupo_etario, ce.sexo
+        """.formatted(tabla, code_asegurado);
+
+        return secondJdbcTemplate.queryForList(sql,codcas);
+    }
     /// Total - atenciones- CSV
+    public List<Map<String, Object>> query4DMCADTACSV(String anio, String periodo, String codcas, String codasegu ) {
+        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+
+        String code_asegurado = code_asegurado(codasegu);
+
+        String sql = """
+        SELECT 
+            ce.cod_servicio,
+            ce.cod_especialidad,
+            ca.cenasides,
+            am.actdes AS actividad,
+            ag.agrupador AS agrupador,
+            a.actespnom AS subactividad,
+            ce.cod_tipo_consulta,
+            ce.cod_diag,
+            d.diagdes AS descripcion_diagnostico,
+            c.servhosdes AS descripcion_servicio,
+            e.especialidad AS descripcion_especialidad,
+            t.tipcondes AS descripcion_tipo_consulta,
+            dni_medico,
+            doc_paciente,
+            anio_edad,
+            cod_tipdoc_paciente,
+            sexo,
+            fecha_atencion,
+            acto_med
+        FROM %s AS ce
+        LEFT JOIN dwsge.sgss_cmsho10 AS c ON ce.cod_servicio = c.servhoscod
+        LEFT JOIN dwsge.dim_especialidad AS e ON ce.cod_especialidad = e.cod_especialidad
+        LEFT JOIN dwsge.sgss_cmtco10 AS t ON ce.cod_tipo_consulta = t.tipconcod
+        LEFT JOIN dwsge.sgss_cmdia10 AS d ON ce.cod_diag = d.diagcod
+        LEFT JOIN dwsge.sgss_cmace10 AS a ON ce.cod_actividad = a.actcod AND ce.cod_subactividad = a.actespcod
+        LEFT JOIN dwsge.sgss_cmact10 AS am ON ce.cod_actividad = am.actcod
+        LEFT JOIN dwsge.sgss_cmcas10 AS ca ON ce.cod_oricentro = ca.oricenasicod AND ce.cod_centro = ca.cenasicod
+        LEFT JOIN dwsge.dim_agrupador as ag ON ce.cod_agrupador = ag.cod_agrupador
+        WHERE ce.cod_centro = ?
+                        AND ce.cod_actividad = '91'
+                        AND ce.cod_subactividad = '003'
+          AND ce.clasificacion in (2,4,6)
+              AND (
+                    CASE 
+                        WHEN ce.cod_tipo_paciente = '4' THEN '2'
+                        ELSE '1'
+                    END
+                    ) IN %s
+        """.formatted(tabla, code_asegurado);
+
+        return secondJdbcTemplate.queryForList(sql,codcas);
+    }
 
     ///total - medicos query0
+    public List<Map<String, Object>> query0DMCADTM(String anio, String periodo, String codcas, String codasegu ) {
+        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
 
+        String code_asegurado = code_asegurado(codasegu);
+
+        String sql = """
+         SELECT c.servhosdes AS descripcion_servicio,
+             ce.dni_medico,
+             ce.fecha_atencion
+        FROM %s AS ce
+        LEFT JOIN dwsge.sgss_cmsho10 AS c ON ce.cod_servicio = c.servhoscod
+        WHERE ce.cod_centro = ?
+          AND ce.clasificacion in (2,4,6)
+                        AND ce.cod_actividad = '91'
+                        AND ce.cod_subactividad = '003'
+          AND (
+                            CASE 
+                                WHEN ce.cod_tipo_paciente = '4' THEN '2'
+                                ELSE '1'
+                            END
+                            ) IN %s
+        """.formatted(tabla, code_asegurado);
+
+        return secondJdbcTemplate.queryForList(sql,codcas);
+    }
     ///total - medicos query1
+    public List<Map<String, Object>> query1DMCADTM(String anio, String periodo, String codcas, String codasegu ) {
+        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
 
+        String code_asegurado = code_asegurado(codasegu);
+
+        String sql = """
+         SELECT ce.dni_medico,
+             ce.fecha_atencion
+        FROM %s AS ce
+        WHERE ce.cod_centro = ?
+          AND ce.clasificacion in (2,4,6)
+                        AND ce.cod_actividad = '91'
+                        AND ce.cod_subactividad = '003'
+          AND (
+                            CASE 
+                                WHEN ce.cod_tipo_paciente = '4' THEN '2'
+                                ELSE '1'
+                            END
+                            ) IN %s
+        """.formatted(tabla, code_asegurado);
+
+        return secondJdbcTemplate.queryForList(sql,codcas);
+    }
     ///Total - medicos query2 CSV
+    public List<Map<String, Object>> query2DMCADTMCSV(String anio, String periodo, String codcas, String codasegu ) {
+        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+
+        String code_asegurado = code_asegurado(codasegu);
+
+        String sql = """
+        SELECT 
+            ce.cod_servicio,
+            ce.cod_especialidad,
+            ca.cenasides,
+            am.actdes AS actividad,
+            ag.agrupador AS agrupador,
+            a.actespnom AS subactividad,
+            ce.cod_tipo_consulta,
+            ce.cod_diag,
+            c.servhosdes AS descripcion_servicio,
+            e.especialidad AS descripcion_especialidad,
+            t.tipcondes AS descripcion_tipo_consulta,
+            d.diagdes AS descripcion_diagnostico,
+            dni_medico,
+            doc_paciente,
+            cod_tipdoc_paciente,
+            sexo,
+            fecha_atencion,
+            acto_med
+        FROM %s AS ce
+        LEFT JOIN dwsge.sgss_cmsho10 AS c ON ce.cod_servicio = c.servhoscod
+        LEFT JOIN dwsge.dim_especialidad AS e ON ce.cod_especialidad = e.cod_especialidad
+        LEFT JOIN dwsge.sgss_cmtco10 AS t ON ce.cod_tipo_consulta = t.tipconcod
+        LEFT JOIN dwsge.sgss_cmdia10 AS d ON ce.cod_diag = d.diagcod
+        LEFT JOIN dwsge.sgss_cmace10 AS a ON ce.cod_actividad = a.actcod AND ce.cod_subactividad = a.actespcod
+        LEFT JOIN dwsge.sgss_cmact10 AS am ON ce.cod_actividad = am.actcod
+        LEFT JOIN dwsge.sgss_cmcas10 AS ca ON ce.cod_oricentro = ca.oricenasicod AND ce.cod_centro = ca.cenasicod
+        LEFT JOIN dwsge.dim_agrupador as ag ON ce.cod_agrupador = ag.cod_agrupador
+        WHERE ce.cod_centro = ?
+                        AND ce.cod_actividad = '91'
+                        AND ce.cod_subactividad = '003' 
+          AND ce.clasificacion in (2,4,6)
+          AND (
+                            CASE 
+                                WHEN ce.cod_tipo_paciente = '4' THEN '2'
+                                ELSE '1'
+                            END
+                            ) IN %s
+        """.formatted(tabla, code_asegurado);
+
+        return secondJdbcTemplate.queryForList(sql,codcas);
+    }
 
     ///Total - horas- programadas
+    public List<Map<String, Object>> queryDMCADTHP(String anio, String periodo, String codcas) {
+        String tabla= "dwsge.dwe_consulta_externa_programacion_" + anio + "_" + periodo;
 
+        String sql = """
+    SELECT 
+	    ce.cod_servicio,
+        ce.cod_especialidad,
+        ca.cenasides,
+        ce.cod_tipdoc_medico,
+        ce.dni_medico,
+        am.actdes AS actividad,
+        ag.agrupador AS agrupador,
+        a.actespnom AS detalle_subactividad,
+        c.servhosdes AS descripcion_servicio,
+        e.especialidad AS descripcion_especialidad,
+		ce.total_horas,
+        ce.fecha_prog
+    FROM %s ce
+    LEFT JOIN dwsge.sgss_cmsho10 AS c ON ce.cod_servicio = c.servhoscod
+    LEFT JOIN dwsge.dim_especialidad AS e ON ce.cod_especialidad = e.cod_especialidad
+    LEFT JOIN dwsge.sgss_cmace10 AS a ON ce.cod_actividad = a.actcod AND ce.cod_subactividad = a.actespcod
+    LEFT JOIN dwsge.sgss_cmact10 AS am ON ce.cod_actividad = am.actcod
+    LEFT JOIN dwsge.sgss_cmcas10 AS ca ON ce.cod_oricentro = ca.oricenasicod AND ce.cod_centro = ca.cenasicod
+    LEFT JOIN dwsge.dim_agrupador AS ag ON ce.cod_agrupador = ag.cod_agrupador
+    WHERE ce.cod_centro = ?
+        AND (
+            ce.cod_motivo_suspension IS NULL 
+            OR ce.cod_motivo_suspension NOT IN ('04','09','10','99','13','16','11')
+        )
+                        AND ce.cod_actividad = '91'
+                        AND ce.cod_subactividad = '003'
+        """.formatted(tabla);
+        return secondJdbcTemplate.queryForList(sql,codcas);
+    }
     ///Total - horas- efectivas
+    public List<Map<String, Object>> queryDMCADTHE(String anio, String periodo, String codcas) {
+        String tabla= "dwsge.dwe_consulta_externa_horas_efectivas_" + anio + "_" + periodo;
+
+        String sql = """
+        SELECT 
+            ce.dni_medico,
+            c.servhosdes as servicio,
+            ag.agrupador,
+            e.especialidad,
+            a.actespnom as subactividad,
+            ce.fecha_prog,
+            ce.horas_efec_def
+        FROM %s AS ce
+        LEFT JOIN dwsge.sgss_cmsho10 AS c 
+            ON ce.cod_servicio = c.servhoscod
+        LEFT JOIN dwsge.dim_especialidad AS e
+            ON ce.cod_especialidad = e.cod_especialidad
+        LEFT JOIN dwsge.sgss_cmace10 AS a
+            ON ce.cod_actividad = a.actcod
+            AND ce.cod_subactividad = a.actespcod
+        LEFT JOIN dwsge.sgss_cmact10 AS am
+            ON ce.cod_actividad = am.actcod
+        LEFT JOIN dwsge.sgss_cmcas10 AS ca
+            ON ce.cod_oricentro = ca.oricenasicod
+            AND ce.cod_centro = ca.cenasicod
+        LEFT JOIN dwsge.dim_agrupador AS ag ON ce.cod_agrupador = ag.cod_agrupador
+        WHERE ce.cod_centro = ?
+                        AND ce.cod_actividad = '91'
+                        AND ce.cod_subactividad = '003'
+                        AND ce.ate>0
+        """.formatted(tabla);
+        return secondJdbcTemplate.queryForList(sql,codcas);
+    }
 
 
 
