@@ -235,18 +235,219 @@ public class DashboardMService {
         return DMR.query2DMAMTDCSV(anio, periodo, codcas, codasegu);
     }
 
+  /// /////////////test
+    ///Indicadores de medicina complementaria
+    /// total - atenciones- servicio - subactividad
+    public List<Map<String, Object>> query0DMMCTASS(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query0DMMCTASS(anio, periodo, codcas, codasegu);
+    }
+    /// total - atenciones- agrupador - especialidad
+    public List<Map<String, Object>> query1DMMCTAAE(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query1DMMCTAAE(anio, periodo, codcas, codasegu);
+    }
+    /// Total - atenciones - no considerados
+    public List<Map<String, Object>> query2DMMCTANC(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query2DMMCTANC(anio, periodo, codcas, codasegu);
+    }
+    /// Total - atenciones- sexo y grupo etario vs atenciones
+    public List<Map<String, Object>> query3DMMCTASGEA(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query3DMMCTASGEA(anio, periodo, codcas, codasegu);
+    }
+    /// Total - atenciones- CSV
+    public List<Map<String, Object>> query4DMMCTACSV(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query4DMMCTACSV(anio, periodo, codcas, codasegu);
+    }
+    /// total - medicos query0
+    public List<Map<String, Object>> query0DMMCTM(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query0DMMCTM(anio, periodo, codcas, codasegu);
+    }
+    /// total - medicos query1
+    public List<Map<String, Object>> query1DMMCTM(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query1DMMCTM(anio, periodo, codcas, codasegu);
+    }
+    /// Total - medicos query2 CSV
+    public List<Map<String, Object>> query2DMMCTMCSV(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query2DMMCTMCSV(anio, periodo, codcas, codasegu);
+    }
+    /// Total - horas- programadas
+    public List<Map<String, Object>> queryDMMCTHP(String anio, String periodo, String codcas){
+        return DMR.queryDMMCTHP(anio, periodo, codcas);
+    }
+    /// Total - horas- efectivas
+    public List<Map<String, Object>> queryDMMCTHE(String anio, String periodo, String codcas){
+        return DMR.queryDMMCTHE(anio, periodo, codcas);
+    }
+
+    ///Indicadores de medicina ocupacional
+    /// total - atenciones- servicio - subactividad
+    public List<Map<String, Object>> query0DMMOTASS(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query0DMMOTASS(anio, periodo, codcas, codasegu);
+    }
+    /// total - atenciones- agrupador - especialidad
+    public List<Map<String, Object>> query1DMMOTAAE(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query1DMMOTAAE(anio, periodo, codcas, codasegu);
+    }
+    /// Total - atenciones - no considerados
+    public List<Map<String, Object>> query2DMMOTANC(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query2DMMOTANC(anio, periodo, codcas, codasegu);
+    }
+    /// Total - atenciones- sexo y grupo etario vs atenciones
+    public List<Map<String, Object>> query3DMMOTASGEA(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query3DMMOTASGEA(anio, periodo, codcas, codasegu);
+    }
+    /// Total - atenciones- CSV
+    public List<Map<String, Object>> query4DMMOTACSV(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query4DMMOTACSV(anio, periodo, codcas, codasegu);
+    }
+    /// total - medicos query0
+    public List<Map<String, Object>> query0DMOCTM(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query0DMOCTM(anio, periodo, codcas, codasegu);
+    }
+    /// total - medicos query1
+    public List<Map<String, Object>> query1DMOCTM(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query1DMOCTM(anio, periodo, codcas, codasegu);
+    }
+    /// Total - medicos query2 CSV
+    public List<Map<String, Object>> query2DMMOTMCSV(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query2DMMOTMCSV(anio, periodo, codcas, codasegu);
+    }
+    /// Total - horas- programadas
+    public List<Map<String, Object>> queryDMMOTHP(String anio, String periodo, String codcas){
+        return DMR.queryDMMOTHP(anio, periodo, codcas);
+    }
+    /// Total - horas- efectivas
+    public List<Map<String, Object>> queryDMMOTHE(String anio, String periodo, String codcas){
+        return DMR.queryDMMOTHE(anio, periodo, codcas);
+    }
 
 
+    ///Indicadores de medico de personal
+    /// total - atenciones- servicio - subactividad
+    public List<Map<String, Object>> query0DMMPTASS(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query0DMMPTASS(anio, periodo, codcas, codasegu);
+    }
+    /// total - atenciones- agrupador - especialidad
+    public List<Map<String, Object>> query1DMMPTAAE(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query1DMMPTAAE(anio, periodo, codcas, codasegu);
+    }
+    /// Total - atenciones - no considerados
+    public List<Map<String, Object>> query2DMMPTANC(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query2DMMPTANC(anio, periodo, codcas, codasegu);
+    }
+    /// Total - atenciones- sexo y grupo etario vs atenciones
+    public List<Map<String, Object>> query3DMMPTASGEA(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query3DMMPTASGEA(anio, periodo, codcas, codasegu);
+    }
+    /// Total - atenciones- CSV
+    public List<Map<String, Object>> query4DMMPTACSV(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query4DMMPTACSV(anio, periodo, codcas, codasegu);
+    }
+    /// total - medicos query0
+    public List<Map<String, Object>> query0DMMPTM(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query0DMMPTM(anio, periodo, codcas, codasegu);
+    }
+    /// total - medicos query1
+    public List<Map<String, Object>> query1DMMPTM(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query1DMMPTM(anio, periodo, codcas, codasegu);
+    }
+    /// Total - medicos query2 CSV
+    public List<Map<String, Object>> query2DMMPTMCSV(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query2DMMPTMCSV(anio, periodo, codcas, codasegu);
+    }
+    /// Total - horas- programadas
+    public List<Map<String, Object>> queryDMMPTHP(String anio, String periodo, String codcas){
+        return DMR.queryDMMPTHP(anio, periodo, codcas);
+    }
+    /// Total - horas- efectivas
+    public List<Map<String, Object>> queryDMMPTHE(String anio, String periodo, String codcas){
+        return DMR.queryDMMPTHE(anio, periodo, codcas);
+    }
 
 
+    ///Indicadores de consulta de atencion inmediata
+    /// total - atenciones- servicio - subactividad
+    public List<Map<String, Object>> query0DMCAITASS(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query0DMCAITASS(anio, periodo, codcas, codasegu);
+    }
+    /// total - atenciones- agrupador - especialidad
+    public List<Map<String, Object>> query1DMCAITAAE(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query1DMCAITAAE(anio, periodo, codcas, codasegu);
+    }
+    /// Total - atenciones - no considerados
+    public List<Map<String, Object>> query2DMCAITANC(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query2DMCAITANC(anio, periodo, codcas, codasegu);
+    }
+    /// Total - atenciones- sexo y grupo etario vs atenciones
+    public List<Map<String, Object>> query3DMCAITASGEA(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query3DMCAITASGEA(anio, periodo, codcas, codasegu);
+    }
+    /// Total - atenciones- CSV
+    public List<Map<String, Object>> query4DMCAITACSV(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query4DMCAITACSV(anio, periodo, codcas, codasegu);
+    }
+    /// total - medicos query0
+    public List<Map<String, Object>> query0DMCAITM(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query0DMCAITM(anio, periodo, codcas, codasegu);
+    }
+    /// total - medicos query1
+    public List<Map<String, Object>> query1DMCAITM(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query1DMCAITM(anio, periodo, codcas, codasegu);
+    }
+    /// Total - medicos query2 CSV
+    public List<Map<String, Object>> query2DMCAITMCSV(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query2DMCAITMCSV(anio, periodo, codcas, codasegu);
+    }
+    /// Total - horas- programadas
+    public List<Map<String, Object>> queryDMCAITHP(String anio, String periodo, String codcas){
+        return DMR.queryDMCAITHP(anio, periodo, codcas);
+    }
+    /// Total - horas- efectivas
+    public List<Map<String, Object>> queryDMCAITHE(String anio, String periodo, String codcas){
+        return DMR.queryDMCAITHE(anio, periodo, codcas);
+    }
 
 
-
-
-
-
-
-
+    ///Indicadores de cons apoyo desc
+    /// total - atenciones- servicio - subactividad
+    public List<Map<String, Object>> query0DMCADTASS(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query0DMCADTASS(anio, periodo, codcas, codasegu);
+    }
+    /// total - atenciones- agrupador - especialidad
+    public List<Map<String, Object>> query1DMCADTAAE(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query1DMCADTAAE(anio, periodo, codcas, codasegu);
+    }
+    /// Total - atenciones - no considerados
+    public List<Map<String, Object>> query2DMCADTANC(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query2DMCADTANC(anio, periodo, codcas, codasegu);
+    }
+    /// Total - atenciones- sexo y grupo etario vs atenciones
+    public List<Map<String, Object>> query3DMCADTASGEA(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query3DMCADTASGEA(anio, periodo, codcas, codasegu);
+    }
+    /// Total - atenciones- CSV
+    public List<Map<String, Object>> query4DMCADTACSV(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query4DMCADTACSV(anio, periodo, codcas, codasegu);
+    }
+    /// total - medicos query0
+    public List<Map<String, Object>> query0DMCADTM(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query0DMCADTM(anio, periodo, codcas, codasegu);
+    }
+    /// total - medicos query1
+    public List<Map<String, Object>> query1DMCADTM(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query1DMCADTM(anio, periodo, codcas, codasegu);
+    }
+    /// Total - medicos query2 CSV
+    public List<Map<String, Object>> query2DMCADTMCSV(String anio, String periodo, String codcas, String codasegu ){
+        return DMR.query2DMCADTMCSV(anio, periodo, codcas, codasegu);
+    }
+    /// Total - horas- programadas
+    public List<Map<String, Object>> queryDMCADTHP(String anio, String periodo, String codcas){
+        return DMR.queryDMCADTHP(anio, periodo, codcas);
+    }
+    /// Total - horas- efectivas
+    public List<Map<String, Object>> queryDMCADTHE(String anio, String periodo, String codcas){
+        return DMR.queryDMCADTHE(anio, periodo, codcas);
+    }
 
 
 }

@@ -2731,7 +2731,7 @@ public class DashboardMRepository {
         LEFT JOIN dwsge.sgss_cmact10 AS am ON ce.cod_actividad = am.actcod
         LEFT JOIN dwsge.sgss_cmcas10 AS ca ON ce.cod_oricentro = ca.oricenasicod AND ce.cod_centro = ca.cenasicod
         LEFT JOIN dwsge.dim_agrupador as ag ON ce.cod_agrupador = ag.cod_agrupador
-        WHERE ce.cod_centro = %s
+        WHERE ce.cod_centro = ?
           AND (ce.cod_actividad = 'B8' OR ce.cod_actividad = '91')
           AND ce.cod_subactividad = '070'
           AND (ce.cod_servicio = 'AB1' OR ce.cod_servicio = 'AM6')
@@ -3365,7 +3365,7 @@ public class DashboardMRepository {
         LEFT JOIN dwsge.sgss_cmact10 AS am ON ce.cod_actividad = am.actcod
         LEFT JOIN dwsge.sgss_cmcas10 AS ca ON ce.cod_oricentro = ca.oricenasicod AND ce.cod_centro = ca.cenasicod
         LEFT JOIN dwsge.dim_agrupador as ag ON ce.cod_agrupador = ag.cod_agrupador
-        WHERE ce.cod_centro = %s
+        WHERE ce.cod_centro = ?
           AND a.actespcod = '002'
           AND ce.clasificacion in (2,4,6)
           AND (
@@ -3795,7 +3795,7 @@ public class DashboardMRepository {
             COUNT(*) AS atenciones
         FROM %s AS ce
         LEFT JOIN dwsge.dim_grupo_etario as ge ON ce.anio_edad = ge.edad
-        WHERE ce.cod_centro = '{codcas}'
+        WHERE ce.cod_centro = ?
                         AND ce.cod_actividad = '91'
                         AND ce.cod_subactividad = '003'
           AND ce.clasificacion in (2,4,6)
