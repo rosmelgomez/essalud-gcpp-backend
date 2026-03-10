@@ -19,6 +19,7 @@ public class DashboardMController {
     public DashboardMController(DashboardMService DMS) {
         this.DMS = DMS;
     }
+
     /// Query Dashboard medicas
     /// Atenciones Medicas
     @GetMapping("/queryDMAMA/{anio}/{periodo}/{codcas}/{codasegu}")
