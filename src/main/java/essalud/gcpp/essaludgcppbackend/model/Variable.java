@@ -26,7 +26,7 @@ public class Variable {
 
     /// relation categoria
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_variable")
+    @JoinColumn(name = "id_subcategoria")
     private SubCategoria subcategoria_variable;
 
     /// relation encuesta

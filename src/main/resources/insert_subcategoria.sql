@@ -1,0 +1,16 @@
+INSERT INTO public.subcategoria(id, active, name_subcategoria, id_categoria)VALUES ('1', '0', 'Atenciones médicas', '1') ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.subcategoria(id, active, name_subcategoria, id_categoria)VALUES ('2', '1', 'Medicina complementaria', '1') ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.subcategoria(id, active, name_subcategoria, id_categoria)VALUES ('3', '1', 'Medicina ocupacional', '1') ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.subcategoria(id, active, name_subcategoria, id_categoria)VALUES ('4', '1', 'Medico de personal', '1') ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.subcategoria(id, active, name_subcategoria, id_categoria)VALUES ('5', '1', 'Consulta de atención inmmediata', '1') ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.subcategoria(id, active, name_subcategoria, id_categoria)VALUES ('6', '1', 'Cons. Apoyo Desc.', '1') ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.subcategoria(id, active, name_subcategoria, id_categoria)VALUES ('7', '1', 'Obstetricia', '2') ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.subcategoria(id, active, name_subcategoria, id_categoria)VALUES ('8', '1', 'Preventivo promocional', '2') ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.subcategoria(id, active, name_subcategoria, id_categoria)VALUES ('9', '1', 'Nutrición', '2') ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.subcategoria(id, active, name_subcategoria, id_categoria)VALUES ('10', '1', 'Enfermería', '2') ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.subcategoria(id, active, name_subcategoria, id_categoria)VALUES ('11', '1', 'Psicología', '2') ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.subcategoria(id, active, name_subcategoria, id_categoria)VALUES ('12', '1', 'Trabajo social', '2') ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.subcategoria(id, active, name_subcategoria, id_categoria)VALUES ('13', '1', 'CRED', '2') ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.subcategoria(id, active, name_subcategoria, id_categoria)VALUES ('14', '0', 'Topicos', '4') ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.subcategoria(id, active, name_subcategoria, id_categoria)VALUES ('15', '1', 'Sesiones odontológicas', '3') ON CONFLICT (id) DO NOTHING;
+SELECT setval(pg_get_serial_sequence('subcategoria','id'), (SELECT MAX(id) FROM subcategoria));

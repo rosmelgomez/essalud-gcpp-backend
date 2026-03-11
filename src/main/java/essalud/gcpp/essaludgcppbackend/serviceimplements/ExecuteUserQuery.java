@@ -2,6 +2,7 @@ package essalud.gcpp.essaludgcppbackend.serviceimplements;
 
 import javax.sql.DataSource;
 
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,9 +25,13 @@ public class ExecuteUserQuery implements ApplicationRunner {
 	}
 
 	@Override
-	public void run(ApplicationArguments args) {
+	public void run(@NonNull ApplicationArguments args) {
 		ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
 		populator.addScript(new ClassPathResource("insert_users.sql"));
+		populator.addScript(new ClassPathResource("insert_modulo.sql"));
+		populator.addScript(new ClassPathResource("insert_categoria.sql"));
+		populator.addScript(new ClassPathResource("insert_subcategoria.sql"));
+		populator.addScript(new ClassPathResource("insert_variable.sql"));
 
 		try {
 			populator.execute(firstDataSource);
