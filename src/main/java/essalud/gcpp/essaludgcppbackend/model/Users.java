@@ -60,7 +60,12 @@ public class Users {
     @Column(name = "rol", nullable = false)
     private String rol;
 
-    // One user can have many log entries.
+    /// relation logs
     @OneToMany(mappedBy = "user_logs", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Logs> logs_user;
+
+    /// relation encuesta
+    @OneToMany(mappedBy = "user_encuestas", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Encuesta> encuestas;
+
 }

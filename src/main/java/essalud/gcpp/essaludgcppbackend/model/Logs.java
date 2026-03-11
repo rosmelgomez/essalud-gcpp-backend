@@ -49,7 +49,7 @@ public class Logs {
     @Column(name = "date_creation", nullable = false)
     private LocalDateTime date_creation;
 
-    // Each log entry belongs to one user.
+    /// relation user.
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_user")
     private Users user_logs;
