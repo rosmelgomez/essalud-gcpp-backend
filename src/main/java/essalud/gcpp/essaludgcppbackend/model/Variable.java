@@ -19,7 +19,7 @@ public class Variable {
     private Integer id;
 
     @Column(name = "name_variable", nullable = false)
-    private String name_categoria;
+    private String name_variable;
 
     @Column(name = "active", nullable = false)
     private Boolean active;

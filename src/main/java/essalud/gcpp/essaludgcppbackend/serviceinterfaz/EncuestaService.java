@@ -1,0 +1,71 @@
+package essalud.gcpp.essaludgcppbackend.serviceinterfaz;
+
+import essalud.gcpp.essaludgcppbackend.dtos.EncuestaDto;
+import essalud.gcpp.essaludgcppbackend.model.*;
+import essalud.gcpp.essaludgcppbackend.repositories.*;
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+@Service
+public class EncuestaService  {
+
+    private final UsersRepository UR;
+
+    private final ModuloRepository MR;
+
+    private final CategoriaRepository CR;
+
+    private final SubCategoriaRepository SCR;
+
+    private final VariableRepository VAR;
+
+    private final EncuestaRepository ER;
+    public EncuestaService(UsersRepository UR, ModuloRepository MR, CategoriaRepository CR, SubCategoriaRepository SCR, VariableRepository VAR,  EncuestaRepository ER) {
+        this.UR = UR;
+        this.MR = MR;
+        this.CR = CR;
+        this.SCR = SCR;
+        this.VAR = VAR;
+        this.ER = ER;
+    }
+
+    public void registrarEncuesta(EncuestaDto encuestaDto) {
+        Users user = UR.findById(encuestaDto.getId_user()).orElse(null);
+        Modulo modulo = MR.findById(encuestaDto.getId_modulo()).orElse(null);
+        Categoria categoria = CR.findById(encuestaDto.getId_categoria()).orElse(null);
+        SubCategoria subCategoria = SCR.findById(encuestaDto.getId_subcategoria()).orElse(null);
+        Variable variable = VAR.findById(encuestaDto.getId_variable()).orElse(null);
+
+        Encuesta encuesta = new Encuesta();
+        encuesta.setCodcas(encuestaDto.getCodcas());
+        encuesta.setStatus(encuestaDto.getStatus());
+        encuesta.setComment(encuestaDto.getComment());
+        encuesta.setDate_creation(LocalDateTime.now());
+        encuesta.setUser_encuestas(user);
+        encuesta.setModulo_encuestas(modulo);
+        encuesta.setCategoria_encuestas(categoria);
+        encuesta.setSubcategoria_encuestas(subCategoria);
+        encuesta.setVariable_encuestas(variable);
+        ER.save(encuesta);
+    }
+
+    public List<EncuestaDto> getEncuestas() {
+        List<Encuesta> encuestas = ER.findAll();
+        List<EncuestaDto> encuestasDto = new ArrayList<>();
+        ModelMapper mapper = new ModelMapper();
+        for (Encuesta encuesta : encuestas) {
+            EncuestaDto encuestaDto = mapper.map(encuesta, EncuestaDto.class);
+            encuestaDto.setId_categoria(encuesta.getCategoria_encuestas().getId());
+            encuestaDto.setId_modulo(encuesta.getModulo_encuestas().getId());
+            encuestaDto.setId_subcategoria(encuesta.getSubcategoria_encuestas().getId());
+            encuestaDto.setId_user(encuesta.getUser_encuestas().getId());
+            encuestasDto.add(encuestaDto);
+        }
+        return encuestasDto;
+    }
+
+}

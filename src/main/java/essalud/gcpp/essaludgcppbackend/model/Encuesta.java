@@ -17,6 +17,9 @@ public class Encuesta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(name = "codcas", nullable = false)
+    private String codcas;
+
     @Column(name = "status", nullable = false)
     private String status;
 
