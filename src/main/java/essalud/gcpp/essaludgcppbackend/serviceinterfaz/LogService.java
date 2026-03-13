@@ -1,6 +1,6 @@
 package essalud.gcpp.essaludgcppbackend.serviceinterfaz;
 
-import essalud.gcpp.essaludgcppbackend.dtos.LogFilter;
+import essalud.gcpp.essaludgcppbackend.dtos.LogFilterDto;
 import essalud.gcpp.essaludgcppbackend.dtos.LogUsersDto;
 import essalud.gcpp.essaludgcppbackend.model.Logs;
 import essalud.gcpp.essaludgcppbackend.model.Users;
@@ -21,24 +21,24 @@ public class LogService {
         this.logsRepository = logsRepository;
     }
 
-    public List<LogFilter>  getLogFilters() {
+    public List<LogFilterDto>  getLogFilters() {
         List<Logs> logs = logsRepository.findAll();
-        List<LogFilter> logFilters = new ArrayList<>();
+        List<LogFilterDto> logFilterDtos = new ArrayList<>();
         for (Logs log : logs) {
-            LogFilter logFilter = new LogFilter();
-            logFilter.setDni(log.getUser_logs().getDni());
-            logFilter.setName(log.getUser_logs().getName());
-            logFilter.setLastname(log.getUser_logs().getLastname());
-            logFilter.setIp_user(log.getIp_user());
-            logFilter.setUrl(log.getUrl());
-            logFilter.setBrowser(log.getBrowser());
-            logFilter.setUser_role(log.getUser_logs().getRol());
-            logFilter.setCodcas(log.getUser_logs().getCodcas());
-            logFilter.setCode_red(log.getUser_logs().getCode_red());
-            logFilter.setDate(log.getDate_creation());
-            logFilters.add(logFilter);
+            LogFilterDto logFilterDto = new LogFilterDto();
+            logFilterDto.setDni(log.getUser_logs().getDni());
+            logFilterDto.setName(log.getUser_logs().getName());
+            logFilterDto.setLastname(log.getUser_logs().getLastname());
+            logFilterDto.setIp_user(log.getIp_user());
+            logFilterDto.setUrl(log.getUrl());
+            logFilterDto.setBrowser(log.getBrowser());
+            logFilterDto.setUser_role(log.getUser_logs().getRol());
+            logFilterDto.setCodcas(log.getUser_logs().getCodcas());
+            logFilterDto.setCode_red(log.getUser_logs().getCode_red());
+            logFilterDto.setDate(log.getDate_creation());
+            logFilterDtos.add(logFilterDto);
         }
-        return logFilters;
+        return logFilterDtos;
     }
 
     public void registerLogs(LogUsersDto dto, Users user, HttpServletRequest request) {

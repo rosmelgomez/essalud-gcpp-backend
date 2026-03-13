@@ -27,58 +27,58 @@ public class DashboardMRepository {
     /// Query Dashboard medicas
     /// Atenciones Medicas
     public List<Map<String, Object>> queryDMAMA(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla = "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
         String sql = """
-                        SELECT 
-                            ce.cod_servicio,
-                            ce.cod_especialidad,
-                            ca.cenasides,
-                            ag.agrupador AS agrupador,
-                            am.actdes AS actividad,
-                            a.actespnom AS subactividad,
-                            ce.cod_tipo_consulta,
-                            ce.cod_diag,
-                            c.servhosdes AS descripcion_servicio,
-                            e.especialidad AS descripcion_especialidad,
-                            t.tipcondes AS descripcion_tipo_consulta,
-                            d.diagdes AS descripcion_diagnostico,
-                            dni_medico,
-                            doc_paciente,
-                            CASE WHEN ce.cod_tipo_paciente = '4' THEN '2' ELSE '1' END AS cod_tipo_paciente,
-                            sexo,
-                            fecha_atencion,
-                            acto_med
-                        FROM %s AS ce
-                        LEFT JOIN dwsge.sgss_cmsho10 AS c 
-                            ON ce.cod_servicio = c.servhoscod
-                        LEFT JOIN dwsge.dim_especialidad AS e
-                            ON ce.cod_especialidad = e.cod_especialidad
-                        LEFT JOIN dwsge.sgss_cmtco10 AS t
-                            ON ce.cod_tipo_consulta = t.tipconcod
-                        LEFT JOIN dwsge.sgss_cmdia10 AS d
-                            ON ce.cod_diag = d.diagcod
-                        LEFT JOIN dwsge.sgss_cmace10 AS a
-                            ON ce.cod_actividad = a.actcod
-                            AND ce.cod_subactividad = a.actespcod
-                        LEFT JOIN dwsge.sgss_cmact10 AS am
-                            ON ce.cod_actividad = am.actcod
-                        LEFT JOIN dwsge.sgss_cmcas10 AS ca
-                            ON ce.cod_oricentro = ca.oricenasicod
-                            AND ce.cod_centro = ca.cenasicod
-                        LEFT JOIN dwsge.dim_agrupador as ag ON ce.cod_agrupador = ag.cod_agrupador
-                        WHERE ce.cod_centro = ?
-                        AND ce.cod_actividad = '91'
-                        AND ce.clasificacion in (2,4,6)
-                        AND ce.cod_variable = '001'
-                        AND (
-                                CASE 
-                                    WHEN ce.cod_tipo_paciente = '4' THEN '2'
-                                    ELSE '1'
-                                END
-                                ) IN %s
+                SELECT
+                    ce.cod_servicio,
+                    ce.cod_especialidad,
+                    ca.cenasides,
+                    ag.agrupador AS agrupador,
+                    am.actdes AS actividad,
+                    a.actespnom AS subactividad,
+                    ce.cod_tipo_consulta,
+                    ce.cod_diag,
+                    c.servhosdes AS descripcion_servicio,
+                    e.especialidad AS descripcion_especialidad,
+                    t.tipcondes AS descripcion_tipo_consulta,
+                    d.diagdes AS descripcion_diagnostico,
+                    dni_medico,
+                    doc_paciente,
+                    CASE WHEN ce.cod_tipo_paciente = '4' THEN '2' ELSE '1' END AS cod_tipo_paciente,
+                    sexo,
+                    fecha_atencion,
+                    acto_med
+                FROM %s AS ce
+                LEFT JOIN dwsge.sgss_cmsho10 AS c
+                    ON ce.cod_servicio = c.servhoscod
+                LEFT JOIN dwsge.dim_especialidad AS e
+                    ON ce.cod_especialidad = e.cod_especialidad
+                LEFT JOIN dwsge.sgss_cmtco10 AS t
+                    ON ce.cod_tipo_consulta = t.tipconcod
+                LEFT JOIN dwsge.sgss_cmdia10 AS d
+                    ON ce.cod_diag = d.diagcod
+                LEFT JOIN dwsge.sgss_cmace10 AS a
+                    ON ce.cod_actividad = a.actcod
+                    AND ce.cod_subactividad = a.actespcod
+                LEFT JOIN dwsge.sgss_cmact10 AS am
+                    ON ce.cod_actividad = am.actcod
+                LEFT JOIN dwsge.sgss_cmcas10 AS ca
+                    ON ce.cod_oricentro = ca.oricenasicod
+                    AND ce.cod_centro = ca.cenasicod
+                LEFT JOIN dwsge.dim_agrupador as ag ON ce.cod_agrupador = ag.cod_agrupador
+                WHERE ce.cod_centro = ?
+                AND ce.cod_actividad = '91'
+                AND ce.clasificacion in (2,4,6)
+                AND ce.cod_variable = '001'
+                AND (
+                        CASE
+                            WHEN ce.cod_tipo_paciente = '4' THEN '2'
+                            ELSE '1'
+                        END
+                        ) IN %s
                 """.formatted(tabla, code_asegurado);
 
         return secondJdbcTemplate.queryForList(sql, codcas);
@@ -89,7 +89,7 @@ public class DashboardMRepository {
 
 
         String sql = """
-                        SELECT 
+                        SELECT
                             ce.*,
                             c.servhosdes,
                             e.especialidad,
@@ -98,7 +98,7 @@ public class DashboardMRepository {
                             ag.agrupador,
                             ca.cenasides
                         FROM %s AS ce
-                        LEFT JOIN dwsge.sgss_cmsho10 AS c 
+                        LEFT JOIN dwsge.sgss_cmsho10 AS c
                             ON ce.cod_servicio = c.servhoscod
                         LEFT JOIN dwsge.dim_especialidad AS e
                             ON ce.cod_especialidad = e.cod_especialidad
@@ -201,7 +201,7 @@ public class DashboardMRepository {
     }
     /// Atenciones médicas - desercion
     public List<Map<String, Object>> queryDMAMD(String anio, String periodo, String codcas, String codasegu) {
-        String tabla1 = "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla1 = "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
         String tabla2 = "dwsge.dwe_consulta_externa_citados_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
@@ -280,37 +280,37 @@ public class DashboardMRepository {
     }
     /// Atenciones médicas - medicos
     public List<Map<String, Object>> queryDMAMM(String anio, String periodo, String codcas) {
-        String tabla = "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla = "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String sql = """
-                        SELECT c.cod_centro,
-                            c.dni_medico,
-                            c.agrupador,
-                            c.periodo,
-                            c.cantidad_medicos,
-                            c.medico
-                        FROM ( SELECT b.cod_centro,
-                                    b.dni_medico,
-                                    b.agrupador,
-                                    b.periodo,
-                                    b.cantidad_medicos,
-                                    row_number() OVER (PARTITION BY b.cod_centro, b.dni_medico, b.periodo ORDER BY b.cantidad_medicos DESC) AS medico
-                                FROM ( SELECT a.cod_centro,
-                                            a.dni_medico,
-                                            ag.agrupador,
-                                            a.periodo,
-                                            CASE WHEN a.cod_tipo_paciente = '4' THEN '2' ELSE '1' END AS cod_tipo_paciente,
-                                            count(*) AS cantidad_medicos
-                                        FROM (SELECT * FROM %s) a
-                                        LEFT JOIN dwsge.dim_agrupador ag
-                                        ON a.cod_agrupador = ag.cod_agrupador
-                                        WHERE a.cod_centro= ?
-                                        AND a.cod_actividad = '91'
-                                        AND a.cod_variable = '001'
-                                        AND a.clasificacion in (2,4,6)
-                                        GROUP BY a.cod_centro, a.dni_medico, ag.agrupador, a.periodo,CASE WHEN a.cod_tipo_paciente = '4' THEN '2' ELSE '1' END
-                                        ORDER BY a.dni_medico, a.periodo, (count(*))) b) c
-                        WHERE c.medico = '1'::bigint
+                SELECT c.cod_centro,
+                    c.dni_medico,
+                    c.agrupador,
+                    c.periodo,
+                    c.cantidad_medicos,
+                    c.medico
+                FROM ( SELECT b.cod_centro,
+                            b.dni_medico,
+                            b.agrupador,
+                            b.periodo,
+                            b.cantidad_medicos,
+                            row_number() OVER (PARTITION BY b.cod_centro, b.dni_medico, b.periodo ORDER BY b.cantidad_medicos DESC) AS medico
+                        FROM ( SELECT a.cod_centro,
+                                    a.dni_medico,
+                                    ag.agrupador,
+                                    a.periodo,
+                                    CASE WHEN a.cod_tipo_paciente = '4' THEN '2' ELSE '1' END AS cod_tipo_paciente,
+                                    count(*) AS cantidad_medicos
+                                FROM (SELECT * FROM %s) a
+                                LEFT JOIN dwsge.dim_agrupador ag 
+                                ON a.cod_agrupador = ag.cod_agrupador
+                                WHERE a.cod_centro= ?
+                                AND a.cod_actividad = '91'
+                                AND a.cod_variable = '001'
+                                AND a.clasificacion in (2,4,6)
+                                GROUP BY a.cod_centro, a.dni_medico, ag.agrupador, a.periodo,CASE WHEN a.cod_tipo_paciente = '4' THEN '2' ELSE '1' END
+                                ORDER BY a.dni_medico, a.periodo, (count(*))) b) c
+                WHERE c.medico = '1'::bigint
                 """.formatted(tabla);
 
         return secondJdbcTemplate.queryForList(sql, codcas);
@@ -377,7 +377,7 @@ public class DashboardMRepository {
 
     /// Medicinas Complementaria - atenciones
     public List<Map<String, Object>> queryDMMCA(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla = "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -507,7 +507,7 @@ public class DashboardMRepository {
     }
     /// Medicinas Complementaria - medicos
     public List<Map<String, Object>> queryDMMCM(String anio, String periodo, String codcas) {
-        String tabla = "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla = "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String sql = """
                         SELECT c.cod_centro,
@@ -558,7 +558,7 @@ public class DashboardMRepository {
                         WHERE cod_servicio='A91'
                         AND cod_actividad = '91'
                         AND (
-                                CASE 
+                                CASE
                                     WHEN cod_tipo_paciente = '4' THEN '2'
                                     ELSE '1'
                                 END
@@ -606,7 +606,7 @@ public class DashboardMRepository {
 
     /// Medicina Ocupacional - atenciones
     public List<Map<String, Object>> queryDMMOA(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla = "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -738,7 +738,7 @@ public class DashboardMRepository {
     }
     /// Medicina Ocupacional - medicos
     public List<Map<String, Object>> queryDMMOM(String anio, String periodo, String codcas) {
-        String tabla = "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla = "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String sql = """
                         SELECT c.cod_centro,
@@ -838,7 +838,7 @@ public class DashboardMRepository {
 
     /// Médico Personal - Atenciones
     public List<Map<String, Object>> queryDMMPA(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla = "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -971,7 +971,7 @@ public class DashboardMRepository {
     }
     /// Médico Personal - Medicos
     public List<Map<String, Object>> queryDMMPM(String anio, String periodo, String codcas) {
-        String tabla = "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla = "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String sql = """
                         SELECT c.cod_centro,
@@ -1074,7 +1074,7 @@ public class DashboardMRepository {
 
     /// Consulta Atención Inmediata - atenciones
     public List<Map<String, Object>> queryDMCAIA(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -1204,7 +1204,7 @@ public class DashboardMRepository {
     }
     /// Consulta Atención Inmediata - medicos
     public List<Map<String, Object>> queryDMCAIM(String anio, String periodo, String codcas) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String sql = """
                         SELECT c.cod_centro,
@@ -1304,7 +1304,7 @@ public class DashboardMRepository {
 
     /// Consulta Apoyo Desc - atenciones
     public List<Map<String, Object>> queryDMCADA(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -1434,7 +1434,7 @@ public class DashboardMRepository {
     }
     /// Consulta Apoyo Desc - medicos
     public List<Map<String, Object>> queryDMCADM(String anio, String periodo, String codcas) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String sql = """
                         SELECT c.cod_centro,
@@ -1535,7 +1535,7 @@ public class DashboardMRepository {
     /// Indicadores de atenciones medicas
     /// total_atenciones - servicio - subactividad
     public List<Map<String, Object>> query0DMAMTASS(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -1562,7 +1562,7 @@ public class DashboardMRepository {
     }
     /// total_atenciones - agrupador - especialidad
     public List<Map<String, Object>> query1DMAMTAAE(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -1611,7 +1611,7 @@ public class DashboardMRepository {
     }
     /// total_atenciones  - no considerados
     public List<Map<String, Object>> query2DMAMTANC(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -1654,7 +1654,7 @@ public class DashboardMRepository {
     }
     /// total_atenciones  - sexo grupo etario
     public List<Map<String, Object>> query3DMAMTASGE(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -1682,7 +1682,7 @@ public class DashboardMRepository {
     }
     /// total_atenciones  - CSV
     public List<Map<String, Object>> query4DMAMTACSV(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -1733,7 +1733,7 @@ public class DashboardMRepository {
 
     /// total_medicos - query 0
     public List<Map<String, Object>> query0DMAMTM(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -1759,7 +1759,7 @@ public class DashboardMRepository {
     }
     /// total_medicos - query 1
     public List<Map<String, Object>> query1DMAMTM(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -1783,7 +1783,7 @@ public class DashboardMRepository {
     }
     /// total_medicos - query 2 csv
     public List<Map<String, Object>> query2DMAMTMCSV(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -1946,7 +1946,7 @@ public class DashboardMRepository {
 
     /// total_deserción - query 0
     public List<Map<String, Object>> query0DMAMTD(String anio, String periodo, String codcas, String codasegu) {
-        String tabla1 = "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla1 = "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
         String tabla2 = "dwsge.dwe_consulta_externa_citados_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
@@ -2025,7 +2025,7 @@ public class DashboardMRepository {
     }
     /// total_deserción - query 1
     public List<Map<String, Object>> query1DMAMTD(String anio, String periodo, String codcas, String codasegu) {
-        String tabla1 = "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla1 = "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
         String tabla2 = "dwsge.dwe_consulta_externa_citados_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
@@ -2102,7 +2102,7 @@ public class DashboardMRepository {
     }
     /// total_deserción - query 2 csv
     public List<Map<String, Object>> query2DMAMTDCSV(String anio, String periodo, String codcas, String codasegu) {
-        String tabla1 = "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla1 = "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
         String tabla2 = "dwsge.dwe_consulta_externa_citados_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
@@ -2183,7 +2183,7 @@ public class DashboardMRepository {
     ///Indicadores de medicina complementaria
     /// total - atenciones- servicio - subactividad
     public List<Map<String, Object>> query0DMMCTASS(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -2209,7 +2209,7 @@ public class DashboardMRepository {
     }
     /// total - atenciones- agrupador - especialidad
     public List<Map<String, Object>> query1DMMCTAAE(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -2257,7 +2257,7 @@ public class DashboardMRepository {
     }
     /// Total - atenciones - no considerados
     public List<Map<String, Object>> query2DMMCTANC(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -2299,7 +2299,7 @@ public class DashboardMRepository {
     }
     /// Total - atenciones- sexo y grupo etario vs atenciones
     public List<Map<String, Object>> query3DMMCTASGEA(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -2326,7 +2326,7 @@ public class DashboardMRepository {
     }
     /// Total - atenciones- CSV
     public List<Map<String, Object>> query4DMMCTACSV(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -2375,7 +2375,7 @@ public class DashboardMRepository {
     }
     /// total - medicos query0
     public List<Map<String, Object>> query0DMMCTM(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -2401,7 +2401,7 @@ public class DashboardMRepository {
     }
     /// total - medicos query1
     public List<Map<String, Object>> query1DMMCTM(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -2425,7 +2425,7 @@ public class DashboardMRepository {
     }
     /// Total - medicos query2 CSV
     public List<Map<String, Object>> query2DMMCTMCSV(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -2546,7 +2546,7 @@ public class DashboardMRepository {
     ///Indicadores de medicina ocupacional
     /// total - atenciones- servicio - subactividad
     public List<Map<String, Object>> query0DMMOTASS(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -2574,7 +2574,7 @@ public class DashboardMRepository {
     }
     /// total - atenciones- agrupador - especialidad
     public List<Map<String, Object>> query1DMMOTAAE(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -2624,7 +2624,7 @@ public class DashboardMRepository {
     }
     /// Total - atenciones - no considerados
     public List<Map<String, Object>> query2DMMOTANC(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -2668,7 +2668,7 @@ public class DashboardMRepository {
     }
     /// Total - atenciones- sexo y grupo etario vs atenciones
     public List<Map<String, Object>> query3DMMOTASGEA(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -2697,7 +2697,7 @@ public class DashboardMRepository {
     }
     /// Total - atenciones- CSV
     public List<Map<String, Object>> query4DMMOTACSV(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -2749,7 +2749,7 @@ public class DashboardMRepository {
 
     ///total - medicos query0
     public List<Map<String, Object>> query0DMOCTM(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -2776,7 +2776,7 @@ public class DashboardMRepository {
     }
     ///total - medicos query1
     public List<Map<String, Object>> query1DMOCTM(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -2801,7 +2801,7 @@ public class DashboardMRepository {
     }
     ///Total - medicos query2 CSV
     public List<Map<String, Object>> query2DMMOTMCSV(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -2926,7 +2926,7 @@ public class DashboardMRepository {
     ///Indicadores de medico de personal
     /// total - atenciones- servicio - subactividad
     public List<Map<String, Object>> query0DMMPTASS(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -2954,7 +2954,7 @@ public class DashboardMRepository {
     }
     /// total - atenciones- agrupador - especialidad
     public List<Map<String, Object>> query1DMMPTAAE(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -3004,7 +3004,7 @@ public class DashboardMRepository {
     }
     /// Total - atenciones - no considerados
     public List<Map<String, Object>> query2DMMPTANC(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -3048,7 +3048,7 @@ public class DashboardMRepository {
     }
     /// Total - atenciones- sexo y grupo etario vs atenciones
     public List<Map<String, Object>> query3DMMPTASGEA(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -3077,7 +3077,7 @@ public class DashboardMRepository {
     }
     /// Total - atenciones- CSV
     public List<Map<String, Object>> query4DMMPTACSV(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -3129,7 +3129,7 @@ public class DashboardMRepository {
 
     ///total - medicos query0
     public List<Map<String, Object>> query0DMMPTM(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -3156,7 +3156,7 @@ public class DashboardMRepository {
     }
     ///total - medicos query1
     public List<Map<String, Object>> query1DMMPTM(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -3181,7 +3181,7 @@ public class DashboardMRepository {
     }
     ///Total - medicos query2 CSV
     public List<Map<String, Object>> query2DMMPTMCSV(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -3306,7 +3306,7 @@ public class DashboardMRepository {
     ///Indicadores de consulta de atencion inmediata
     /// total - atenciones- servicio - subactividad
     public List<Map<String, Object>> query0DMCAITASS(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -3332,7 +3332,7 @@ public class DashboardMRepository {
     }
     /// total - atenciones- agrupador - especialidad
     public List<Map<String, Object>> query1DMCAITAAE(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -3380,7 +3380,7 @@ public class DashboardMRepository {
     }
     /// Total - atenciones - no considerados
     public List<Map<String, Object>> query2DMCAITANC(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -3422,7 +3422,7 @@ public class DashboardMRepository {
     }
     /// Total - atenciones- sexo y grupo etario vs atenciones
     public List<Map<String, Object>> query3DMCAITASGEA(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -3449,7 +3449,7 @@ public class DashboardMRepository {
     }
     /// Total - atenciones- CSV
     public List<Map<String, Object>> query4DMCAITACSV(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -3499,7 +3499,7 @@ public class DashboardMRepository {
 
     ///total - medicos query0
     public List<Map<String, Object>> query0DMCAITM(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -3524,7 +3524,7 @@ public class DashboardMRepository {
     }
     ///total - medicos query1
     public List<Map<String, Object>> query1DMCAITM(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -3547,7 +3547,7 @@ public class DashboardMRepository {
     }
     ///Total - medicos query2 CSV
     public List<Map<String, Object>> query2DMCAITMCSV(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -3665,7 +3665,7 @@ public class DashboardMRepository {
     ///Indicadores de cons apoyo desc
     /// total - atenciones- servicio - subactividad
     public List<Map<String, Object>> query0DMCADTASS(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -3692,7 +3692,7 @@ public class DashboardMRepository {
     }
     /// total - atenciones- agrupador - especialidad
     public List<Map<String, Object>> query1DMCADTAAE(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -3741,7 +3741,7 @@ public class DashboardMRepository {
     }
     /// Total - atenciones - no considerados
     public List<Map<String, Object>> query2DMCADTANC(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -3784,7 +3784,7 @@ public class DashboardMRepository {
     }
     /// Total - atenciones- sexo y grupo etario vs atenciones
     public List<Map<String, Object>> query3DMCADTASGEA(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -3812,7 +3812,7 @@ public class DashboardMRepository {
     }
     /// Total - atenciones- CSV
     public List<Map<String, Object>> query4DMCADTACSV(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -3863,7 +3863,7 @@ public class DashboardMRepository {
 
     ///total - medicos query0
     public List<Map<String, Object>> query0DMCADTM(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -3889,7 +3889,7 @@ public class DashboardMRepository {
     }
     ///total - medicos query1
     public List<Map<String, Object>> query1DMCADTM(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -3913,7 +3913,7 @@ public class DashboardMRepository {
     }
     ///Total - medicos query2 CSV
     public List<Map<String, Object>> query2DMCADTMCSV(String anio, String periodo, String codcas, String codasegu ) {
-        String tabla= "dwsge.dw_consulta_externa_homologacion_" + anio + "_" + periodo;
+        String tabla= "dwsge.dwe_consulta_externa_homologacion_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
 

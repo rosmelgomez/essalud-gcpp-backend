@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class LogFilter {
+public class LogFilterDto {
     private String dni;
     private String name;
     private String lastname;

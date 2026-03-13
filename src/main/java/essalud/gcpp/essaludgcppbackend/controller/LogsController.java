@@ -1,6 +1,6 @@
 package essalud.gcpp.essaludgcppbackend.controller;
 
-import essalud.gcpp.essaludgcppbackend.dtos.LogFilter;
+import essalud.gcpp.essaludgcppbackend.dtos.LogFilterDto;
 import essalud.gcpp.essaludgcppbackend.dtos.LogUsersDto;
 import essalud.gcpp.essaludgcppbackend.model.Users;
 import essalud.gcpp.essaludgcppbackend.repositories.UsersRepository;
@@ -40,7 +40,7 @@ public class LogsController {
 
     @GetMapping("/getlogusers")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<List<LogFilter>> getLogUsers(){
+    public ResponseEntity<List<LogFilterDto>> getLogUsers(){
         return ResponseEntity.ok(logService.getLogFilters());
     }
 

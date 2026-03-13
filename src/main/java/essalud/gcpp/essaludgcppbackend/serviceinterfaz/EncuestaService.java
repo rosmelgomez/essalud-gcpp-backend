@@ -59,10 +59,11 @@ public class EncuestaService  {
         ModelMapper mapper = new ModelMapper();
         for (Encuesta encuesta : encuestas) {
             EncuestaDto encuestaDto = mapper.map(encuesta, EncuestaDto.class);
+            encuestaDto.setId_user(encuesta.getUser_encuestas().getId());
             encuestaDto.setId_categoria(encuesta.getCategoria_encuestas().getId());
             encuestaDto.setId_modulo(encuesta.getModulo_encuestas().getId());
             encuestaDto.setId_subcategoria(encuesta.getSubcategoria_encuestas().getId());
-            encuestaDto.setId_user(encuesta.getUser_encuestas().getId());
+            encuestaDto.setId_variable(encuesta.getVariable_encuestas().getId());
             encuestasDto.add(encuestaDto);
         }
         return encuestasDto;
