@@ -52,7 +52,7 @@ public class DashboardEmeRepository {
                 d.diagdes,
                 d.cod_prioridad_n
             FROM (
-                SELECT 
+                SELECT
                     ROW_NUMBER() OVER (
                         PARTITION BY cod_centro, cod_estandar, acto_med, cod_emergencia
                         ORDER BY CAST(secuen_aten AS INTEGER) ASC
@@ -60,24 +60,24 @@ public class DashboardEmeRepository {
                     c.*
                 FROM (
                     SELECT
-                        a.cod_centro, 
-                        a.periodo, 
+                        a.cod_centro,
+                        a.periodo,
                         a.cod_topico,
                         top.topemedes,
-                        a.acto_med, 
-                        a.fecha_aten, 
-                        a.hora_aten, 
+                        a.acto_med,
+                        a.fecha_aten,
+                        a.hora_aten,
                         a.cod_tipo_paciente,
                         tp.tipopacinom,
-                        a.cod_prioridad, 
-                        a.cod_emergencia, 
-                        a.secuen_aten, 
+                        a.cod_prioridad,
+                        a.cod_emergencia,
+                        a.secuen_aten,
                         a.cod_estandar,
                         es.des_estandar,
                         a.cod_diagnostico,
                         dg.diagdes,
 
-                        CASE 
+                        CASE
                             WHEN a.cod_estandar = '04' THEN '1'
                             WHEN a.cod_prioridad = '1' THEN '2'
                             ELSE a.cod_prioridad
@@ -85,23 +85,23 @@ public class DashboardEmeRepository {
 
                     FROM %s a
 
-                    LEFT JOIN dwsge.sgss_cmdia10 dg 
+                    LEFT JOIN dwsge.sgss_cmdia10 dg
                         ON dg.diagcod = a.cod_diagnostico
 
-                    LEFT JOIN dwsge.sgss_cbtpc10 tp 
+                    LEFT JOIN dwsge.sgss_cbtpc10 tp
                         ON tp.tipopacicod = a.cod_tipo_paciente
 
-                    LEFT JOIN dwsge.sgss_mbtoe10 top 
+                    LEFT JOIN dwsge.sgss_mbtoe10 top
                         ON top.topemecod = a.cod_topico
 
-                    LEFT JOIN dwsge.dim_estandar es 
+                    LEFT JOIN dwsge.dim_estandar es
                         ON es.id_estandar = a.cod_estandar
 
-                    WHERE 
+                    WHERE
                         a.cod_diagnostico IS NOT NULL
                         AND a.cod_estandar IN ('04','05','06','07','08','09','10','11','12','13','14')
                         AND (
-                            CASE 
+                            CASE
                                 WHEN a.cod_tipo_paciente = '4' THEN '2'
                                 ELSE '1'
                             END
@@ -114,7 +114,7 @@ public class DashboardEmeRepository {
                 AND d.cod_centro = ?
                 AND d.periodo = ?
                 AND d.cod_prioridad_n= ?
-                """.formatted(tabla, code_asegurado);
+            """.formatted(tabla, code_asegurado);
 
         return secondJdbcTemplate.queryForList(sql, codcas,periodo_sql, prioridad);
     }
@@ -134,7 +134,7 @@ public class DashboardEmeRepository {
                         ELSE '1'
                     END
                     ) IN %s
-                """.formatted(tabla, code_asegurado);
+        """.formatted(tabla, code_asegurado);
 
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
@@ -153,14 +153,13 @@ public class DashboardEmeRepository {
               AND des_estancia = 'Mayor 24h'
               AND estancia_horas IS NOT NULL
               AND (
-                        CASE 
+                        CASE
                             WHEN estancias.cod_tipo_paciente = '4' THEN '2'
                             ELSE '1'
                         END
                         ) IN %s
             GROUP BY des_estancia
-                """.formatted(tabla, code_asegurado);
-
+            """.formatted(tabla, code_asegurado);
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
 
@@ -178,7 +177,7 @@ public class DashboardEmeRepository {
               AND des_estancia = 'Menor 24h'
               AND estancia_horas IS NOT NULL
               AND (
-                        CASE 
+                        CASE
                             WHEN estancias.cod_tipo_paciente = '4' THEN '2'
                             ELSE '1'
                         END
