@@ -87,6 +87,7 @@ public class UsersService {
     public void deleteUser(Integer id) {
         usersRepository.findById(id).ifPresent(usersRepository::delete);
     }
+
     private UsersDto user (Users  user) {
         UsersDto usersDto = new UsersDto();
         usersDto.setId(user.getId());
