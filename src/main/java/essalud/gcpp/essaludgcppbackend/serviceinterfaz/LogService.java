@@ -27,8 +27,7 @@ public class LogService {
         for (Logs log : logs) {
             LogFilterDto logFilterDto = new LogFilterDto();
             logFilterDto.setDni(log.getUser_logs().getDni());
-            logFilterDto.setName(log.getUser_logs().getName());
-            logFilterDto.setLastname(log.getUser_logs().getLastname());
+            logFilterDto.setFull_name(log.getUser_logs().getName()+ " "+log.getUser_logs().getLastname());
             logFilterDto.setIp_user(log.getIp_user());
             logFilterDto.setUrl(log.getUrl());
             logFilterDto.setBrowser(log.getBrowser());
@@ -36,6 +35,7 @@ public class LogService {
             logFilterDto.setCodcas(log.getUser_logs().getCodcas());
             logFilterDto.setCode_red(log.getUser_logs().getCode_red());
             logFilterDto.setDate(log.getDate_creation());
+            logFilterDto.setId_user(log.getUser_logs().getId());
             logFilterDtos.add(logFilterDto);
         }
         return logFilterDtos;

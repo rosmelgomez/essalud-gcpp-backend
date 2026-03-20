@@ -10,8 +10,7 @@ import java.time.LocalDateTime;
 @Data
 public class LogFilterDto {
     private String dni;
-    private String name;
-    private String lastname;
+    private String full_name;
     private String ip_user;
     private String url;
     private String browser;
@@ -19,4 +18,5 @@ public class LogFilterDto {
     private String codcas;
     private String code_red;
     private LocalDateTime date;
+    private Integer id_user;
 }
