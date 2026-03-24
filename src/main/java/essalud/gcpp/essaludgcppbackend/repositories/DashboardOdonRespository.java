@@ -31,7 +31,7 @@ public class DashboardOdonRespository {
         String code_asegurado = code_asegurado(codasegu);
 
         String sql = """
-                SELECT 
+                SELECT
                     ce.cod_servicio,
                     ce.cod_especialidad,
                     ca.cenasides,

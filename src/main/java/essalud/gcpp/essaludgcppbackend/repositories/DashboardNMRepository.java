@@ -35,9 +35,9 @@ public class DashboardNMRepository {
         String sql = """
                     SELECT ce.cod_oricentro, ce.cod_centro,ca.cenasides,ce.cod_servicio, ce.cod_actividad, ce.cod_subactividad,a.actespnom,ce.acto_med, ce.doc_paciente
                     FROM %s ce
-                    LEFT OUTER JOIN dwsge.sgss_cmdia10 dg 
+                    LEFT OUTER JOIN dwsge.sgss_cmdia10 dg
                         ON dg.diagcod=ce.diagcod
-                    LEFT JOIN dwsge.sgss_cmsho10 AS c 
+                    LEFT JOIN dwsge.sgss_cmsho10 AS c
                         ON ce.cod_servicio = c.servhoscod
                     LEFT JOIN dwsge.sgss_cmace10 AS a
                         ON ce.cod_actividad = a.actcod
@@ -54,13 +54,13 @@ public class DashboardNMRepository {
                         OR (cod_servicio ='F21'
                         AND cod_actividad = 'B1' AND cod_subactividad in ('007', '480', '643', '008') AND ce.cod_tipo_gravidez = '1'))
                         AND (
-                                CASE 
+                                CASE
                                     WHEN ce.cod_tipo_paciente = '4' THEN '2'
                                     ELSE '1'
                                 END
                                 ) IN %s
                     UNION ALL
-                    
+
                     SELECT ce.cod_oricentro, ce.cod_centro,ca.cenasides,ce.cod_servicio, ce.cod_actividad, ce.cod_subactividad,a.actespnom, ce.acto_med::NUMERIC, ce.doc_paciente
                     FROM %s ce
                     LEFT JOIN dwsge.sgss_cmcas10 AS ca
@@ -74,7 +74,7 @@ public class DashboardNMRepository {
                     AND ce.cod_servicio ='F21'
                     AND ce.cod_subactividad ='127'
                     AND (
-                            CASE 
+                            CASE
                                 WHEN ce.cod_tipo_paciente = '4' THEN '2'
                                 ELSE '1'
                             END
@@ -92,9 +92,9 @@ public class DashboardNMRepository {
         String sql = """
                     SELECT ce.cod_oricentro, ce.cod_centro,ca.cenasides,a.actespnom,c.servhosdes,ce.cod_servicio, ce.cod_actividad, ce.cod_subactividad,ce.acto_med, ce.doc_paciente, ce.diagcod, dg.diagdes
                     FROM %s ce
-                    LEFT OUTER JOIN dwsge.sgss_cmdia10 dg 
+                    LEFT OUTER JOIN dwsge.sgss_cmdia10 dg
                         ON dg.diagcod=ce.diagcod
-                    LEFT JOIN dwsge.sgss_cmsho10 AS c 
+                    LEFT JOIN dwsge.sgss_cmsho10 AS c
                         ON ce.cod_servicio = c.servhoscod
                     LEFT JOIN dwsge.sgss_cmace10 AS a
                         ON ce.cod_actividad = a.actcod
@@ -110,7 +110,7 @@ public class DashboardNMRepository {
                         AND cod_tipo_gravidez = '1'
                         AND ce.cod_subactividad in ('007', '480', '643', '008')
                         AND (
-                                CASE 
+                                CASE
                                     WHEN ce.cod_tipo_paciente = '4' THEN '2'
                                     ELSE '1'
                                 END
@@ -128,7 +128,7 @@ public class DashboardNMRepository {
         String sql = """
                     SELECT ce.cod_oricentro, ce.cod_centro,ca.cenasides,a.actespnom,c.servhosdes,ce.cod_servicio, ce.cod_actividad, ce.cod_subactividad,ce.acto_med, ce.doc_paciente, ce.diagcod, dg.diagdes
                     FROM %s ce
-                    LEFT OUTER JOIN dwsge.sgss_cmdia10 dg 
+                    LEFT OUTER JOIN dwsge.sgss_cmdia10 dg
                         ON dg.diagcod=ce.diagcod
                     LEFT JOIN dwsge.sgss_cmsho10 AS c 
                         ON ce.cod_servicio = c.servhoscod
@@ -848,7 +848,7 @@ public class DashboardNMRepository {
         String sql = """
                     SELECT ce.cod_oricentro, ce.cod_centro,ca.cenasides,a.actespnom,c.servhosdes,ce.cod_servicio, ce.cod_actividad, ce.cod_subactividad,ce.acto_med, ce.doc_paciente, ce.diagcod, dg.diagdes
                     FROM %s ce
-                    LEFT OUTER JOIN dwsge.sgss_cmdia10 dg 
+                    LEFT OUTER JOIN dwsge.sgss_cmdia10 dg
                         ON dg.diagcod=ce.diagcod
                     LEFT JOIN dwsge.sgss_cmsho10 AS c 
                         ON ce.cod_servicio = c.servhoscod
@@ -861,9 +861,9 @@ public class DashboardNMRepository {
                         ON ce.cod_oricentro = ca.oricenasicod
                         AND ce.cod_centro = ca.cenasicod
                         WHERE cod_centro = ?
-                        AND cod_servicio ='E21'
-                        AND cod_actividad ='B1'
-                        AND ce.cod_subactividad in ('752','760','763','006')
+                        AND ((cod_servicio ='E21'AND cod_actividad ='B1' AND ce.cod_subactividad in ('752','760','763','006'))
+                        or
+                        (cod_servicio ='E21'AND cod_actividad ='A7' AND ce.cod_subactividad in ('005','006','752','760','763')))
                         AND (
                                 CASE 
                                     WHEN ce.cod_tipo_paciente = '4' THEN '2'
