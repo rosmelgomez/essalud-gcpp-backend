@@ -1,4 +1,4 @@
-package essalud.gcpp.essaludgcppbackend.dtos;
+package essalud.gcpp.essaludgcppbackend.dtos.encuesta;
 import lombok.*;
 
 @Getter

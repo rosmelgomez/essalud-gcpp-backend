@@ -1,7 +1,7 @@
 package essalud.gcpp.essaludgcppbackend.controller;
 
-import essalud.gcpp.essaludgcppbackend.dtos.*;
-import essalud.gcpp.essaludgcppbackend.serviceinterfaz.*;
+import essalud.gcpp.essaludgcppbackend.dtos.encuesta.*;
+import essalud.gcpp.essaludgcppbackend.serviceinterfaz.encuesta.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 

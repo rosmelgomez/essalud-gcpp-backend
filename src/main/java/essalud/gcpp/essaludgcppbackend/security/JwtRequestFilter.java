@@ -3,7 +3,8 @@ package essalud.gcpp.essaludgcppbackend.security;
 
 import java.io.IOException;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,19 +23,22 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
-    @Autowired
-    private JwtUserDetailsService jwtUserDetailsService;
+    private final JwtTokenUtil jwtTokenUtil;
+    private final JwtUserDetailsService jwtUserDetailsService;
 
-    @Value("${app.security.cookie.access.name:access_token}")
+    @Value(value = "${app.security.cookie.access.name}")
     private String accessCookieName;
 
-    @Value("${app.security.cookie.api.name:api_token}")
+    @Value(value = "${app.security.cookie.api.name}")
     private String apiCookieName;
 
+    public JwtRequestFilter(JwtTokenUtil jwtTokenUtil, JwtUserDetailsService jwtUserDetailsService) {
+        this.jwtTokenUtil = jwtTokenUtil;
+        this.jwtUserDetailsService = jwtUserDetailsService;
+    }
+
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
             throws ServletException, IOException {
         final boolean useAccessToken = requiresAccessToken(request);
         String username = null;
@@ -71,7 +75,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private String resolveToken(HttpServletRequest request, boolean useAccessToken) {
+    private @Nullable String resolveToken(HttpServletRequest request, boolean useAccessToken) {
         String tokenFromCookie = getTokenFromCookie(request, useAccessToken ? accessCookieName : apiCookieName);
         if (tokenFromCookie != null && !tokenFromCookie.isBlank()) {
             return tokenFromCookie;
@@ -79,19 +83,18 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         return null;
     }
 
-    private String getTokenFromCookie(HttpServletRequest request, String cookieName) {
+    private  @Nullable String getTokenFromCookie(HttpServletRequest request, String cookieName) {
         Cookie[] cookies = request.getCookies();
-        if (cookies == null) {
-            return null;
-        }
-
-        for (Cookie cookie : cookies) {
-            if (cookieName.equals(cookie.getName())) {
-                return cookie.getValue();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookieName.equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
             }
-        }
 
+        }
         return null;
+
     }
 
     private boolean requiresAccessToken(HttpServletRequest request) {

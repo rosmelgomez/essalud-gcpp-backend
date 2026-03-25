@@ -2,6 +2,7 @@ package essalud.gcpp.essaludgcppbackend.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import essalud.gcpp.essaludgcppbackend.model.encuesta.Encuesta;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,7 +27,7 @@ public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
+  /*
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -41,6 +42,9 @@ public class Users {
 
     @Column(name = "code_red")
     private String code_red;
+*/
+    @Column(name = "email", nullable = false)
+    private String email;
 
     @Column(name = "username", nullable = false)
     private String username;

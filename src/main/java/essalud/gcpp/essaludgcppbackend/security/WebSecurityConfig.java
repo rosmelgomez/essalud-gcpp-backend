@@ -26,10 +26,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity()
 public class WebSecurityConfig {
 
-    @Value("${app.security.cors.allowed-origins:http://10.0.29.89:4200}")
+    @Value(value = "${app.security.cors.allowed-origins}")
     private List<String> allowedOrigins;
 
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -46,7 +46,7 @@ public class WebSecurityConfig {
 
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
@@ -56,12 +56,12 @@ public class WebSecurityConfig {
     }
 
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+    public void configureGlobal(AuthenticationManagerBuilder auth) {
         auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) {
         httpSecurity
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
@@ -69,12 +69,15 @@ public class WebSecurityConfig {
                 authorizeRequests
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers("/login").permitAll()
+                                .requestMatchers("/logout-user").permitAll()
                                 .anyRequest().authenticated()
                 ).exceptionHandling(authentication ->
                         authentication.authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 )
                 .formLogin(AbstractHttpConfigurer::disable
                 )
+                //.logout(AbstractHttpConfigurer::disable
+                //)
                 .sessionManagement(sessionManagement ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 ).addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

@@ -1,8 +1,8 @@
-package essalud.gcpp.essaludgcppbackend.serviceinterfaz;
+package essalud.gcpp.essaludgcppbackend.serviceinterfaz.encuesta;
 
-import essalud.gcpp.essaludgcppbackend.dtos.VariableDto;
-import essalud.gcpp.essaludgcppbackend.model.Variable;
-import essalud.gcpp.essaludgcppbackend.repositories.VariableRepository;
+import essalud.gcpp.essaludgcppbackend.dtos.encuesta.VariableDto;
+import essalud.gcpp.essaludgcppbackend.model.encuesta.Variable;
+import essalud.gcpp.essaludgcppbackend.repositories.encuesta.VariableRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
-package essalud.gcpp.essaludgcppbackend.repositories;
+package essalud.gcpp.essaludgcppbackend.repositories.encuesta;
 
-import essalud.gcpp.essaludgcppbackend.model.SubCategoria;
+import essalud.gcpp.essaludgcppbackend.model.encuesta.SubCategoria;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

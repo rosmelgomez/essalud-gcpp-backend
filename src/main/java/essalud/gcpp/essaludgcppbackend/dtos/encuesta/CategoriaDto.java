@@ -1,4 +1,4 @@
-package essalud.gcpp.essaludgcppbackend.dtos;
+package essalud.gcpp.essaludgcppbackend.dtos.encuesta;
 
 import lombok.*;
 
@@ -7,9 +7,9 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class SubCategoriaDto {
+public class CategoriaDto {
     private Integer id;
     private String name_categoria;
     private Boolean active;
-    private Integer id_categoria;
+    private Integer id_modulo;
 }

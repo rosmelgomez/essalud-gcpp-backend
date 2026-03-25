@@ -1,6 +1,6 @@
 package essalud.gcpp.essaludgcppbackend.controller;
 
-
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -11,6 +11,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,22 +23,21 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
-///@RequestMapping("/ggi")
 public class AuthController {
 
-    @Value("${app.security.cookie.access.name:access_token}")
+    @Value("${app.security.cookie.access.name}")
     private String accessCookieName;
 
-    @Value("${app.security.cookie.api.name:api_token}")
+    @Value("${app.security.cookie.api.name}")
     private String apiCookieName;
 
-    @Value("${app.security.cookie.secure:false}")
+    @Value("${app.security.cookie.secure}")
     private boolean secureCookie;
 
-    @Value("${app.security.cookie.same-site:Lax}")
+    @Value("${app.security.cookie.same-site}")
     private String sameSite;
 
-    @Value("${app.security.cookie.api.path:/}")
+    @Value("${app.security.cookie.api.path}")
     private String apiCookiePath;
 
     private final AuthenticationManager authenticationManager;
@@ -80,7 +80,7 @@ public class AuthController {
             .body("Login Successfull");
     }
 
-    @PostMapping("/access-token")
+    @GetMapping("/access-token")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
     public ResponseEntity<?> validateAccessToken(HttpServletRequest request) {
         String accessToken = getCookieValue(request, accessCookieName);
@@ -137,8 +137,7 @@ public class AuthController {
             .body("Access token renovado");
     }
 
-    @PostMapping("/logout") 
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PostMapping("/logout-user")
     public ResponseEntity<?> logoutUser() {
         ResponseCookie deleteAccessCookie = ResponseCookie.from(accessCookieName, "")
             .httpOnly(true)
@@ -162,7 +161,7 @@ public class AuthController {
             .body("Logout Successfull");
     }
 
-    private String getCookieValue(HttpServletRequest request, String cookieName) {
+    private @Nullable String getCookieValue(HttpServletRequest request, String cookieName) {
         Cookie[] cookies = request.getCookies();
         if (cookies == null) {
             return null;

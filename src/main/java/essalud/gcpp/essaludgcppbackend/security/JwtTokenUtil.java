@@ -27,31 +27,28 @@ public class JwtTokenUtil implements Serializable {
     @Serial
     private static final long serialVersionUID = -2550185165626007488L;
 
-    public static final long DEFAULT_ACCESS_TOKEN_VALIDITY = 15 * 60 * 1000;
-    public static final long DEFAULT_REFRESH_TOKEN_VALIDITY = 7L * 24 * 60 * 60 * 1000;
     private static final String TOKEN_TYPE_CLAIM = "token_type";
     private static final String AUTHORITIES_CLAIM = "authorities";
     private static final String ACCESS_TOKEN_TYPE = "access";
     private static final String REFRESH_TOKEN_TYPE = "refresh";
-    private static final String DEFAULT_ISSUER = "essalud-gcpp-backend";
 
-    @Value("${app.security.jwt.access-token-validity-ms:" + DEFAULT_ACCESS_TOKEN_VALIDITY + "}")
+    @Value(value = "${app.security.jwt.access-token-validity-ms}")
     private long accessTokenValidity;
 
-    @Value("${app.security.jwt.api-token-validity-ms:${app.security.jwt.refresh-token-validity-ms:" + DEFAULT_REFRESH_TOKEN_VALIDITY + "}}")
+    @Value(value = "${app.security.jwt.api-token-validity-ms}")
     private long refreshTokenValidity;
 
-    @Value("${app.security.jwt.access-secret-base64:}")
+    @Value(value = "${app.security.jwt.access-secret-base64}")
     private String accessSecretBase64;
 
-    @Value("${app.security.jwt.api-secret-base64:${app.security.jwt.refresh-secret-base64:}}")
+    @Value(value = "${app.security.jwt.api-secret-base64}")
     private String refreshSecretBase64;
 
     // Legacy fallback for compatibility in environments that still use jwt.secret.
-    @Value("${jwt.secret:}")
+    @Value(value = "${jwt.secret}")
     private String legacySecret;
 
-    @Value("${app.security.jwt.issuer:" + DEFAULT_ISSUER + "}")
+    @Value(value = "${app.security.jwt.issuer}")
     private String issuer;
 
     //recuperar el nombre de usuario del token jwt

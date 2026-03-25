@@ -26,11 +26,12 @@ public class UsersService {
             Users newUser = new Users();
             PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = passwordEncoder.encode(usersDto.getPassword());
-            newUser.setName(usersDto.getUsername());
+            /*newUser.setName(usersDto.getUsername());
             newUser.setLastname(usersDto.getLastname());
             newUser.setDni(usersDto.getDni());
             newUser.setCodcas(usersDto.getCodcas());
             newUser.setCode_red(usersDto.getCode_red());
+            */
             newUser.setUsername(usersDto.getUsername());
             newUser.setPassword(encodedPassword);
             newUser.setRol(usersDto.getRol());
@@ -67,11 +68,13 @@ public class UsersService {
     public void updateUser(UsersDto usersDto) {
         Users user = usersRepository.findById(usersDto.getId()).orElse(null);
         if (user != null) {
-            user.setName(usersDto.getName());
+            /*user.setName(usersDto.getName());
             user.setLastname(usersDto.getLastname());
             user.setDni(usersDto.getDni());
             user.setCodcas(usersDto.getCodcas());
             user.setCode_red(usersDto.getCode_red());
+             */
+
             user.setUsername(usersDto.getUsername());
             user.setFlag(usersDto.getFlag());
             user.setRol(usersDto.getRol());
@@ -91,11 +94,13 @@ public class UsersService {
     private UsersDto user (Users  user) {
         UsersDto usersDto = new UsersDto();
         usersDto.setId(user.getId());
+        /*
         usersDto.setName(user.getName());
         usersDto.setLastname(user.getLastname());
         usersDto.setDni(user.getDni());
         usersDto.setCodcas(user.getCodcas());
         usersDto.setCode_red(user.getCode_red());
+         */
         usersDto.setUsername(user.getUsername());
         usersDto.setPassword("");
         usersDto.setRol(user.getRol());
