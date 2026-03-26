@@ -32,6 +32,7 @@ public class UserRol {
     @JoinColumn(name = "user_id")
     private Users usuario_rol;
 
+
     /// relacion con Rol
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rol_id")
