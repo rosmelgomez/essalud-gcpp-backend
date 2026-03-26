@@ -2,6 +2,7 @@ package essalud.gcpp.essaludgcppbackend.controller;
 
 import essalud.gcpp.essaludgcppbackend.dtos.UserLoginDto;
 import essalud.gcpp.essaludgcppbackend.dtos.UsersDto;
+import essalud.gcpp.essaludgcppbackend.model.Users;
 import essalud.gcpp.essaludgcppbackend.serviceinterfaz.UsersService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,7 +28,7 @@ public class UserController {
 
     @GetMapping("/getInfoUser/{username}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
-    public UsersDto getUser(@PathVariable String username) {
+    public Users getUser(@PathVariable String username) {
         return  usersService.getUserByUsername(username);
     }
 

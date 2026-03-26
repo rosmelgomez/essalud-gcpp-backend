@@ -2,11 +2,13 @@ package essalud.gcpp.essaludgcppbackend.serviceinterfaz;
 
 import essalud.gcpp.essaludgcppbackend.dtos.UserLoginDto;
 import essalud.gcpp.essaludgcppbackend.dtos.UsersDto;
+import essalud.gcpp.essaludgcppbackend.model.Rol;
 import essalud.gcpp.essaludgcppbackend.model.Users;
 import essalud.gcpp.essaludgcppbackend.repositories.UsersRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,6 +25,7 @@ public class UsersService {
     public void saveUser(UsersDto usersDto) {
         Users user = usersRepository.findByUsername(usersDto.getUsername());
         if (user == null) {
+            List<Rol> roles = new ArrayList<>();
             Users newUser = new Users();
             PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = passwordEncoder.encode(usersDto.getPassword());
@@ -34,7 +37,7 @@ public class UsersService {
             */
             newUser.setUsername(usersDto.getUsername());
             newUser.setPassword(encodedPassword);
-            newUser.setRol(usersDto.getRol());
+            //newUser.setRol(usersDto.getRol());
             newUser.setFlag(usersDto.getFlag());
             newUser.setDate_creation(LocalDateTime.now());
             newUser.setDate_update(LocalDateTime.now());
@@ -42,9 +45,9 @@ public class UsersService {
         }
     }
 
-    public UsersDto getUserByUsername(String username) {
-        Users user = usersRepository.findByUsername(username);
-        return  user(user);
+    @Transactional(readOnly = true)
+    public Users getUserByUsername(String username) {
+        return usersRepository.findByUsername(username);
     }
 
     public List<UsersDto> getAllUsers() {
@@ -77,7 +80,7 @@ public class UsersService {
 
             user.setUsername(usersDto.getUsername());
             user.setFlag(usersDto.getFlag());
-            user.setRol(usersDto.getRol());
+            //user.setRol(usersDto.getRol());
             if (usersDto.getPassword() != null) {
                 PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
                 String encodedPassword = passwordEncoder.encode(usersDto.getPassword());
@@ -103,7 +106,7 @@ public class UsersService {
          */
         usersDto.setUsername(user.getUsername());
         usersDto.setPassword("");
-        usersDto.setRol(user.getRol());
+        //usersDto.setRol(user.getRol());
         usersDto.setFlag(user.getFlag());
         usersDto.setDate_creation(user.getDate_creation());
         usersDto.setDate_update(user.getDate_update());

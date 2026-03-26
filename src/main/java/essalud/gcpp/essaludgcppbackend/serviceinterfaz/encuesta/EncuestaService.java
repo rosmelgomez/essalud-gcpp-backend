@@ -47,11 +47,11 @@ public class EncuestaService  {
         encuesta.setStatus(encuestaDto.getStatus());
         encuesta.setComment(encuestaDto.getComment());
         encuesta.setDate_creation(LocalDateTime.now());
-        encuesta.setUser_encuestas(user);
-        encuesta.setModulo_encuestas(modulo);
-        encuesta.setCategoria_encuestas(categoria);
-        encuesta.setSubcategoria_encuestas(subCategoria);
-        encuesta.setVariable_encuestas(variable);
+        encuesta.setUser_encuesta(user);
+        encuesta.setModulo_encuesta(modulo);
+        encuesta.setCategoria_encuesta(categoria);
+        encuesta.setSubcategoria_encuesta(subCategoria);
+        encuesta.setVariable_encuesta(variable);
         ER.save(encuesta);
     }
 
@@ -61,11 +61,11 @@ public class EncuestaService  {
         ModelMapper mapper = new ModelMapper();
         for (Encuesta encuesta : encuestas) {
             EncuestaDto encuestaDto = mapper.map(encuesta, EncuestaDto.class);
-            encuestaDto.setId_user(encuesta.getUser_encuestas().getId());
-            encuestaDto.setId_categoria(encuesta.getCategoria_encuestas().getId());
-            encuestaDto.setId_modulo(encuesta.getModulo_encuestas().getId());
-            encuestaDto.setId_subcategoria(encuesta.getSubcategoria_encuestas().getId());
-            encuestaDto.setId_variable(encuesta.getVariable_encuestas().getId());
+            encuestaDto.setId_user(encuesta.getUser_encuesta().getId());
+            encuestaDto.setId_categoria(encuesta.getCategoria_encuesta().getId());
+            encuestaDto.setId_modulo(encuesta.getModulo_encuesta().getId());
+            encuestaDto.setId_subcategoria(encuesta.getSubcategoria_encuesta().getId());
+            encuestaDto.setId_variable(encuesta.getVariable_encuesta().getId());
             encuestasDto.add(encuestaDto);
         }
         return encuestasDto;

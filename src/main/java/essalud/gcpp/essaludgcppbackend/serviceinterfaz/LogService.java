@@ -2,7 +2,7 @@ package essalud.gcpp.essaludgcppbackend.serviceinterfaz;
 
 import essalud.gcpp.essaludgcppbackend.dtos.LogFilterDto;
 import essalud.gcpp.essaludgcppbackend.dtos.LogUsersDto;
-import essalud.gcpp.essaludgcppbackend.model.Logs;
+import essalud.gcpp.essaludgcppbackend.model.Log;
 import essalud.gcpp.essaludgcppbackend.model.Users;
 import essalud.gcpp.essaludgcppbackend.repositories.LogsRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,20 +22,20 @@ public class LogService {
     }
 
     public List<LogFilterDto>  getLogFilters() {
-        List<Logs> logs = logsRepository.findAll();
+        List<Log> logs = logsRepository.findAll();
         List<LogFilterDto> logFilterDtos = new ArrayList<>();
-        for (Logs log : logs) {
+        for (Log log : logs) {
             LogFilterDto logFilterDto = new LogFilterDto();
-            logFilterDto.setDni(log.getUser_logs().getDni());
-            logFilterDto.setFull_name(log.getUser_logs().getName()+ " "+log.getUser_logs().getLastname());
+            logFilterDto.setDni(log.getUser_log().getDni());
+            logFilterDto.setFull_name(log.getUser_log().getName()+ " "+log.getUser_log().getLastname());
             logFilterDto.setIp_user(log.getIp_user());
             logFilterDto.setUrl(log.getUrl());
             logFilterDto.setBrowser(log.getBrowser());
-            logFilterDto.setUser_role(log.getUser_logs().getRol());
-            logFilterDto.setCodcas(log.getUser_logs().getCodcas());
-            logFilterDto.setCode_red(log.getUser_logs().getCode_red());
+            //logFilterDto.setUser_role(log.getUser_log().getRol());
+            logFilterDto.setCodcas(log.getUser_log().getCodcas());
+            logFilterDto.setCode_red(log.getUser_log().getCode_red());
             logFilterDto.setDate(log.getDate_creation());
-            logFilterDto.setId_user(log.getUser_logs().getId());
+            logFilterDto.setId_user(log.getUser_log().getId());
             logFilterDtos.add(logFilterDto);
         }
         return logFilterDtos;
@@ -47,8 +47,8 @@ public class LogService {
         String browser = BrowserDetector.detectBrowser(request);
         String os = BrowserDetector.detectOS(request);
 
-        Logs log = Logs.builder()
-                .user_logs(user)
+        Log log = Log.builder()
+                .user_log(user)
                 .action(dto.getAction())
                 .status(dto.getStatus())
                 .message(dto.getMessage())

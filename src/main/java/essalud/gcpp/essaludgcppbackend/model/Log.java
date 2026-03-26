@@ -20,7 +20,7 @@ import lombok.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "log_user")
-public class Logs {
+public class Log {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -52,7 +52,7 @@ public class Logs {
     /// relation user.
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_user")
-    private Users user_logs;
+    private Users user_log;
 
 
 }

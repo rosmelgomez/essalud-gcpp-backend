@@ -28,7 +28,7 @@ public class Modulo {
     private List<Categoria> categorias;
 
     /// relation encuesta
-    @OneToMany(mappedBy = "modulo_encuestas", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "modulo_encuesta", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Encuesta> encuestas;
 
 }

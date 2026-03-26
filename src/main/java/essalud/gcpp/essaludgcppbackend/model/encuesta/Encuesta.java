@@ -33,26 +33,26 @@ public class Encuesta {
     /// relation user.
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_user")
-    private Users user_encuestas;
+    private Users user_encuesta;
 
     /// relation modulo
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_modulo")
-    private Modulo modulo_encuestas;
+    private Modulo modulo_encuesta;
 
     /// relation categoria
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_categoria")
-    private Categoria categoria_encuestas;
+    private Categoria categoria_encuesta;
 
     /// relation subcategoria
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_subcategoria")
-    private SubCategoria subcategoria_encuestas;
+    private SubCategoria subcategoria_encuesta;
 
     /// relation variable
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_variable")
-    private Variable variable_encuestas;
+    private Variable variable_encuesta;
 
 }

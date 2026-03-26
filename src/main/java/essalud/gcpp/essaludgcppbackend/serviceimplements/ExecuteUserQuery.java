@@ -28,16 +28,17 @@ public class ExecuteUserQuery implements ApplicationRunner {
 	public void run(@NonNull ApplicationArguments args) {
 		ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
 		populator.addScript(new ClassPathResource("insert_users.sql"));
+		populator.addScript(new ClassPathResource("insert_rol.sql"));
+		populator.addScript(new ClassPathResource("insert_user_rol.sql"));
 		populator.addScript(new ClassPathResource("insert_modulo.sql"));
 		populator.addScript(new ClassPathResource("insert_categoria.sql"));
 		populator.addScript(new ClassPathResource("insert_subcategoria.sql"));
 		populator.addScript(new ClassPathResource("insert_variable.sql"));
-
 		try {
 			populator.execute(firstDataSource);
-			LOGGER.info("Archivo SQL insert_users.sql ejecutado correctamente.");
+			LOGGER.info("Archivos SQL ejecutado correctamente.");
 		} catch (Exception exception) {
-			LOGGER.error("Error al ejecutar insert_users.sql", exception);
+			LOGGER.error("Error al ejecutar archivos SQL", exception);
 		}
 
 

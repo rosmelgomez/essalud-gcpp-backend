@@ -33,7 +33,7 @@ public class Categoria {
     private List<SubCategoria> subcategorias;
 
     /// relation encuesta
-    @OneToMany(mappedBy = "categoria_encuestas", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "categoria_encuesta", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Encuesta> encuestas;
 
 }

@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @Table(name = "solicitud_acceso")
-public class Solicitud_Acceso {
+public class SolicitudAcceso {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -28,6 +28,6 @@ public class Solicitud_Acceso {
     @Column(name = "date_update", nullable = false)
     private LocalDateTime date_update;
 
-    @Column(name = "estado", nullable = false)
-    private String estado;
+    @Column(name = "status", nullable = false)
+    private String status;
 }

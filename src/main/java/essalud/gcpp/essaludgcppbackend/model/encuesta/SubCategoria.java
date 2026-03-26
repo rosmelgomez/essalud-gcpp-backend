@@ -33,6 +33,6 @@ public class SubCategoria {
     private List<Variable> variables;
 
     /// relation encuesta
-    @OneToMany(mappedBy = "subcategoria_encuestas", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "subcategoria_encuesta", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Encuesta> encuestas;
 }

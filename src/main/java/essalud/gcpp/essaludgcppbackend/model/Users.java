@@ -27,7 +27,7 @@ public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-  /*
+
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -42,14 +42,14 @@ public class Users {
 
     @Column(name = "code_red")
     private String code_red;
-*/
-    @Column(name = "email", nullable = false)
+
+    @Column(name = "email")
     private String email;
 
-    @Column(name = "username", nullable = false)
+    @Column(name = "username")
     private String username;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     private String password;
 
     @Column(name = "date_creation", nullable = false)
@@ -61,15 +61,16 @@ public class Users {
     @Column(name = "flag", nullable = false)
     private Boolean flag;
 
-    @Column(name = "rol", nullable = false)
-    private String rol;
+    /// relacion con usuario_rol
+    @OneToMany(mappedBy = "usuario_rol" , fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<UserRol> usuarios_roles;
 
-    /// relation logs
-    @OneToMany(mappedBy = "user_logs", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Logs> logs_user;
+    /// relacion con logs
+    @OneToMany(mappedBy = "user_log", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Log> logs;
 
-    /// relation encuesta
-    @OneToMany(mappedBy = "user_encuestas", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    /// relacion con encuesta
+    @OneToMany(mappedBy = "user_encuesta", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Encuesta> encuestas;
 
 }
