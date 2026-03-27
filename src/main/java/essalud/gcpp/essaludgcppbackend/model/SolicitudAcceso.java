@@ -30,4 +30,10 @@ public class SolicitudAcceso {
 
     @Column(name = "status", nullable = false)
     private String status;
+
+    /// relacion con usuario
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_user")
+    private Users user_solicitud;
+
 }

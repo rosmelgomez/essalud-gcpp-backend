@@ -70,6 +70,8 @@ public class WebSecurityConfig {
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers("/login").permitAll()
                                 .requestMatchers("/logout-user").permitAll()
+                                .requestMatchers("/solicitud/register").permitAll()
+                                .requestMatchers("/user/getUserByDni/").permitAll()
                                 .anyRequest().authenticated()
                 ).exceptionHandling(authentication ->
                         authentication.authenticationEntryPoint(jwtAuthenticationEntryPoint)

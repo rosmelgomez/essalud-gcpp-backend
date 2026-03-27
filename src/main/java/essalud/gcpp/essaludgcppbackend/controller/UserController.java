@@ -26,11 +26,18 @@ public class UserController {
         this.usersService = usersService;
     }
 
-    @GetMapping("/getInfoUser/{username}")
+    @GetMapping("/getUser/{username}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
-    public Users getUser(@PathVariable String username) {
-        return  usersService.getUserByUsername(username);
+    public UsersDto getUserByUsername(@PathVariable String username) {
+        return  usersService.getUserByUsernameOrEmail(username);
     }
+
+
+    @GetMapping("/getUserByDni/{dni}")
+    public UsersDto getUser(@PathVariable String dni) {
+        return  usersService.getUserByDni(dni);
+    }
+
 
     @PostMapping("/register")
     @PreAuthorize("hasAuthority('ADMIN')")

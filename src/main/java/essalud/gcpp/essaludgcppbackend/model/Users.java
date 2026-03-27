@@ -73,4 +73,8 @@ public class Users {
     @OneToMany(mappedBy = "user_encuesta", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Encuesta> encuestas;
 
+    /// relacion con solicitud acceso
+    @OneToMany(mappedBy = "user_solicitud", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<SolicitudAcceso> solicitudes;
+
 }

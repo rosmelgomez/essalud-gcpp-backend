@@ -15,6 +15,7 @@ public class FileController {
     public FileController(FileService fileService) {
         this.fileService = fileService;
     }
+
     @GetMapping("/{name}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
     public ResponseEntity<byte[]> queryDMAMA(@PathVariable String name) {

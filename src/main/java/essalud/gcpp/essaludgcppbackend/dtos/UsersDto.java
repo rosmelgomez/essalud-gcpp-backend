@@ -2,6 +2,7 @@ package essalud.gcpp.essaludgcppbackend.dtos;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -31,5 +32,5 @@ public class UsersDto {
 
     private Boolean flag;
 
-    private String rol;
+    private List<String> roles;
 }

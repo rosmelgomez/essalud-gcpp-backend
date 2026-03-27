@@ -22,7 +22,7 @@ public class LogService {
     }
 
     public List<LogFilterDto>  getLogFilters() {
-        List<Log> logs = logsRepository.findAll();
+        List<Log> logs = logsRepository.findAllWithUser();
         List<LogFilterDto> logFilterDtos = new ArrayList<>();
         for (Log log : logs) {
             LogFilterDto logFilterDto = new LogFilterDto();
