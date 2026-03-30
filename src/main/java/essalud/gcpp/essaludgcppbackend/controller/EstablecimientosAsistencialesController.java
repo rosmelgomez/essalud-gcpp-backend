@@ -35,13 +35,11 @@ public class EstablecimientosAsistencialesController {
     }
 
     @GetMapping("/getRedes")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
     public ResponseEntity<List<Map<String, Object>>> getRedes() {
         return ResponseEntity.ok(EAS.getRedes());
     }
 
     @GetMapping("/getRedesWithCentros")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
     public ResponseEntity<List<Map<String, Object>>> getRedesWithCentros() {
         return ResponseEntity.ok(EAS.getRedesWithCentros());
     }

@@ -71,7 +71,8 @@ public class WebSecurityConfig {
                                 .requestMatchers("/login").permitAll()
                                 .requestMatchers("/logout-user").permitAll()
                                 .requestMatchers("/solicitud/register").permitAll()
-                                .requestMatchers("/user/getUserByDni/").permitAll()
+                                .requestMatchers("/user/getUserByDni/**").permitAll()
+                                .requestMatchers("/establecimiento/getRedes", "/establecimiento/getRedesWithCentros").permitAll()
                                 .anyRequest().authenticated()
                 ).exceptionHandling(authentication ->
                         authentication.authenticationEntryPoint(jwtAuthenticationEntryPoint)

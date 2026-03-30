@@ -1,6 +1,4 @@
 package essalud.gcpp.essaludgcppbackend.dtos;
-
-import jakarta.persistence.Column;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -12,6 +10,8 @@ import java.time.LocalDateTime;
 @Data
 public class SolicitudAccesoDto {
 
+    private Integer id;
+
     private String name;
     private String lastname;
     private String dni;
@@ -20,7 +20,7 @@ public class SolicitudAccesoDto {
     private String email;
 
     ///Solicitud Acceso
-
+    private String rol_solicitud;
     private String descripcion;
     private LocalDateTime date_creation;
     private LocalDateTime date_update;

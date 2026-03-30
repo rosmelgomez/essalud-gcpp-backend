@@ -19,6 +19,15 @@ public class SolicitudAcceso {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(name = "rol_solicitud", nullable = false)
+    private String rol_solicitud;
+
+    @Column(name = "code_red_solicitud")
+    private String code_red_solicitud;
+
+    @Column(name = "codcas_solicitud")
+    private String codcas_solicitud;
+
     @Column(name = "descripcion", nullable = false)
     private String descripcion;
 
