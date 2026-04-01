@@ -27,6 +27,9 @@ public class UserRol {
     @Column(name = "date_creation", nullable = false)
     private LocalDateTime date_creation;
 
+    @Column(name = "flag", nullable = false)
+    private Boolean flag;
+
     /// relacion con Usuario
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -37,7 +40,5 @@ public class UserRol {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rol_id")
     private Rol rol_user;
-
-
 
 }

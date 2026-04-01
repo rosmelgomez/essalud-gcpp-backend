@@ -20,49 +20,49 @@ public class DashboardReporController {
 
     /// Dashboard Reporteador Red
     @GetMapping("/queryDRR")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDRR() {
         return ResponseEntity.ok(DRS.queryDRR());
     }
     /// Dashboard Reporteador centro
     @GetMapping("/queryDRC")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDRC() {
         return ResponseEntity.ok(DRS.queryDRC());
     }
     /// Dashboard Reporteador servicio
     @GetMapping("/queryDRS")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDRS() {
         return ResponseEntity.ok(DRS.queryDRS());
     }
     /// Dashboard Reporteador actividad
     @GetMapping("/queryDRAC")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDRAC() {
         return ResponseEntity.ok(DRS.queryDRAC());
     }
     /// Dashboard Reporteador  subactividad
     @GetMapping("/queryDRSUBAC")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDRSUBAC() {
         return ResponseEntity.ok(DRS.queryDRSUBAC());
     }
     /// Dashboard Reporteador capitulo
     @GetMapping("/queryDRCAP")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDRCAP() {
         return ResponseEntity.ok(DRS.queryDRCAP());
     }
     /// Dashboard Reporteador variable
     @GetMapping("/queryDRVAR")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDRVAR() {
         return ResponseEntity.ok(DRS.queryDRVAR());
     }
     /// Dashboard Reporteador query
     @PostMapping("/queryDRQ")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDRQ(@RequestBody ReporteadorDto repDto) {
         return ResponseEntity.ok(DRS.queryDRQ(repDto));
     }

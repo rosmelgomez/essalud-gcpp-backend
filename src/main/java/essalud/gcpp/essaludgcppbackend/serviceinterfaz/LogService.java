@@ -31,7 +31,7 @@ public class LogService {
             logFilterDto.setIp_user(log.getIp_user());
             logFilterDto.setUrl(log.getUrl());
             logFilterDto.setBrowser(log.getBrowser());
-            //logFilterDto.setUser_role(log.getUser_log().getRol());
+            logFilterDto.setUser_role(log.getRol_user());
             logFilterDto.setCodcas(log.getUser_log().getCodcas());
             logFilterDto.setCode_red(log.getUser_log().getCode_red());
             logFilterDto.setDate(log.getDate_creation());
@@ -41,7 +41,7 @@ public class LogService {
         return logFilterDtos;
     }
 
-    public void registerLogs(LogUsersDto dto, Users user, HttpServletRequest request) {
+    public void registerLogs(LogUsersDto dto, Users user, HttpServletRequest request, String rol) {
 
         String ip = IpUtils.extractClientIp(request);
         String browser = BrowserDetector.detectBrowser(request);
@@ -49,6 +49,7 @@ public class LogService {
 
         Log log = Log.builder()
                 .user_log(user)
+                .rol_user(rol)
                 .action(dto.getAction())
                 .status(dto.getStatus())
                 .message(dto.getMessage())

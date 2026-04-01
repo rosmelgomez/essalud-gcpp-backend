@@ -1,7 +1,9 @@
 package essalud.gcpp.essaludgcppbackend.repositories;
 
 import essalud.gcpp.essaludgcppbackend.model.UserRol;
+import essalud.gcpp.essaludgcppbackend.model.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -18,4 +20,9 @@ public interface UserRolRepository extends JpaRepository<UserRol, Integer> {
     WHERE u.id=:userId
     """, nativeQuery = true)
     List<UserRol> findByUserId(@Param("userId")Integer userId);
+
+    @Modifying
+    @Query("DELETE FROM UserRol ur WHERE ur.usuario_rol = :user")
+    void deleteRolesByUser(@Param("user") Users user);
+
 }

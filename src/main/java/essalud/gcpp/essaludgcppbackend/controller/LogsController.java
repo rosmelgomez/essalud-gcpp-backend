@@ -32,8 +32,9 @@ public class LogsController {
     ) {
 
         Users user = userRepository.findByUsername(authentication.getName());
+        String rol =authentication.getAuthorities().iterator().next().getAuthority();
 
-        logService.registerLogs(dto, user, request);
+        logService.registerLogs(dto, user, request, rol);
 
         return ResponseEntity.ok().build();
     }

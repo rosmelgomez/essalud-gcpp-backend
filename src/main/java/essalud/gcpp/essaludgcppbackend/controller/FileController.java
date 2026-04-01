@@ -17,7 +17,7 @@ public class FileController {
     }
 
     @GetMapping("/{name}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<byte[]> queryDMAMA(@PathVariable String name) {
         return ResponseEntity.ok(fileService.findArchivo(name));
     }

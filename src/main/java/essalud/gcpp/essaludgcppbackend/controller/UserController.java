@@ -27,7 +27,7 @@ public class UserController {
     }
 
     @GetMapping("/getUser/{username}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public UsersDto getUserByUsername(@PathVariable String username) {
         return  usersService.getUserByUsernameOrEmail(username);
     }
@@ -64,14 +64,14 @@ public class UserController {
     }
 
     @PostMapping("/verifyPassword")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<?> verifyPassword(@RequestBody UserLoginDto user) throws Exception {
         authenticateUser(user.getUsername(), user.getPassword());
         return  ResponseEntity.ok().body("password verified");
     }
 
     @PutMapping("/changePassword")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public void changePassword(@RequestBody UserLoginDto user) {
         usersService.changePassword(user);
     }

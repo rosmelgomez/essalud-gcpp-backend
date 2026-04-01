@@ -15,7 +15,7 @@ public interface RolRepository extends JpaRepository<Rol, Integer> {
             "FROM user_rol ur " +
             "JOIN rol r ON ur.rol_id = r.id " +
             "JOIN users u ON ur.user_id = u.id " +
-            "WHERE u.username = :username", nativeQuery = true)
+            "WHERE r.flag = true and ur.flag = true and u.username = :username", nativeQuery = true)
     List<Rol> listaRolesByUsername(@Param("username") String username);
 
     @Query (value = """

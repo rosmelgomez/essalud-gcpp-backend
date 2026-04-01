@@ -23,31 +23,31 @@ public class DashboardNMController {
     /// Query Dashboard no medicas
     /// Obstetricia - Atenciones Medicas
     @GetMapping("/queryDNMOA/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMOA(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMOA(anio, periodo, codcas, codasegu));
     }
     /// Obstetricia - Prenatal
     @GetMapping("/queryDNMOP/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMOP(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMOP(anio, periodo, codcas, codasegu));
     }
     /// Obstetricia - Familiar
     @GetMapping("/queryDNMOF/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMOF(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMOF(anio, periodo, codcas, codasegu));
     }
     /// Obstetricia - Complementarias
     @GetMapping("/queryDNMOC/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMOC(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMOC(anio, periodo, codcas, codasegu));
     }
     /// Obstetricia - Preconcepcional
     @GetMapping("/queryDNMOPC/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMOPC(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMOPC(anio, periodo, codcas, codasegu));
     }
@@ -55,31 +55,31 @@ public class DashboardNMController {
     /// Preventivo Promocional
     ///  Preventivo Promocional - Atenciones
     @GetMapping("/queryDNMPPA/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMPPA(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMPPA(anio, periodo, codcas, codasegu));
     }
     ///  Preventivo Promocional - domiciliaria
     @GetMapping("/queryDNMPPD/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMPPD(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMPPD(anio, periodo, codcas, codasegu));
     }
     ///  Preventivo Promocional - grupal
     @GetMapping("/queryDNMPPG/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMPPG(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMPPG(anio, periodo, codcas, codasegu));
     }
     ///  Preventivo Promocional - psicoprofilaxis
     @GetMapping("/queryDNMPPP/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMPPP(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMPPP(anio, periodo, codcas, codasegu));
     }
     ///  Preventivo Promocional - consejeria
     @GetMapping("/queryDNMPPC/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMPPC(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMPPC(anio, periodo, codcas, codasegu));
     }
@@ -87,7 +87,7 @@ public class DashboardNMController {
     /// Nutricion
     ///  Nutricion - nutricion_total
     @GetMapping("/queryDNMNNT/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMNNT(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMNNT(anio, periodo, codcas, codasegu));
     }
@@ -95,37 +95,37 @@ public class DashboardNMController {
     /// Enfermeria
     ///  Enfermeria - enfermeria_total
     @GetMapping("/queryDNMEET/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMEET(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMEET(anio, periodo, codcas, codasegu));
     }
     ///  Enfermeria - enfermeria_tuberculosis
     @GetMapping("/queryDNMEETU/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMEETU(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMEETU(anio, periodo, codcas, codasegu));
     }
     ///  Enfermeria - enfermeria_vih
     @GetMapping("/queryDNMEEV/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMEEV(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMEEV(anio, periodo, codcas, codasegu));
     }
     ///  Enfermeria - enfermeria_cronicas_am
     @GetMapping("/queryDNMEECA/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMEECA(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMEECA(anio, periodo, codcas, codasegu));
     }
     ///  Enfermeria - enfermeria_otros
     @GetMapping("/queryDNMEEO/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMEEO(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMEEO(anio, periodo, codcas, codasegu));
     }
     ///  Enfermeria - enfermeria_prev_anemia
     @GetMapping("/queryDNMEEPA/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMEEPA(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMEEPA(anio, periodo, codcas, codasegu));
     }
@@ -134,43 +134,43 @@ public class DashboardNMController {
     /// Psicologia
     /// psicologia total consultantes
     @GetMapping("/queryDNMPSTCS/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMPSTCS(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMPSTCS(anio, periodo, codcas, codasegu));
     }
     /// psicologia - total - consultas
     @GetMapping("/queryDNMPSTC/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMPSTC(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMPSTC(anio, periodo, codcas, codasegu));
     }
     /// Psicologia - horas - efectivas
     @GetMapping("/queryDNMPSHE/{anio}/{periodo}/{codcas}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMPSHE(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas) {
         return ResponseEntity.ok(DNMR.queryDNMPSHE(anio, periodo, codcas));
     }
     /// Psicologia - horas - programadas
     @GetMapping("/queryDNMPHP/{anio}/{periodo}/{codcas}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMPHP(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas) {
         return ResponseEntity.ok(DNMR.queryDNMPHP(anio, periodo, codcas));
     }
     /// Psicologia - medicos
     @GetMapping("/queryDNMPSM/{anio}/{periodo}/{codcas}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMPSM(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas) {
         return ResponseEntity.ok(DNMR.queryDNMPSM(anio, periodo, codcas));
     }
     /// Psicologia - procedimiento terapéutico
     @GetMapping("/queryDNMPSPT/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMPSPT(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMPSPT(anio, periodo, codcas, codasegu));
     }
     /// Psicologia - procedimiento diagnóstico
     @GetMapping("/queryDNMPSPD/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMPSPD(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMPSPD(anio, periodo, codcas, codasegu));
     }
@@ -178,7 +178,7 @@ public class DashboardNMController {
     ///Trabajo Social (TS)
     ///Trabajo - social - total
     @GetMapping("/queryDNMTST/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMTST(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMTST(anio, periodo, codcas, codasegu));
     }
@@ -186,45 +186,45 @@ public class DashboardNMController {
     /// CRED
     /// CRED -total
     @GetMapping("/queryDNMCREDT/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMCREDT(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMCREDT(anio, periodo, codcas, codasegu));
     }
 
     /// Indicadores de obstetricia
     @GetMapping("/queryDNMOBTASS/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMOBTASS(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMOBTASS(anio, periodo, codcas, codasegu));
     }
     /// total atenciones - diagnostico
     @GetMapping("/queryDNMOBTAD/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMOBTAD(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMOBTAD(anio, periodo, codcas, codasegu));
     }
     /// total atenciones - csv
     @GetMapping("/queryDNMOBTACSV/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMOBTACSV(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMOBTACSV(anio, periodo, codcas, codasegu));
     }
 
     /// Indicadores de preventiva promocional
     @GetMapping("/queryDNMPPTASS/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMPPTASS(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMPPTASS(anio, periodo, codcas, codasegu));
     }
     /// total atenciones - diagnostico
     @GetMapping("/queryDNMPPTAD/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMPPTAD(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMPPTAD(anio, periodo, codcas, codasegu));
     }
     /// total atenciones - csv
     @GetMapping("/queryDNMPPTACSV/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMPPTACSV(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMPPTACSV(anio, periodo, codcas, codasegu));
     }
@@ -233,19 +233,19 @@ public class DashboardNMController {
     /// Indicadores de nutricion
     /// total atenciones - servicio - subactividad
     @GetMapping("/queryDNMNUTASS/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMNUTASS(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMNUTASS(anio, periodo, codcas, codasegu));
     }
     /// total atenciones - diagnostico
     @GetMapping("/queryDNMNUTAD/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMNUTAD(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMNUTAD(anio, periodo, codcas, codasegu));
     }
     /// total atenciones - csv
     @GetMapping("/queryDNMNUTACSV/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMNUTACSV(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMNUTACSV(anio, periodo, codcas, codasegu));
     }
@@ -253,19 +253,19 @@ public class DashboardNMController {
     /// Indicadores de enfermeria
     /// total atenciones - servicio - subactividad
     @GetMapping("/queryDNMENTASS/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMENTASS(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMENTASS(anio, periodo, codcas, codasegu));
     }
     /// total atenciones - diagnostico
     @GetMapping("/queryDNMENTAD/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMENTAD(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMENTAD(anio, periodo, codcas, codasegu));
     }
     /// total atenciones - csv
     @GetMapping("/queryDNMENTACSV/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMENTACSV(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMENTACSV(anio, periodo, codcas, codasegu));
     }
@@ -273,19 +273,19 @@ public class DashboardNMController {
     /// Indicadores de psicologia
     /// total atenciones - servicio - subactividad
     @GetMapping("/queryDNMPSTASS/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMPSTASS(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMPSTASS(anio, periodo, codcas, codasegu));
     }
     /// total atenciones - diagnostico
     @GetMapping("/queryDNMPSTAD/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMPSTAD(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMPSTAD(anio, periodo, codcas, codasegu));
     }
     /// total atenciones - csv
     @GetMapping("/queryDNMPSTACSV/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMPSTACSV(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMPSTACSV(anio, periodo, codcas, codasegu));
     }
@@ -293,19 +293,19 @@ public class DashboardNMController {
     /// Indicadores de trabajo social
     /// total atenciones - servicio - subactividad
     @GetMapping("/queryDNMTSTASS/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMTSTASS(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMTSTASS(anio, periodo, codcas, codasegu));
     }
     /// total atenciones - diagnostico
     @GetMapping("/queryDNMTSTAD/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMTSTAD(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMTSTAD(anio, periodo, codcas, codasegu));
     }
     /// total atenciones - csv
     @GetMapping("/queryDNMTSTACSV/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDNMTSTACSV(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DNMR.queryDNMTSTACSV(anio, periodo, codcas, codasegu));
     }

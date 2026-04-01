@@ -25,6 +25,9 @@ public class Log {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(name = "rol_user", nullable = false)
+    private String rol_user;
+
     @Column(name = "ip_user", nullable = false)
     private String ip_user;
 

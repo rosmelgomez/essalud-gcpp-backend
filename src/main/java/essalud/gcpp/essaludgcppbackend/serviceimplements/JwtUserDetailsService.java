@@ -31,7 +31,7 @@ public class   JwtUserDetailsService implements UserDetailsService {
             user = userRepository.findByEmail(username);
         }
         List<Rol> roles = rolRepository.listaRolesByUsername(username);
-        if(user!=null && user.getFlag()){
+        if(user!=null && user.getFlag() && roles!=null) {
             List<GrantedAuthority> grantedAuthorities=new ArrayList<>();
             for (Rol rol : roles) {
                 grantedAuthorities.add(new SimpleGrantedAuthority(rol.getName()));

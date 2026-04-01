@@ -8,6 +8,8 @@ import essalud.gcpp.essaludgcppbackend.model.Users;
 import essalud.gcpp.essaludgcppbackend.repositories.RolRepository;
 import essalud.gcpp.essaludgcppbackend.repositories.UserRolRepository;
 import essalud.gcpp.essaludgcppbackend.repositories.UsersRepository;
+import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -51,13 +53,12 @@ public class UsersService {
              for (String role : usersDto.getRoles()) {
                  Rol rol = rolRepository.findRol(role);
                  UserRol  userRol = new UserRol();
+                 userRol.setFlag(true);
                  userRol.setDate_creation(LocalDateTime.now());
                  userRol.setUsuario_rol(newUser);
                  userRol.setRol_user(rol);
                  userRolRepository.save(userRol);
              }
-
-
 
         }
     }
@@ -78,7 +79,7 @@ public class UsersService {
     }
 
     public List<UsersDto> getAllUsers() {
-        List<Users> users = usersRepository.findAll();
+        List<Users> users = usersRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
         List<UsersDto> usersDtos = new ArrayList<>();
         for (Users user : users) {
             List<Rol> roles =  rolRepository.listaRolesByUsername(user.getUsername());
@@ -96,35 +97,49 @@ public class UsersService {
         usersRepository.save(user);
     }
 
+    @Transactional
     public void updateUser(UsersDto usersDto) {
-        Users user = usersRepository.findById(usersDto.getId()).orElse(null);
-        if (user != null) {
-            user.setName(usersDto.getName());
-            user.setLastname(usersDto.getLastname());
-            user.setDni(usersDto.getDni());
-            user.setCodcas(usersDto.getCodcas());
-            user.setCode_red(usersDto.getCode_red());
-            user.setUsername(usersDto.getUsername());
-            user.setFlag(usersDto.getFlag());
-            if (usersDto.getPassword() != null) {
-                PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-                String encodedPassword = passwordEncoder.encode(usersDto.getPassword());
-                user.setPassword(encodedPassword);
-            }
-            usersRepository.save(user);
 
-            List<UserRol> userRols = userRolRepository.findByUserId(user.getId());
-            ///Modificar roles
-            if (usersDto.getRoles() != null) {
-                for (UserRol userRol : userRols) {
-                    for (String role : usersDto.getRoles()) {
-                        Rol rol = rolRepository.findRol(role);
-                        userRol.setRol_user(rol);
-                        userRolRepository.save(userRol);
-                    }
-                }
-            }
+        Users user = usersRepository.findById(usersDto.getId())
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        user.setName(usersDto.getName());
+        user.setLastname(usersDto.getLastname());
+        user.setDni(usersDto.getDni());
+        user.setCodcas(usersDto.getCodcas());
+        user.setCode_red(usersDto.getCode_red());
+        user.setUsername(usersDto.getUsername());
+        user.setFlag(usersDto.getFlag());
+
+        if (usersDto.getPassword() != null && !usersDto.getPassword().isEmpty()) {
+            PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            user.setPassword(passwordEncoder.encode(usersDto.getPassword()));
         }
+
+        usersRepository.save(user);
+
+        updateRolesUserByName(user, usersDto.getRoles());
+    }
+    @Transactional
+    public void updateRolesUserByName(Users user, List<String> rolesNames) {
+
+        userRolRepository.deleteRolesByUser(user);
+
+        if (rolesNames == null || rolesNames.isEmpty()) return;
+
+        List<UserRol> nuevosRoles = new ArrayList<>();
+
+        for (String roleName : rolesNames) {
+            Rol rol = rolRepository.findRol(roleName);
+            UserRol ur = new UserRol();
+            ur.setUsuario_rol(user);
+            ur.setRol_user(rol);
+            ur.setDate_creation(LocalDateTime.now());
+            ur.setFlag(true);
+            nuevosRoles.add(ur);
+        }
+
+        userRolRepository.saveAll(nuevosRoles);
     }
 
     public void deleteUser(Integer id) {

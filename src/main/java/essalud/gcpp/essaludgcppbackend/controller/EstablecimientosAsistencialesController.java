@@ -23,13 +23,13 @@ public class EstablecimientosAsistencialesController {
     }
 
     @GetMapping("/getCentros")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> getCentros() {
         return ResponseEntity.ok(EAS.getCentros());
     }
 
     @GetMapping("/getCentroAsistencialByRed/{code_red}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> getCentrosByCodeRed(@PathVariable String code_red) {
         return ResponseEntity.ok(EAS.getCentrosByCodeRed(code_red));
     }

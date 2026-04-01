@@ -14,13 +14,13 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-public class ExecuteUserQuery implements ApplicationRunner {
+public class ExecuteQuery implements ApplicationRunner {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ExecuteUserQuery.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ExecuteQuery.class);
 
 	private final DataSource firstDataSource;
 
-	public ExecuteUserQuery(@Qualifier("firstDataSource") DataSource firstDataSource) {
+	public ExecuteQuery(@Qualifier("firstDataSource") DataSource firstDataSource) {
 		this.firstDataSource = firstDataSource;
 	}
 
@@ -34,6 +34,7 @@ public class ExecuteUserQuery implements ApplicationRunner {
 		populator.addScript(new ClassPathResource("insert_categoria.sql"));
 		populator.addScript(new ClassPathResource("insert_subcategoria.sql"));
 		populator.addScript(new ClassPathResource("insert_variable.sql"));
+
 		try {
 			populator.execute(firstDataSource);
 			LOGGER.info("Archivos SQL ejecutado correctamente.");

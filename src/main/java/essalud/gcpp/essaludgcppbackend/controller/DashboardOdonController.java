@@ -24,37 +24,37 @@ public class DashboardOdonController {
     ///Dashboard odontologicas
     ///  sesiones odontologicas - Atenciones
     @GetMapping("/queryDOSOA/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDOSOA(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DOS.queryDOSOA(anio, periodo, codcas, codasegu));
     }
     ///  sesiones odontologicas - horas efectivas
     @GetMapping("/queryDOSOHE/{anio}/{periodo}/{codcas}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDOSOHE(@PathVariable String anio,@PathVariable String periodo, @PathVariable String codcas) {
         return ResponseEntity.ok(DOS.queryDOSOHE(anio, periodo, codcas));
     }
     ///  sesiones odontologicas - horas programadas
     @GetMapping("/queryDOSOHP/{anio}/{periodo}/{codcas}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDOSOHP(@PathVariable String anio,@PathVariable String periodo, @PathVariable String codcas) {
         return ResponseEntity.ok(DOS.queryDOSOHP(anio, periodo, codcas));
     }
     ///  sesiones odontologicas - medicos
     @GetMapping("/queryDOSOM/{anio}/{periodo}/{codcas}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDOSOM(@PathVariable String anio,@PathVariable String periodo, @PathVariable String codcas) {
         return ResponseEntity.ok(DOS.queryDOSOM(anio, periodo, codcas));
     }
     ///  sesiones odontologicas - total consultante atencion
     @GetMapping("/queryDOSOTCA/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDOSOTCA(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DOS.queryDOSOTCA(anio, periodo, codcas, codasegu));
     }
     ///  sesiones odontologicas - total consultante servicio
     @GetMapping("/queryDOSOTCS/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDOSOTCS(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(DOS.queryDOSOTCS(anio, periodo, codcas, codasegu));
     }

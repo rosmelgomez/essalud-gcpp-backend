@@ -20,25 +20,25 @@ public class DashboardEmeController {
         this.DES = DES;
     }
     @GetMapping("/queryDEP/{anio}/{periodo}/{codcas}/{codasegu}/{prioridad}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDEP(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu , @PathVariable String prioridad) {
         return ResponseEntity.ok(DES.queryDEP(anio, periodo, codcas, codasegu, prioridad));
     }
     /// defunciones
     @GetMapping("/queryDED/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public List<Map<String, Object>> queryDED(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return DES.queryDED(anio, periodo, codcas, codasegu);
     }
     /// mayor a 24h
     @GetMapping("/queryDEMY24HR/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public List<Map<String, Object>> queryDEMY24HR(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return DES.queryDEMY24HR(anio, periodo, codcas, codasegu);
     }
     /// menor a 24h
     @GetMapping("/queryDEMN24HR/{anio}/{periodo}/{codcas}/{codasegu}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public List<Map<String, Object>> queryDEMN24HR(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return DES.queryDEMN24HR(anio, periodo, codcas, codasegu);
     }
