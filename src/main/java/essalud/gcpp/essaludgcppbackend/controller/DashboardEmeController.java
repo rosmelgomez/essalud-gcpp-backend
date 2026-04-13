@@ -19,6 +19,8 @@ public class DashboardEmeController {
     public DashboardEmeController(DashboardEmeService DES) {
         this.DES = DES;
     }
+
+
     @GetMapping("/queryDEP/{anio}/{periodo}/{codcas}/{codasegu}/{prioridad}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDEP(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu , @PathVariable String prioridad) {
