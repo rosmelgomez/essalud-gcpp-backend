@@ -25,7 +25,7 @@ public class DashboardIQuirurgicasRepository {   private final JdbcTemplate seco
 
     /// Query Dashboard intervenciones quirurgicas
     /// Grado de complejidad
-    public List<Map<String, Object>> queryDIQGC(String anio, String periodo, String codcas, String codasegu, String complejidad) {
+    public List<Map<String, Object>> queryDIQGC(String anio, String periodo, String codcas, String codasegu) {
         String tabla = "dssge.dwe_centro_quirurgico_" + anio + "_" + periodo;
 
         String code_asegurado = code_asegurado(codasegu);
@@ -60,8 +60,8 @@ public class DashboardIQuirurgicasRepository {   private final JdbcTemplate seco
             FROM %s cq
             LEFT JOIN dwsge.sgss_cmsho10 AS c
                 ON cq.cod_servicio = c.servhoscod
-            LEFT JOIN dwsge.sgss_cmcas10 AS ca 
-                ON cq.cod_oricentro = ca.oricenasicod 
+            LEFT JOIN dwsge.sgss_cmcas10 AS ca
+                ON cq.cod_oricentro = ca.oricenasicod
             AND cq.cod_centro = ca.cenasicod
             LEFT JOIN dwsge.sgss_qmcqs10 AS q 
                 ON q.cenasicod = cq.cod_centro 
@@ -78,11 +78,11 @@ public class DashboardIQuirurgicasRepository {   private final JdbcTemplate seco
                                     ELSE '1'
                                 END
                             ) IN %s
-                        AND cq.cod_complejidad = ? 
+                       
             ORDER BY cq.acto_med, cq.num_solicitud, cq.fec_oper DESC;
             """.formatted(tabla, code_asegurado);
 
-        return secondJdbcTemplate.queryForList(sql, codcas, complejidad);
+        return secondJdbcTemplate.queryForList(sql, codcas);
     }
 
 
