@@ -27,4 +27,24 @@ public class DashboardIQuirurgicasController {
         return ResponseEntity.ok(diqs.queryDIQGC(anio, periodo, codcas, codasegu, complejidad));
     }
 
+    /// emergencia
+    @GetMapping("/queryDIQE/{anio}/{periodo}/{codcas}/{codasegu}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
+    public ResponseEntity<List<Map<String, Object>>> queryDIQE(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
+        return ResponseEntity.ok(diqs.queryDIQE(anio, periodo, codcas, codasegu));
+    }
+
+    ///horas quirurgicas electivas
+    @GetMapping("/queryDIQHQE/{anio}/{periodo}/{codcas}/{codasegu}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
+    public ResponseEntity<List<Map<String, Object>>> queryDIQHQE(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
+        return ResponseEntity.ok(diqs.queryDIQHQE(anio, periodo, codcas, codasegu));
+    }
+
+    ///horas quirurgicas emergencia
+    @GetMapping("/queryDIQHQEME/{anio}/{periodo}/{codcas}/{codasegu}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
+    public ResponseEntity<List<Map<String, Object>>> queryDIQHQEME(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
+        return ResponseEntity.ok(diqs.queryDIQHQEME(anio, periodo, codcas, codasegu));
+    }
 }
