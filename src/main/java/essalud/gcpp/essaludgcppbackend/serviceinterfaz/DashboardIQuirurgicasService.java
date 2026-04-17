@@ -1,6 +1,7 @@
 package essalud.gcpp.essaludgcppbackend.serviceinterfaz;
 
 import essalud.gcpp.essaludgcppbackend.repositories.DashboardIQuirurgicasRepository;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,19 +21,7 @@ public class DashboardIQuirurgicasService {
 
         List<Map<String, Object>> data = diqr.queryDIQGC(anio, periodo, codcas, codasegu);
 
-        return data.stream()
-                .filter(map -> {
-                    Object value = map.get("cod_complejidad");
-
-                    // Caso 1: quieres los NULL
-                    if (complejidad == null || "null".equalsIgnoreCase(complejidad)) {
-                        return value == null;
-                    }
-
-                    // Caso 2: quieres valores específicos
-                    return value != null && value.toString().equals(complejidad);
-                })
-                .toList();
+        return getMaps(complejidad, data);
     }
 
     /// emergencia
@@ -48,5 +37,28 @@ public class DashboardIQuirurgicasService {
     ///horas quirurgicas emergencia
     public List<Map<String, Object>> queryDIQHQEME(String anio, String periodo, String codcas, String codasegu){
         return diqr.queryDIQHQEME(anio, periodo, codcas, codasegu);
+    }
+
+    ///Indicadores de grado de complejidad
+    public List<Map<String, Object>> queryDIQIGC(String anio, String periodo, String codcas, String codasegu, String complejidad) {
+        List<Map<String, Object>> data = diqr.queryDIQIGC(anio, periodo, codcas, codasegu);
+        return getMaps(complejidad, data);
+    }
+
+    @NonNull
+    private List<Map<String, Object>> getMaps(String complejidad, List<Map<String, Object>> data) {
+        return data.stream()
+                .filter(map -> {
+                    Object value = map.get("cod_complejidad");
+
+                    // Caso 1: quieres los NULL
+                    if (complejidad == null || "null".equalsIgnoreCase(complejidad)) {
+                        return value == null;
+                    }
+
+                    // Caso 2: quieres valores específicos
+                    return value != null && value.toString().equals(complejidad);
+                })
+                .toList();
     }
 }

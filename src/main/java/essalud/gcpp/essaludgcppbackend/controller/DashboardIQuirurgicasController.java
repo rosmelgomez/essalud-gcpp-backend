@@ -47,4 +47,13 @@ public class DashboardIQuirurgicasController {
     public ResponseEntity<List<Map<String, Object>>> queryDIQHQEME(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
         return ResponseEntity.ok(diqs.queryDIQHQEME(anio, periodo, codcas, codasegu));
     }
+
+    ///Indicadores de grado de complejidad
+    @GetMapping("/queryDIQIGC/{anio}/{periodo}/{codcas}/{codasegu}/{complejidad}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
+    public ResponseEntity<List<Map<String, Object>>> queryDIQIGC(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu,  @PathVariable String complejidad ) {
+        return ResponseEntity.ok(diqs.queryDIQIGC(anio, periodo, codcas, codasegu, complejidad));
+    }
+
+
 }
