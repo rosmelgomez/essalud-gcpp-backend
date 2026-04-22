@@ -19,14 +19,16 @@ public class TablasHomologadasController {
         this.THS = THS;
     }
 
-    @GetMapping("getQueryTHE/{codcas}")
-    public List<Map<String, Object>> getQueryTHE(@PathVariable String codcas) {
-        return THS.getQueryTHE(codcas);
+    ///Tabla Homologada Emergencia
+    @GetMapping("queryTHE/{codcas}")
+    public List<Map<String, Object>> queryTHE(@PathVariable String codcas) {
+        return THS.queryTHE(codcas);
     }
 
-    @GetMapping("/getQueryTHCE")
-    public List<Map<String, Object>> getQueryTHCE() {
-        return THS.getQueryTHCE();
+    ///Tabla homologada consulta externa
+    @GetMapping("/queryTHCE")
+    public List<Map<String, Object>> queryTHCE() {
+        return THS.queryTHCE();
     }
 
 

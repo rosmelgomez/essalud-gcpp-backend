@@ -16,13 +16,13 @@ public class TablasHomolagadasService {
     }
 
     ///Tabla Homologada Emergencia
-    public List<Map<String, Object>> getQueryTHE(String codcas) {
-        return THR.getQueryTHE(codcas);
+    public List<Map<String, Object>> queryTHE(String codcas) {
+        return THR.queryTHE(codcas);
     }
 
     ///Tabla homologada consulta externa
-    public List<Map<String, Object>> getQueryTHCE() {
-        return THR.getQueryTHCE();
+    public List<Map<String, Object>> queryTHCE() {
+        return THR.queryTHCE();
     }
 
 }

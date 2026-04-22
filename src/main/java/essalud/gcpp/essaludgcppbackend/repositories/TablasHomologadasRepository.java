@@ -17,7 +17,7 @@ public class TablasHomologadasRepository {
     }
 
     ///Tabla Homologada Emergencia
-    public List<Map<String, Object>> getQueryTHE(String codcas) {
+    public List<Map<String, Object>> queryTHE(String codcas) {
 
         String sql = """
 		SELECT
@@ -46,7 +46,7 @@ public class TablasHomologadasRepository {
     }
 
     ///Tabla homologada consulta externa
-    public List<Map<String, Object>> getQueryTHCE() {
+    public List<Map<String, Object>> queryTHCE() {
 
         String sql = """
 		SELECT
