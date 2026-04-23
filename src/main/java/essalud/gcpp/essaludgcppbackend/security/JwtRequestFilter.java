@@ -40,9 +40,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
             throws ServletException, IOException {
-        final boolean useAccessToken = requiresAccessToken(request);
+        final boolean useApiToken = requiresApiToken(request);
         String username = null;
-        String jwtToken = resolveToken(request, useAccessToken);
+        String jwtToken = resolveToken(request, useApiToken);
 
         if (jwtToken != null) {
             try {
@@ -58,10 +58,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(username);
-
-            boolean validToken = useAccessToken
-                ? jwtTokenUtil.validateAccessToken(jwtToken, userDetails)
-                : jwtTokenUtil.validateRefreshToken(jwtToken, userDetails);
+             ////verificando
+            boolean validToken = useApiToken
+                ? jwtTokenUtil.validateApiToken(jwtToken, userDetails)
+                : jwtTokenUtil.validateAccessToken(jwtToken, userDetails);
 
             if (validToken) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
@@ -97,7 +97,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     }
 
-    private boolean requiresAccessToken(HttpServletRequest request) {
+    private boolean requiresApiToken(HttpServletRequest request) {
         String requestPath = request.getRequestURI();
         return requestPath.endsWith("/access-token")
             || requestPath.endsWith("/refresh-token")

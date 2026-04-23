@@ -22,6 +22,8 @@ public class UsersDto {
 
     private String code_red;
 
+    private String email;
+
     private String username;
 
     private String password;

@@ -55,10 +55,10 @@ public class AuthController {
     public ResponseEntity<?> createAuthenticateUser(@RequestBody UserLoginDto user) throws Exception {
         authenticateUser(user.getUsername(), user.getPassword());
         final UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(user.getUsername());
-        final String accessToken = jwtTokenUtil.generateAccessToken(userDetails);
-        final String refreshToken = jwtTokenUtil.generateRefreshToken(userDetails);
+        final String apiToken = jwtTokenUtil.generateApiToken(userDetails);
+        final String refreshToken = jwtTokenUtil.generateAccessToken(userDetails);
 
-        ResponseCookie accessCookie = ResponseCookie.from(accessCookieName, accessToken)
+        ResponseCookie accessCookie = ResponseCookie.from(apiCookieName, apiToken)
             .httpOnly(true)
             .secure(secureCookie)
             .path("/")
@@ -80,7 +80,7 @@ public class AuthController {
             .body("Login Successfull");
     }
 
-    @GetMapping("/access-token")
+    @GetMapping("/api-token")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
     public ResponseEntity<?> validateAccessToken(HttpServletRequest request) {
         String accessToken = getCookieValue(request, accessCookieName);
@@ -119,11 +119,11 @@ public class AuthController {
         }
 
         UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(username);
-        if (!jwtTokenUtil.validateRefreshToken(refreshToken, userDetails)) {
+        if (!jwtTokenUtil.validateApiToken(refreshToken, userDetails)) {
             return ResponseEntity.status(401).body("Refresh token invalido");
         }
 
-        String newAccessToken = jwtTokenUtil.generateAccessToken(userDetails);
+        String newAccessToken = jwtTokenUtil.generateApiToken(userDetails);
         ResponseCookie accessCookie = ResponseCookie.from(accessCookieName, newAccessToken)
             .httpOnly(true)
             .secure(secureCookie)
@@ -134,7 +134,7 @@ public class AuthController {
 
         return ResponseEntity.ok()
             .header(HttpHeaders.SET_COOKIE, accessCookie.toString())
-            .body("Access token renovado");
+            .body("Access token renovado"+ " " +accessCookie.toString());
     }
 
     @PostMapping("/logout-user")

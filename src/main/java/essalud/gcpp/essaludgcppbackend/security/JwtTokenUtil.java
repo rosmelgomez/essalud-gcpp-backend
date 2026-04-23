@@ -30,19 +30,19 @@ public class JwtTokenUtil implements Serializable {
     private static final String TOKEN_TYPE_CLAIM = "token_type";
     private static final String AUTHORITIES_CLAIM = "authorities";
     private static final String ACCESS_TOKEN_TYPE = "access";
-    private static final String REFRESH_TOKEN_TYPE = "refresh";
+    private static final String API_TOKEN_TYPE = "api";
 
     @Value(value = "${app.security.jwt.access-token-validity-ms}")
     private long accessTokenValidity;
 
     @Value(value = "${app.security.jwt.api-token-validity-ms}")
-    private long refreshTokenValidity;
+    private long apiTokenValidity;
 
     @Value(value = "${app.security.jwt.access-secret-base64}")
     private String accessSecretBase64;
 
     @Value(value = "${app.security.jwt.api-secret-base64}")
-    private String refreshSecretBase64;
+    private String apiSecretBase64;
 
     // Legacy fallback for compatibility in environments that still use jwt.secret.
     @Value(value = "${jwt.secret}")
@@ -71,7 +71,7 @@ public class JwtTokenUtil implements Serializable {
             return parseClaimsWithKey(token, resolveSigningKey(ACCESS_TOKEN_TYPE));
         } catch (JwtException | IllegalArgumentException accessEx) {
             try {
-                return parseClaimsWithKey(token, resolveSigningKey(REFRESH_TOKEN_TYPE));
+                return parseClaimsWithKey(token, resolveSigningKey(API_TOKEN_TYPE));
             } catch (JwtException | IllegalArgumentException refreshEx) {
                 throw new JwtException("Token invalido o firma no verificada", refreshEx);
             }
@@ -84,12 +84,12 @@ public class JwtTokenUtil implements Serializable {
         return expiration.before(new Date());
     }
     //generear token
-    public String generateAccessToken(UserDetails userDetails) {
+    public String generateApiToken(UserDetails userDetails) {
         return generateToken(userDetails, accessTokenValidity, ACCESS_TOKEN_TYPE);
     }
 
-    public String generateRefreshToken(UserDetails userDetails) {
-        return generateToken(userDetails, refreshTokenValidity, REFRESH_TOKEN_TYPE);
+    public String generateAccessToken(UserDetails userDetails) {
+        return generateToken(userDetails, apiTokenValidity, API_TOKEN_TYPE);
     }
 
     private String generateToken(UserDetails userDetails, long validityMs, String tokenType) {
@@ -106,7 +106,7 @@ public class JwtTokenUtil implements Serializable {
     }
 
     public long getRefreshTokenValiditySeconds() {
-        return refreshTokenValidity / 1000;
+        return apiTokenValidity / 1000;
     }
 
     // compactación del JWT en una cadena segura para URL
@@ -124,8 +124,8 @@ public class JwtTokenUtil implements Serializable {
         return validateToken(token, userDetails, ACCESS_TOKEN_TYPE);
     }
 
-    public Boolean validateRefreshToken(String token, UserDetails userDetails) {
-        return validateToken(token, userDetails, REFRESH_TOKEN_TYPE);
+    public Boolean validateApiToken(String token, UserDetails userDetails) {
+        return validateToken(token, userDetails, API_TOKEN_TYPE);
     }
 
     //validar token
@@ -153,7 +153,7 @@ public class JwtTokenUtil implements Serializable {
     }
 
     private byte[] resolveSigningKey(String tokenType) {
-        String configuredKey = ACCESS_TOKEN_TYPE.equals(tokenType) ? accessSecretBase64 : refreshSecretBase64;
+        String configuredKey = ACCESS_TOKEN_TYPE.equals(tokenType) ? accessSecretBase64 : apiSecretBase64;
 
         if (configuredKey != null && !configuredKey.isBlank()) {
             return Base64.getDecoder().decode(configuredKey);

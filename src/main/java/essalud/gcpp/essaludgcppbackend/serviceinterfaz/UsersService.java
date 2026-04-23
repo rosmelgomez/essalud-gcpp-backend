@@ -15,8 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UsersService {
@@ -122,24 +122,51 @@ public class UsersService {
     }
     @Transactional
     public void updateRolesUserByName(Users user, List<String> rolesNames) {
+        // 1. Obtener roles actuales del usuario (registros de la tabla intermedia UserRol)
+        List<UserRol> asignacionesActuales = userRolRepository.findByUserId(user.getId());
 
-        userRolRepository.deleteRolesByUser(user);
+        // 2. Mapear nombres de roles actuales para facilitar la comparación
+        Set<String> nombresActuales = asignacionesActuales.stream()
+                .map(ur -> ur.getRol_user().getName())
+                .collect(Collectors.toSet());
 
-        if (rolesNames == null || rolesNames.isEmpty()) return;
+        // Asegurar que la lista de entrada no sea nula para evitar NullPointerException
+        Set<String> nuevosNombres = (rolesNames != null) ? new HashSet<>(rolesNames) : new HashSet<>();
 
-        List<UserRol> nuevosRoles = new ArrayList<>();
+        // --- LÓGICA DE DESACTIVACIÓN ---
+        // Si el rol está en la DB pero NO está en la lista nueva, lo desactivamos (o eliminamos)
+        for (UserRol asignacion : asignacionesActuales) {
+            if (!nuevosNombres.contains(asignacion.getRol_user().getName())) {
+                // Opción A: Desactivar (si usas borrado lógico)
+                asignacion.setFlag(false);
+                userRolRepository.save(asignacion);
 
-        for (String roleName : rolesNames) {
-            Rol rol = rolRepository.findRol(roleName);
-            UserRol ur = new UserRol();
-            ur.setUsuario_rol(user);
-            ur.setRol_user(rol);
-            ur.setDate_creation(LocalDateTime.now());
-            ur.setFlag(true);
-            nuevosRoles.add(ur);
+                // Opción B: Si prefieres borrarlo físicamente:
+                // userRolRepository.delete(asignacion);
+            } else {
+                // Si ya existe y estaba desactivado, lo volvemos a activar
+                if (!asignacion.getFlag()) {
+                    asignacion.setFlag(true);
+                    userRolRepository.save(asignacion);
+                }
+            }
         }
 
-        userRolRepository.saveAll(nuevosRoles);
+        // --- LÓGICA DE ADICIÓN ---
+        // Si el rol está en la lista nueva pero NO está en la DB, lo creamos
+        for (String nombreNuevo : nuevosNombres) {
+            if (!nombresActuales.contains(nombreNuevo)) {
+                Rol rol = rolRepository.findRol(nombreNuevo);
+                if (rol != null) {
+                    UserRol nuevoUserRol = new UserRol();
+                    nuevoUserRol.setUsuario_rol(user);
+                    nuevoUserRol.setRol_user(rol);
+                    nuevoUserRol.setDate_creation(LocalDateTime.now());
+                    nuevoUserRol.setFlag(true);
+                    userRolRepository.save(nuevoUserRol);
+                }
+            }
+        }
     }
 
     public void deleteUser(Integer id) {
