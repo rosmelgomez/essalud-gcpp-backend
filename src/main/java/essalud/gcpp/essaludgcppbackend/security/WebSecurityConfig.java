@@ -69,7 +69,6 @@ public class WebSecurityConfig {
                 authorizeRequests
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers("/login").permitAll()
-                                .requestMatchers("/logout-user").permitAll()
                                 .requestMatchers("/solicitud/register").permitAll()
                                 .requestMatchers("/user/getUserByDni/**").permitAll()
                                 .requestMatchers("/establecimiento/getRedes", "/establecimiento/getRedesWithCentros").permitAll()

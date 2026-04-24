@@ -75,8 +75,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private @Nullable String resolveToken(HttpServletRequest request, boolean useAccessToken) {
-        String tokenFromCookie = getTokenFromCookie(request, useAccessToken ? accessCookieName : apiCookieName);
+    private @Nullable String resolveToken(HttpServletRequest request, boolean useApiToken) {
+        String tokenFromCookie = getTokenFromCookie(request, useApiToken ? apiCookieName : accessCookieName);
         if (tokenFromCookie != null && !tokenFromCookie.isBlank()) {
             return tokenFromCookie;
         }
@@ -99,8 +99,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     private boolean requiresApiToken(HttpServletRequest request) {
         String requestPath = request.getRequestURI();
-        return requestPath.endsWith("/access-token")
+        return requestPath.endsWith("/api-token")
             || requestPath.endsWith("/refresh-token")
-            || requestPath.endsWith("/logout");
+            || requestPath.endsWith("/logout")
+            || requestPath.endsWith("/logout-user");
     }
 }
