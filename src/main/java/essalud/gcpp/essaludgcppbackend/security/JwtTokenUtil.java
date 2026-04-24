@@ -85,11 +85,11 @@ public class JwtTokenUtil implements Serializable {
     }
     //generear token
     public String generateApiToken(UserDetails userDetails) {
-        return generateToken(userDetails, accessTokenValidity, ACCESS_TOKEN_TYPE);
+        return generateToken(userDetails, apiTokenValidity, API_TOKEN_TYPE);
     }
 
     public String generateAccessToken(UserDetails userDetails) {
-        return generateToken(userDetails, apiTokenValidity, API_TOKEN_TYPE);
+        return generateToken(userDetails, accessTokenValidity, ACCESS_TOKEN_TYPE);
     }
 
     private String generateToken(UserDetails userDetails, long validityMs, String tokenType) {
