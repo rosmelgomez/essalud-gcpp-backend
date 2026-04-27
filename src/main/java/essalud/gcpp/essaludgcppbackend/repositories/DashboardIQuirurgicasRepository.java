@@ -158,13 +158,13 @@ public class DashboardIQuirurgicasRepository {
         String code_asegurado = code_asegurado(codasegu);
 
         String sql = """
-                SELECT
+                SELECT 
                     SUM(
                         SPLIT_PART(t.duracion_sala, ':', 1)::numeric
                         + SPLIT_PART(t.duracion_sala, ':', 2)::numeric / 60
                     ) AS horas_quirurgicas_realizadas_iq_electivas
                 FROM (
-                    SELECT DISTINCT ON (cq.acto_med, cq.cod_cpms)
+                    SELECT DISTINCT ON (cq.acto_med, cq.fec_oper)
                         cq.cod_oricentro,
                         cq.cod_centro,
                         ca.cenasides AS cenasides,
@@ -211,7 +211,7 @@ public class DashboardIQuirurgicasRepository {
                     WHERE cq.cod_centro = ?
                     AND (CASE WHEN cq.cod_tipo_paciente = '4' THEN '2' ELSE '1' END) IN %s
                     AND cq.cod_tipo_programacion = '1'
-                    ORDER BY cq.acto_med, cq.cod_cpms, cq.fec_oper DESC
+                    ORDER BY cq.acto_med, cq.fec_oper DESC
                 ) t;
             """.formatted(tabla, code_asegurado);
 
@@ -231,7 +231,7 @@ public class DashboardIQuirurgicasRepository {
                             + SPLIT_PART(t.duracion_sala, ':', 2)::numeric / 60
                         ) AS horas_quirurgicas_realizadas_iq_emergencia
                     FROM (
-                        SELECT DISTINCT ON (cq.acto_med, cq.cod_cpms)
+                        SELECT DISTINCT ON (cq.acto_med, cq.fec_oper)
                             cq.cod_oricentro,
                             cq.cod_centro,
                             ca.cenasides AS cenasides,
@@ -278,7 +278,7 @@ public class DashboardIQuirurgicasRepository {
                         WHERE cq.cod_centro = ?
                         AND (CASE WHEN cq.cod_tipo_paciente = '4' THEN '2' ELSE '1' END) IN %s
                         AND cq.cod_tipo_programacion = '2'
-                        ORDER BY cq.acto_med, cq.cod_cpms, cq.fec_oper DESC
+                        ORDER BY cq.acto_med, cq.fec_oper DESC
                     ) t;
             """.formatted(tabla, code_asegurado);
 
@@ -324,10 +324,5 @@ public class DashboardIQuirurgicasRepository {
         """.formatted(tabla, code_asegurado);
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
-
-
-
-
-
 
 }
