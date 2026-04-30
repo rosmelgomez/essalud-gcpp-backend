@@ -24,6 +24,9 @@ public class Documento {
     @Column(name = "descripcion", nullable = false)
     private String descripcion;
 
+    @Column(name = "tipo_archivo", nullable = false)
+    private String tipo_archivo;
+
     @Column(name = "usuario_creation", nullable = false)
     private String usuario_creation;
 

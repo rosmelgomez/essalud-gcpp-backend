@@ -17,6 +17,8 @@ public class DocumentoDto {
 
     private String descripcion;
 
+    private String tipo_archivo;
+
     private String usuario_creation;
 
     private String usuario_update;
