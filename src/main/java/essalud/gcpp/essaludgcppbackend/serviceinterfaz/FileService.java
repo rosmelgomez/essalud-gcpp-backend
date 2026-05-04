@@ -82,12 +82,10 @@ public class FileService {
         return new byte[0];
     }
 
-
-
     public Resource loadResource(Integer id) {
         byte[] data = getDocumento(id);
         if (data.length == 0) {
-            throw new RuntimeException("File not found");
+            throw new RuntimeException("documento no encontrado");
         }
         return new ByteArrayResource(data);
     }
