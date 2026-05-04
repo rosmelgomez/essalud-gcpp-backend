@@ -98,6 +98,13 @@
             <version>2.3.9</version>
         </dependency>
 
+        <!-- dependencia para la lectura del tipo de archivo-->
+        <dependency>
+            <groupId>org.apache.tika</groupId>
+            <artifactId>tika-core</artifactId>
+            <version>3.2.2</version>
+        </dependency>
+
     </dependencies>
 
     <build>

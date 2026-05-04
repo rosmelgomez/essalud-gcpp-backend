@@ -44,10 +44,8 @@ public class JwtTokenUtil implements Serializable {
     @Value(value = "${app.security.jwt.api-token-validity-ms}")
     private long apiTokenValidity;
 
-    @Value(value = "${app.security.jwt.access-secret-base64:}")
     private String accessSecretBase64;
 
-    @Value(value = "${app.security.jwt.api-secret-base64:}")
     private String apiSecretBase64;
 
     @Value(value = "${jwt.secret:}")
@@ -61,13 +59,13 @@ public class JwtTokenUtil implements Serializable {
         // Generar acceso secret si no está configurado
         if (accessSecretBase64 == null || accessSecretBase64.isBlank()) {
             accessSecretBase64 = generateRandomSecretInBase64();
-            logger.info("✓ JWT Access Secret generado aleatoriamente");
+            logger.info("JWT Access Secret generado aleatoriamente");
         }
 
         // Generar API secret si no está configurado
         if (apiSecretBase64 == null || apiSecretBase64.isBlank()) {
             apiSecretBase64 = generateRandomSecretInBase64();
-            logger.info("✓ JWT API Secret generado aleatoriamente");
+            logger.info("JWT API Secret generado aleatoriamente");
         }
     }
 

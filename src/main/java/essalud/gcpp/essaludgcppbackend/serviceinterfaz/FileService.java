@@ -6,9 +6,6 @@ import java.util.List;
 
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import essalud.gcpp.essaludgcppbackend.dtos.DocumentoDto;
@@ -62,21 +59,20 @@ public class FileService {
     }
 
     public void updateDocumento(DocumentoDto  documento) {
-        Documento documentoNew = documentoRepository.findById(documento.getId()).orElse(null);
-        if (documentoNew != null) {
-            Documento documentoUpdated = new Documento();
-            documentoUpdated.setNombre(documento.getNombre());
-            documentoUpdated.setDescripcion(documento.getDescripcion());
-            documentoUpdated.setUsuario_update(documento.getUsuario_update() );
-            documentoUpdated.setDate_update(LocalDateTime.now());
-            documentoRepository.save(documentoUpdated);
+        Documento documentoUpdate = documentoRepository.findById(documento.getId()).orElse(null);
+        if (documentoUpdate != null) {
+            documentoUpdate.setNombre(documento.getNombre());
+            documentoUpdate.setDescripcion(documento.getDescripcion());
+            documentoUpdate.setUsuario_update(documento.getUsuario_update() );
+            documentoUpdate.setDate_update(LocalDateTime.now());
+            documentoUpdate.setArchivo(documento.getArchivo() != null ? documento.getArchivo() : new byte[0]);
+            documentoRepository.save(documentoUpdate);
         }
     }
 
     public void deleteDocumento(Integer id) {
         documentoRepository.deleteById(id);
     }
-
 
     public byte[] getDocumento(Integer id) {
         Documento documento = documentoRepository.findById(id).orElse(null);
@@ -90,35 +86,10 @@ public class FileService {
 
     public Resource loadResource(Integer id) {
         byte[] data = getDocumento(id);
-
         if (data.length == 0) {
             throw new RuntimeException("File not found");
         }
-
         return new ByteArrayResource(data);
     }
-
-
-   public ResponseEntity<Resource> getFileResponse(Integer id) {
-        Documento doc = documentoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Documento no encontrado"));
-
-        if (doc.getArchivo() == null || doc.getArchivo().length == 0) {
-            throw new RuntimeException("Archivo vacío");
-        }
-
-        Resource resource = new ByteArrayResource(doc.getArchivo());
-
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(doc.getTipo_archivo()))
-                .header(HttpHeaders.CONTENT_DISPOSITION,
-                        "attachment; filename=\"" + doc.getNombre() + "\"")
-                .body(resource);
-    }
-
-
-
-
-
 
 }

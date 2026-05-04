@@ -1,12 +1,11 @@
 package essalud.gcpp.essaludgcppbackend.controller;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.List;
 
-import org.springframework.core.io.ByteArrayResource;
+import lombok.SneakyThrows;
+import org.apache.tika.Tika;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,12 +31,11 @@ public class FileController {
 
     @PostMapping("/insert-archivo")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
-    public ResponseEntity<Void> insertArchivo(@ModelAttribute DocumentoDto documentoDto, @RequestParam(value = "documento", required = false) MultipartFile documento) throws IOException {
+    public void insertArchivo(@ModelAttribute DocumentoDto documentoDto, @RequestParam(value = "documento", required = false) MultipartFile documento) throws IOException {
         if (documento != null && !documento.isEmpty()) {
             documentoDto.setArchivo(documento.getBytes());
         }
         fileService.insertDocumento(documentoDto);
-        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/get-documentos")
@@ -48,36 +46,32 @@ public class FileController {
 
     @PutMapping("/update")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
-   public ResponseEntity<Void> updateDocumento(@RequestBody DocumentoDto documentoDto) {
+   public void updateDocumento(@ModelAttribute DocumentoDto documentoDto, @RequestParam(value = "documento", required = false ) MultipartFile documento) throws IOException {
+        if (documento != null && !documento.isEmpty()) {
+            documentoDto.setArchivo(documento.getBytes());
+        }
         fileService.updateDocumento(documentoDto);
-        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
-    public ResponseEntity<Void> deleteDocumento(@PathVariable Integer id) {
+    public void deleteDocumento(@PathVariable Integer id) {
         fileService.deleteDocumento(id);
-        return ResponseEntity.ok().build();
     }
 
+    @SneakyThrows
     @GetMapping("/documento/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<Resource> getFile(@PathVariable Integer id) {
         Resource resource = fileService.loadResource(id);
-       // String contentType=Files.probeContentType(resource.getFile().toPath());
 
+        Tika tika = new Tika();
+        String contentType = tika.detect(resource.getInputStream());
+
+        System.out.println(contentType);
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_TYPE, "documento")
-                .contentType(MediaType.APPLICATION_PDF)
-                //.contentType(MediaType.parseMediaType(contentType))
+                .contentType(MediaType.parseMediaType(contentType))
                 .body(resource);
     }
-
-    /*@GetMapping("/documento/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
-    public ResponseEntity<Resource> getFile(@PathVariable Integer id) {
-        return ResponseEntity.ok().body(fileService.loadResource(id));
-    }*/
-
 
 }
