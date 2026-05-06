@@ -1,7 +1,12 @@
-package essalud.gcpp.essaludgcppbackend.model;
+package essalud.gcpp.essaludgcppbackend.model.usuario;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import essalud.gcpp.essaludgcppbackend.model.Log;
+import essalud.gcpp.essaludgcppbackend.model.SolicitudAcceso;
+import essalud.gcpp.essaludgcppbackend.model.documentos.Documento;
+import essalud.gcpp.essaludgcppbackend.model.documentos.FlujoAprobacionDocumento;
+import essalud.gcpp.essaludgcppbackend.model.documentos.VersionDocumento;
 import essalud.gcpp.essaludgcppbackend.model.encuesta.Encuesta;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -77,4 +82,16 @@ public class Users {
     @OneToMany(mappedBy = "user_solicitud", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<SolicitudAcceso> solicitudes;
 
+
+    ///relacion con documento
+    @OneToMany(mappedBy = "user_documento", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Documento> documentos ;
+
+    /// relacion con version documento
+    @OneToMany(mappedBy = "user_version_documento", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<VersionDocumento> version_documentos;
+
+    ///relacion con flujo de aprobacion
+    @OneToMany(mappedBy = "user_flujo_aprobacion", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<FlujoAprobacionDocumento> flujo_aprobaciones;
 }

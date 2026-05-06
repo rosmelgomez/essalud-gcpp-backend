@@ -3,7 +3,7 @@ package essalud.gcpp.essaludgcppbackend.serviceinterfaz;
 import essalud.gcpp.essaludgcppbackend.dtos.LogFilterDto;
 import essalud.gcpp.essaludgcppbackend.dtos.LogUsersDto;
 import essalud.gcpp.essaludgcppbackend.model.Log;
-import essalud.gcpp.essaludgcppbackend.model.Users;
+import essalud.gcpp.essaludgcppbackend.model.usuario.Users;
 import essalud.gcpp.essaludgcppbackend.repositories.LogsRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;

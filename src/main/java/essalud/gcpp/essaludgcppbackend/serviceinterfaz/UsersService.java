@@ -2,12 +2,12 @@ package essalud.gcpp.essaludgcppbackend.serviceinterfaz;
 
 import essalud.gcpp.essaludgcppbackend.dtos.UserLoginDto;
 import essalud.gcpp.essaludgcppbackend.dtos.UsersDto;
-import essalud.gcpp.essaludgcppbackend.model.Rol;
-import essalud.gcpp.essaludgcppbackend.model.UserRol;
-import essalud.gcpp.essaludgcppbackend.model.Users;
-import essalud.gcpp.essaludgcppbackend.repositories.RolRepository;
-import essalud.gcpp.essaludgcppbackend.repositories.UserRolRepository;
-import essalud.gcpp.essaludgcppbackend.repositories.UsersRepository;
+import essalud.gcpp.essaludgcppbackend.model.usuario.Rol;
+import essalud.gcpp.essaludgcppbackend.model.usuario.UserRol;
+import essalud.gcpp.essaludgcppbackend.model.usuario.Users;
+import essalud.gcpp.essaludgcppbackend.repositories.usuario.RolRepository;
+import essalud.gcpp.essaludgcppbackend.repositories.usuario.UserRolRepository;
+import essalud.gcpp.essaludgcppbackend.repositories.usuario.UsersRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -30,8 +31,8 @@ public class TipoDocumento {
     @Column(name = "requiere_aprobacion", nullable = false)
     private Boolean requiere_aprobacion;
 
-    @Column(name = "max_tamano_mb", nullable = false)
-    private Integer max_tamano_mb;
+    @Column(name = "max_size_mb", nullable = false)
+    private Integer max_size_mb;
 
     @Column(name = "flag", nullable = false)
     private Boolean flag;
@@ -41,5 +42,9 @@ public class TipoDocumento {
 
     @Column(name = "date_update", nullable = false)
     private LocalDateTime date_update;
+
+    /// relacion con documento
+    @OneToMany(mappedBy = "tipo_documento" , fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Documento> documentos;
 
 }

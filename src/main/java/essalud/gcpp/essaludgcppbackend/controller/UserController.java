@@ -2,7 +2,6 @@ package essalud.gcpp.essaludgcppbackend.controller;
 
 import essalud.gcpp.essaludgcppbackend.dtos.UserLoginDto;
 import essalud.gcpp.essaludgcppbackend.dtos.UsersDto;
-import essalud.gcpp.essaludgcppbackend.model.Users;
 import essalud.gcpp.essaludgcppbackend.serviceinterfaz.UsersService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

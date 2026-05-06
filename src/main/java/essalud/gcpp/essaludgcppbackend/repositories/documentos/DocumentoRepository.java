@@ -1,4 +1,4 @@
-package essalud.gcpp.essaludgcppbackend.repositories;
+package essalud.gcpp.essaludgcppbackend.repositories.documentos;
 
 import essalud.gcpp.essaludgcppbackend.model.documentos.Documento;
 import org.springframework.data.jpa.repository.JpaRepository;

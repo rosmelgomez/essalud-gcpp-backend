@@ -2,6 +2,7 @@ package essalud.gcpp.essaludgcppbackend.model;
 
 import java.time.LocalDateTime;
 
+import essalud.gcpp.essaludgcppbackend.model.usuario.Users;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

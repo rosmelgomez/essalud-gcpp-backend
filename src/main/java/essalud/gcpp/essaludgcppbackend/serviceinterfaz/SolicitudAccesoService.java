@@ -1,19 +1,15 @@
 package essalud.gcpp.essaludgcppbackend.serviceinterfaz;
 
 import essalud.gcpp.essaludgcppbackend.dtos.SolicitudAccesoDto;
-import essalud.gcpp.essaludgcppbackend.dtos.UsersDto;
-import essalud.gcpp.essaludgcppbackend.model.Rol;
 import essalud.gcpp.essaludgcppbackend.model.SolicitudAcceso;
-import essalud.gcpp.essaludgcppbackend.model.UserRol;
-import essalud.gcpp.essaludgcppbackend.model.Users;
+import essalud.gcpp.essaludgcppbackend.model.usuario.Users;
 import essalud.gcpp.essaludgcppbackend.repositories.SolicitudAccesoRepository;
-import essalud.gcpp.essaludgcppbackend.repositories.UsersRepository;
+import essalud.gcpp.essaludgcppbackend.repositories.usuario.UsersRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 

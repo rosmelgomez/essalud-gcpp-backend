@@ -1,4 +1,4 @@
-package essalud.gcpp.essaludgcppbackend.controller;
+package essalud.gcpp.essaludgcppbackend.controller.documentos;
 
 import java.io.IOException;
 import java.util.List;
@@ -10,10 +10,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import essalud.gcpp.essaludgcppbackend.dtos.DocumentoDto;
-import essalud.gcpp.essaludgcppbackend.serviceinterfaz.FileService;
+import essalud.gcpp.essaludgcppbackend.dtos.documento.DocumentoDto;
+import essalud.gcpp.essaludgcppbackend.serviceinterfaz.documentos.FileService;
 
 @RestController
 @RequestMapping("/file")

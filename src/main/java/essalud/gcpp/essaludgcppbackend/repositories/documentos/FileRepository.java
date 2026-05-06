@@ -1,4 +1,4 @@
-package essalud.gcpp.essaludgcppbackend.repositories;
+package essalud.gcpp.essaludgcppbackend.repositories.documentos;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;

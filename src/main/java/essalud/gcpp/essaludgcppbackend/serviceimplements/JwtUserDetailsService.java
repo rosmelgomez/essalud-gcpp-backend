@@ -1,8 +1,8 @@
 package essalud.gcpp.essaludgcppbackend.serviceimplements;
-import essalud.gcpp.essaludgcppbackend.model.Rol;
-import essalud.gcpp.essaludgcppbackend.model.Users;
-import essalud.gcpp.essaludgcppbackend.repositories.RolRepository;
-import essalud.gcpp.essaludgcppbackend.repositories.UsersRepository;
+import essalud.gcpp.essaludgcppbackend.model.usuario.Rol;
+import essalud.gcpp.essaludgcppbackend.model.usuario.Users;
+import essalud.gcpp.essaludgcppbackend.repositories.usuario.RolRepository;
+import essalud.gcpp.essaludgcppbackend.repositories.usuario.UsersRepository;
 import org.jspecify.annotations.NonNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

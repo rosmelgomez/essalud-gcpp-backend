@@ -1,4 +1,4 @@
-package essalud.gcpp.essaludgcppbackend.controller;
+package essalud.gcpp.essaludgcppbackend.controller.encuesta;
 
 import essalud.gcpp.essaludgcppbackend.dtos.encuesta.*;
 import essalud.gcpp.essaludgcppbackend.serviceinterfaz.encuesta.*;

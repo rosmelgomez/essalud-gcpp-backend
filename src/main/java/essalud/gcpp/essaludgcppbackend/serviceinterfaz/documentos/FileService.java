@@ -1,4 +1,4 @@
-package essalud.gcpp.essaludgcppbackend.serviceinterfaz;
+package essalud.gcpp.essaludgcppbackend.serviceinterfaz.documentos;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -9,10 +9,10 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
-import essalud.gcpp.essaludgcppbackend.dtos.DocumentoDto;
+import essalud.gcpp.essaludgcppbackend.dtos.documento.DocumentoDto;
 import essalud.gcpp.essaludgcppbackend.model.documentos.Documento;
-import essalud.gcpp.essaludgcppbackend.repositories.DocumentoRepository;
-import essalud.gcpp.essaludgcppbackend.repositories.FileRepository;
+import essalud.gcpp.essaludgcppbackend.repositories.documentos.DocumentoRepository;
+import essalud.gcpp.essaludgcppbackend.repositories.documentos.FileRepository;
 
 @Service
 public class FileService {
@@ -32,12 +32,12 @@ public class FileService {
         Documento documentoNew = new Documento();
         documentoNew.setTitulo(documento.getTitulo());
         documentoNew.setDescripcion(documento.getDescripcion());
-        documentoNew.setUsuario_creation(documento.getUsuario_creation() );
-        documentoNew.setUsuario_update(documento.getUsuario_update() );
+       // documentoNew.setUsuario_creation(documento.getUsuario_creation() );
+        ///documentoNew.setUsuario_update(documento.getUsuario_update() );
         documentoNew.setDate_creation(LocalDateTime.now());
         documentoNew.setDate_update(LocalDateTime.now());
-        documentoNew.setArchivo( documento.getArchivo().getBytes());
-        documentoNew.setExtencion(documento.getExtencion());
+        ///documentoNew.setArchivo( documento.getArchivo().getBytes());
+        ///documentoNew.setExtencion(documento.getExtencion());
         documentoRepository.save(documentoNew);
     }
 
@@ -50,9 +50,9 @@ public class FileService {
             documentoDto.setId(documento.getId());
             documentoDto.setTitulo(documento.getTitulo());
             documentoDto.setDescripcion(documento.getDescripcion());
-            documentoDto.setExtencion(documento.getExtencion());
-            documentoDto.setUsuario_creation(documento.getUsuario_creation() );
-            documentoDto.setUsuario_update(documento.getUsuario_update() );
+            ///documentoDto.setExtencion(documento.getExtencion());
+            ///documentoDto.setUsuario_creation(documento.getUsuario_creation() );
+            //documentoDto.setUsuario_update(documento.getUsuario_update() );
             documentoDto.setDate_creation(LocalDateTime.now());
             documentoDto.setDate_update(LocalDateTime.now());
             documentosDtos.add(documentoDto);
@@ -65,9 +65,9 @@ public class FileService {
         if (documentoUpdate != null) {
             documentoUpdate.setTitulo(documento.getTitulo());
             documentoUpdate.setDescripcion(documento.getDescripcion());
-            documentoUpdate.setUsuario_update(documento.getUsuario_update() );
+            ///documentoUpdate.setUsuario_update(documento.getUsuario_update() );
             documentoUpdate.setDate_update(LocalDateTime.now());
-            documentoUpdate.setArchivo(documento.getArchivo().getBytes());
+            ///documentoUpdate.setArchivo(documento.getArchivo().getBytes());
             documentoRepository.save(documentoUpdate);
         }
     }
@@ -79,7 +79,7 @@ public class FileService {
     public byte[] getDocumento(Integer id) {
         Documento documento = documentoRepository.findById(id).orElse(null);
         if (documento != null) {
-            return documento.getArchivo() != null ? documento.getArchivo() : new byte[0];
+            return new byte[0];
         }
         return new byte[0];
     }

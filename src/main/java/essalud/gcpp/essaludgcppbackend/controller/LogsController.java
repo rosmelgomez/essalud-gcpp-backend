@@ -2,8 +2,8 @@ package essalud.gcpp.essaludgcppbackend.controller;
 
 import essalud.gcpp.essaludgcppbackend.dtos.LogFilterDto;
 import essalud.gcpp.essaludgcppbackend.dtos.LogUsersDto;
-import essalud.gcpp.essaludgcppbackend.model.Users;
-import essalud.gcpp.essaludgcppbackend.repositories.UsersRepository;
+import essalud.gcpp.essaludgcppbackend.model.usuario.Users;
+import essalud.gcpp.essaludgcppbackend.repositories.usuario.UsersRepository;
 import essalud.gcpp.essaludgcppbackend.serviceinterfaz.LogService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

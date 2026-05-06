@@ -1,6 +1,6 @@
-package essalud.gcpp.essaludgcppbackend.repositories;
+package essalud.gcpp.essaludgcppbackend.repositories.usuario;
 
-import essalud.gcpp.essaludgcppbackend.model.Rol;
+import essalud.gcpp.essaludgcppbackend.model.usuario.Rol;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
