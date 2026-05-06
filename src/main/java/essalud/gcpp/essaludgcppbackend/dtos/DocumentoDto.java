@@ -1,6 +1,7 @@
 package essalud.gcpp.essaludgcppbackend.dtos;
 
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
@@ -13,11 +14,11 @@ public class DocumentoDto {
 
     private Integer id;
 
-    private String nombre;
+    private String titulo;
 
     private String descripcion;
 
-    private String tipo_archivo;
+    private String extencion;
 
     private String usuario_creation;
 
@@ -27,5 +28,5 @@ public class DocumentoDto {
 
     private LocalDateTime date_update;
 
-    private  byte[] archivo;
+    private MultipartFile archivo;
 }

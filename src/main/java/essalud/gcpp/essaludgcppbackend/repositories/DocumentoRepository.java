@@ -1,6 +1,6 @@
 package essalud.gcpp.essaludgcppbackend.repositories;
 
-import essalud.gcpp.essaludgcppbackend.model.Documento;
+import essalud.gcpp.essaludgcppbackend.model.documentos.Documento;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

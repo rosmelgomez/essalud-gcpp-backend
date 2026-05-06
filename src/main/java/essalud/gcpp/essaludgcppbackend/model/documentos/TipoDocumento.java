@@ -1,4 +1,4 @@
-package essalud.gcpp.essaludgcppbackend.model;
+package essalud.gcpp.essaludgcppbackend.model.documentos;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "documento")
-public class Documento {
+@Table(name = "tipo_documento")
+public class TipoDocumento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,22 +24,22 @@ public class Documento {
     @Column(name = "descripcion", nullable = false)
     private String descripcion;
 
-    @Column(name = "tipo_archivo", nullable = false)
-    private String tipo_archivo;
+    @Column(name = "extensiones_permitidas", nullable = false)
+    private String extensiones_permitidas;
 
-    @Column(name = "usuario_creation", nullable = false)
-    private String usuario_creation;
+    @Column(name = "requiere_aprobacion", nullable = false)
+    private Boolean requiere_aprobacion;
 
-    @Column(name = "usuario_update", nullable = false)
-    private String usuario_update;
+    @Column(name = "max_tamano_mb", nullable = false)
+    private Integer max_tamano_mb;
+
+    @Column(name = "flag", nullable = false)
+    private Boolean flag;
 
     @Column(name = "date_creation", nullable = false)
     private LocalDateTime date_creation;
 
     @Column(name = "date_update", nullable = false)
     private LocalDateTime date_update;
-
-    @Column(name = "archivo", nullable = false)
-    private byte[] archivo;
 
 }

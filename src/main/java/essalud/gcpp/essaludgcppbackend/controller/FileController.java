@@ -29,27 +29,21 @@ public class FileController {
         return ResponseEntity.ok(fileService.findArchivo(name));
     }
 
-    @PostMapping("/insert-archivo")
+
+    @PostMapping(value = "/insert-archivo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
-    public void insertArchivo(@ModelAttribute DocumentoDto documentoDto, @RequestParam(value = "documento", required = false) MultipartFile documento) throws IOException {
-        if (documento != null && !documento.isEmpty()) {
-            documentoDto.setArchivo(documento.getBytes());
-        }
+    public void insertArchivo(@ModelAttribute DocumentoDto documentoDto) throws IOException {
         fileService.insertDocumento(documentoDto);
     }
-
     @GetMapping("/get-documentos")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity< List<DocumentoDto>> listarDocumentos() {
         return ResponseEntity.ok(fileService.getDocumentos());
     }
 
-    @PutMapping("/update")
+    @PutMapping(value = "/update" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
-   public void updateDocumento(@ModelAttribute DocumentoDto documentoDto, @RequestParam(value = "documento", required = false ) MultipartFile documento) throws IOException {
-        if (documento != null && !documento.isEmpty()) {
-            documentoDto.setArchivo(documento.getBytes());
-        }
+   public void updateDocumento(@ModelAttribute DocumentoDto documentoDto) throws IOException {
         fileService.updateDocumento(documentoDto);
     }
 
