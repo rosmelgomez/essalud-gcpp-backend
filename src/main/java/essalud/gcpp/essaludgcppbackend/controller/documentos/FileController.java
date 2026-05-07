@@ -28,12 +28,12 @@ public class FileController {
         return ResponseEntity.ok(fileService.findArchivo(name));
     }
 
-
     @PostMapping(value = "/insert-archivo", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public void insertArchivo(@ModelAttribute DocumentoDto documentoDto) throws IOException {
         fileService.insertDocumento(documentoDto);
     }
+
     @GetMapping("/get-documentos")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity< List<DocumentoDto>> listarDocumentos() {

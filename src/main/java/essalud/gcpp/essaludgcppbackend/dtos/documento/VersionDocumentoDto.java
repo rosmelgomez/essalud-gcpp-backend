@@ -33,4 +33,7 @@ public class VersionDocumentoDto {
     private Integer id_user_creation;
 
     private Integer id_documento;
+
+    ///flujo de aprobacion
+   private Integer id_user_aprobador;
 }

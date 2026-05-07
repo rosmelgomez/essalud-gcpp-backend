@@ -1,5 +1,6 @@
 package essalud.gcpp.essaludgcppbackend.model.documentos;
 
+import essalud.gcpp.essaludgcppbackend.model.Log;
 import jakarta.persistence.*;
 import lombok.*;
 

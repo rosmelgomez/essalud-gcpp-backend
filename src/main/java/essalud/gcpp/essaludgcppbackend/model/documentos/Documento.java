@@ -54,8 +54,9 @@ public class Documento {
     @JoinColumn(name = "id_tipo_documento")
     private TipoDocumento tipo_documento;
 
+
     /// relacion con version documento
-    @OneToMany(mappedBy = "version_documento" , fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "documento_version_documento" , fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<VersionDocumento> version_documentos;
 
 }

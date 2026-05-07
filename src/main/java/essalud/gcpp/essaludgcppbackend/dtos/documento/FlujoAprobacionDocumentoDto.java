@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class FlujoAprobacionDto {
+public class FlujoAprobacionDocumentoDto {
 
     private Integer id;
 

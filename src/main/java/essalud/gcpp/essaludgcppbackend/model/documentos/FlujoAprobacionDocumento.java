@@ -36,6 +36,7 @@ public class FlujoAprobacionDocumento {
     @JoinColumn(name = "id_user_aprobador")
     private Users user_flujo_aprobacion;
 
+
     /// relacion con version_documento
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_version_documento")

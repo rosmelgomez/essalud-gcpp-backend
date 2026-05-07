@@ -3,6 +3,8 @@ package essalud.gcpp.essaludgcppbackend.model.documentos;
 import essalud.gcpp.essaludgcppbackend.model.usuario.Users;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.type.descriptor.java.BlobJavaType;
+
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -41,19 +43,20 @@ public class VersionDocumento {
     @Column(name = "date_update", nullable = false)
     private LocalDateTime date_update;
 
+    @Lob
     @Column(name = "archivo", nullable = false)
     private byte[] archivo;
-
 
     /// relacion con usuario creador
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_user_creation")
     private Users user_version_documento;
 
+
     /// relacion con documento
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_documento")
-    private Documento documento;
+    private Documento documento_version_documento;
 
     /// relacion con flujo Aprobacion
     @OneToMany(mappedBy = "version_documento_aprobacion" , fetch = FetchType.LAZY, cascade = CascadeType.ALL)
