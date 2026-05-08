@@ -3,7 +3,6 @@ package essalud.gcpp.essaludgcppbackend.model.documentos;
 import essalud.gcpp.essaludgcppbackend.model.usuario.Users;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.type.descriptor.java.BlobJavaType;
 
 
 import java.time.LocalDateTime;
@@ -25,15 +24,15 @@ public class VersionDocumento {
     @Column(name = "nombre", nullable = false)
     private String nombre;
 
-    @Column(name = "comentario")
-    private String comentario;
+    @Column(name = "descripcion")
+    private String descripcion;
 
 
     @Column(name = "extencion", nullable = false)
     private String extencion;
 
     @Column(name = "version" , nullable = false)
-    private String version;
+    private int version;
 
     @Column(name = "size" , nullable = false)
     private double size;
@@ -45,7 +44,7 @@ public class VersionDocumento {
     private LocalDateTime date_update;
 
     @Lob
-    @Column(name = "archivo", nullable = false)
+    @Column(name = "archivo", nullable = false )
     private byte[] archivo;
 
     /// relacion con usuario creador

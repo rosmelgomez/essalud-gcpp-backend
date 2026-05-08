@@ -29,15 +29,14 @@ public class VersionDocumentoController {
         versionDocumentoService.saveVersionDocumento(versionDocumentoDto);
     }
 
-    @GetMapping("/get-version-documento")
-
+    @GetMapping("/getall")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
     public List<VersionDocumentoDto> getAllVersionDocumentos() {
         return versionDocumentoService.getAllVersionDocumentos();
     }
 
     @SneakyThrows
-    @GetMapping("/documento/{id}")
+    @GetMapping("/archivo/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<Resource> getFile(@PathVariable Integer id) {
         Resource resource = versionDocumentoService.loadResource(id);
@@ -52,7 +51,7 @@ public class VersionDocumentoController {
     }
 
 
-    @GetMapping("/getVersionDocumento/{iddoc}")
+    @GetMapping("/getvdbyiddoc/{iddoc}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public List<VersionDocumentoDto> getD(@PathVariable Integer iddoc) {
         return versionDocumentoService.getVersionDocumentos(iddoc);

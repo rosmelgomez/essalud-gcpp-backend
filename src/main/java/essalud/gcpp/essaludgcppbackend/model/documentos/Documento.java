@@ -41,8 +41,8 @@ public class Documento {
     @Column(name = "date_update", nullable = false)
     private LocalDateTime date_update;
 
-    @Column(name = "status", nullable = false)
-    private String status;
+    @Column(name = "flag", nullable = false)
+    private Boolean flag;
 
     /// relacion con usuario creador
     @ManyToOne(fetch = FetchType.LAZY)

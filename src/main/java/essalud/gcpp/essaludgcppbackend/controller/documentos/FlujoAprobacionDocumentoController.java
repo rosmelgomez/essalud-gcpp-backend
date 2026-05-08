@@ -19,13 +19,13 @@ public class FlujoAprobacionDocumentoController {
         this.fads = fads;
     }
 
-    @GetMapping("get-all")
+    @GetMapping("getall")
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<FlujoAprobacionDocumentoDto> getDocumentos(){
         return fads.getFlujoAprobacionDocumentos();
     }
 
-    @GetMapping("/getFlujoByUser/{idUser}")
+    @GetMapping("/getflujobyuser/{idUser}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED')")
     public List<FlujoAprobacionDocumentoDto> getFlujoByUser(@PathVariable Integer idUser){
         return fads.getFlujoAprobacionDocumentosByUser(idUser);

@@ -10,18 +10,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Data
 public class FlujoAprobacionDocumentoDto {
-
     private Integer id;
-
     private String comentario;
-
     private String status;
-
     private LocalDateTime date_creation;
-
     private LocalDateTime date_update;
-
     private Integer id_user_aprobador;
-
     private Integer id_version_documento;
 }

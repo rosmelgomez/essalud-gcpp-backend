@@ -7,8 +7,6 @@ import essalud.gcpp.essaludgcppbackend.model.usuario.Users;
 import essalud.gcpp.essaludgcppbackend.repositories.documentos.DocumentoRepository;
 import essalud.gcpp.essaludgcppbackend.repositories.documentos.VersionDocumentoRepository;
 import essalud.gcpp.essaludgcppbackend.repositories.usuario.UsersRepository;
-import org.hibernate.type.descriptor.java.BlobJavaType;
-import org.modelmapper.ModelMapper;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -40,7 +38,7 @@ public class VersionDocumentoService {
        if(documento != null && user != null){
            VersionDocumento versionDocumento = new VersionDocumento();
            versionDocumento.setNombre(versionDocumentoDto.getNombre());
-           versionDocumento.setComentario(versionDocumentoDto.getComentario());
+           versionDocumento.setDescripcion(versionDocumentoDto.getDescripcion());
            versionDocumento.setExtencion(versionDocumentoDto.getArchivo().getContentType());
            versionDocumento.setVersion(versionDocumentoDto.getVersion());
            versionDocumento.setSize(versionDocumentoDto.getArchivo().getSize());
@@ -88,11 +86,12 @@ public class VersionDocumentoService {
         return versionDocumentosDto;
     }
 
+
     private VersionDocumentoDto versionDocumentoDto(VersionDocumento versionDocumento) {
         VersionDocumentoDto dto = new VersionDocumentoDto();
         dto.setId(versionDocumento.getId());
         dto.setNombre(versionDocumento.getNombre());
-        dto.setComentario(versionDocumento.getComentario());
+        dto.setDescripcion(versionDocumento.getDescripcion());
         dto.setExtencion(versionDocumento.getExtencion());
         dto.setVersion(versionDocumento.getVersion());
         dto.setSize(versionDocumento.getSize());

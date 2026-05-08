@@ -23,7 +23,7 @@ public class TipoDocumentoController {
         tds.saveTipoDocumento(tipoDocumentoDto);
     }
 
-    @GetMapping("/get-tipo-documentos")
+    @GetMapping("/getall")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public List<TipoDocumentoDto> getTipoDocumentos() {
         return tds.getTipoDocumentos();

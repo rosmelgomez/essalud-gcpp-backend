@@ -39,7 +39,7 @@ public class DocumentoService {
             documentoNew.setCodcas(documento.getCodcas());
             documentoNew.setDate_creation(LocalDateTime.now());
             documentoNew.setDate_update(LocalDateTime.now());
-            documentoNew.setStatus(documento.getStatus());
+            documentoNew.setFlag(documento.getFlag());
             documentoNew.setTipo_documento(tipoDocumento);
             documentoNew.setUser_documento(user);
             documentoRepository.save(documentoNew);

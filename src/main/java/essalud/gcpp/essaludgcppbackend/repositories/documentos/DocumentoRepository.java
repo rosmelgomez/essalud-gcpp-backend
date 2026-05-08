@@ -17,7 +17,6 @@ public interface DocumentoRepository extends JpaRepository<Documento, Integer> {
             "WHERE d.id=:id", nativeQuery = true )
     Boolean requiere_aprobacion(@Param("id") Integer id);
 
-
     List<Documento> getDocumentosByCodcas(String codcas);
 
     List<Documento> getDocumentosByCodred(String codred);

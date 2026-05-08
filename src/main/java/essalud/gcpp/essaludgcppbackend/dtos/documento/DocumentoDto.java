@@ -11,26 +11,15 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Data
 public class DocumentoDto {
-
     private Integer id;
-
     private String codigo;
-
     private String titulo;
-
     private String descripcion;
-
     private String codcas;
-
     private String codred;
-
     private LocalDateTime date_creation;
-
     private LocalDateTime date_update;
-
-    private String status;
-
+    private Boolean flag;
     private Integer id_user_creation;
-
     private Integer id_tipo_documento;
 }
