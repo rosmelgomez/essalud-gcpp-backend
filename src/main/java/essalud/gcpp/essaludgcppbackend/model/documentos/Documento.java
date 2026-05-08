@@ -32,8 +32,8 @@ public class Documento {
     @Column(name = "codcas")
     private String codcas;
 
-    @Column(name = "cod_red")
-    private String cod_red;
+    @Column(name = "codred")
+    private String codred;
 
     @Column(name = "date_creation", nullable = false)
     private LocalDateTime date_creation;

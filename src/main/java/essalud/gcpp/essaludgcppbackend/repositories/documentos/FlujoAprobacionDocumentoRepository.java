@@ -12,7 +12,6 @@ public interface FlujoAprobacionDocumentoRepository extends JpaRepository<FlujoA
 
     @Query(value = "SELECT fad.* \n" +
             "FROM flujo_aprobacion_documento fad\n" +
-            "JOIN users us on fad.id_user_aprobador = us.id\n" +
-            "WHERE us.id =:id", nativeQuery = true)
+            "WHERE fad.id_user_aprobador =:id", nativeQuery = true)
     List<FlujoAprobacionDocumento> findByUser(@Param("id") Integer id);
 }

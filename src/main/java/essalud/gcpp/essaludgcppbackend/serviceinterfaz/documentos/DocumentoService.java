@@ -35,7 +35,7 @@ public class DocumentoService {
             documentoNew.setCodigo(documento.getCodigo());
             documentoNew.setTitulo(documento.getTitulo());
             documentoNew.setDescripcion(documento.getDescripcion());
-            documentoNew.setCod_red(documento.getCod_red());
+            documentoNew.setCodred(documento.getCodred());
             documentoNew.setCodcas(documento.getCodcas());
             documentoNew.setDate_creation(LocalDateTime.now());
             documentoNew.setDate_update(LocalDateTime.now());
@@ -51,12 +51,43 @@ public class DocumentoService {
         List<Documento> documentos = documentoRepository.findAll();
         List<DocumentoDto> documentosDto = new ArrayList<>();
         for (Documento documento : documentos) {
-            ModelMapper modelMapper = new ModelMapper();
-            DocumentoDto documentoDto = modelMapper.map(documento, DocumentoDto.class);
-            documentoDto.setId_user_creation(documento.getUser_documento().getId());
-            documentoDto.setId_tipo_documento(documento.getTipo_documento().getId());
-            documentosDto.add(documentoDto);
+            documentosDto.add(getDocumentoDto(documento));
         }
         return documentosDto;
+    }
+
+    public List<DocumentoDto> getDocumentosByCodred(String codred){
+        List<Documento> documentos = documentoRepository.getDocumentosByCodred(codred);
+        List<DocumentoDto> documentosDto = new ArrayList<>();
+        for (Documento documento : documentos) {
+            documentosDto.add(getDocumentoDto(documento));
+        }
+        return documentosDto;
+    }
+
+    public List<DocumentoDto> getDocumentosByCodcas(String codcas){
+        List<Documento> documentos = documentoRepository.getDocumentosByCodcas(codcas);
+        List<DocumentoDto> documentosDto = new ArrayList<>();
+        for (Documento documento : documentos) {
+            documentosDto.add(getDocumentoDto(documento));
+        }
+        return documentosDto;
+    }
+
+    public List<DocumentoDto> getDocumentosByUser(Integer iduser){
+        List<Documento> documentos = documentoRepository.getDocumentoByUser(iduser);
+        List<DocumentoDto> documentosDto = new ArrayList<>();
+        for (Documento documento : documentos) {
+            documentosDto.add(getDocumentoDto(documento));
+        }
+        return documentosDto;
+    }
+
+    private DocumentoDto getDocumentoDto(Documento documento){
+        ModelMapper modelMapper = new ModelMapper();
+        DocumentoDto documentoDto = modelMapper.map(documento, DocumentoDto.class);
+        documentoDto.setId_user_creation(documento.getUser_documento().getId());
+        documentoDto.setId_tipo_documento(documento.getTipo_documento().getId());
+        return documentoDto;
     }
 }

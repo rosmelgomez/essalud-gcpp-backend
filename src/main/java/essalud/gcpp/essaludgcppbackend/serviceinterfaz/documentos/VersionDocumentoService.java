@@ -8,6 +8,7 @@ import essalud.gcpp.essaludgcppbackend.repositories.documentos.DocumentoReposito
 import essalud.gcpp.essaludgcppbackend.repositories.documentos.VersionDocumentoRepository;
 import essalud.gcpp.essaludgcppbackend.repositories.usuario.UsersRepository;
 import org.hibernate.type.descriptor.java.BlobJavaType;
+import org.modelmapper.ModelMapper;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -40,9 +41,9 @@ public class VersionDocumentoService {
            VersionDocumento versionDocumento = new VersionDocumento();
            versionDocumento.setNombre(versionDocumentoDto.getNombre());
            versionDocumento.setComentario(versionDocumentoDto.getComentario());
-           versionDocumento.setExtencion(versionDocumentoDto.getExtencion());
+           versionDocumento.setExtencion(versionDocumentoDto.getArchivo().getContentType());
            versionDocumento.setVersion(versionDocumentoDto.getVersion());
-           versionDocumento.setSize(versionDocumentoDto.getSize());
+           versionDocumento.setSize(versionDocumentoDto.getArchivo().getSize());
            versionDocumento.setDate_creation(LocalDateTime.now());
            versionDocumento.setDate_update(LocalDateTime.now());
            versionDocumento.setArchivo( versionDocumentoDto.getArchivo().getBytes());
@@ -59,26 +60,15 @@ public class VersionDocumentoService {
 
 
     }
-    public List<VersionDocumentoDto> getVersionDocumentos(){
+
+    public List<VersionDocumentoDto> getAllVersionDocumentos(){
         List<VersionDocumento> versionDocumentos = versionDocumentoRepository.findAll();
         List<VersionDocumentoDto> versionDocumentosDto = new ArrayList<>();
         for (VersionDocumento versionDocumento : versionDocumentos){
-            VersionDocumentoDto dto = new VersionDocumentoDto();
-            dto.setId(versionDocumento.getId());
-            dto.setNombre(versionDocumento.getNombre());
-            dto.setComentario(versionDocumento.getComentario());
-            dto.setExtencion(versionDocumento.getExtencion());
-            dto.setVersion(versionDocumento.getVersion());
-            dto.setSize(versionDocumento.getSize());
-            dto.setDate_creation(versionDocumento.getDate_creation());
-            dto.setDate_update(versionDocumento.getDate_update());
-            dto.setId_documento(versionDocumento.getDocumento_version_documento().getId());
-            dto.setId_user_creation(versionDocumento.getUser_version_documento().getId());
-            versionDocumentosDto.add(dto);
+            versionDocumentosDto.add(versionDocumentoDto(versionDocumento));
         }
         return versionDocumentosDto;
     }
-
 
     public Resource loadResource(Integer id) {
         VersionDocumento data = versionDocumentoRepository.findById(id).orElse(null);
@@ -87,6 +77,32 @@ public class VersionDocumentoService {
         }
         return new ByteArrayResource(data.getArchivo());
     }
+
+
+    public List<VersionDocumentoDto> getVersionDocumentos(Integer iddoc){
+        List<VersionDocumento> versionDocumentos = versionDocumentoRepository.getVersionByDocumento(iddoc);
+        List<VersionDocumentoDto> versionDocumentosDto = new ArrayList<>();
+        for (VersionDocumento versionDocumento : versionDocumentos){
+            versionDocumentosDto.add(versionDocumentoDto(versionDocumento));
+        }
+        return versionDocumentosDto;
+    }
+
+    private VersionDocumentoDto versionDocumentoDto(VersionDocumento versionDocumento) {
+        VersionDocumentoDto dto = new VersionDocumentoDto();
+        dto.setId(versionDocumento.getId());
+        dto.setNombre(versionDocumento.getNombre());
+        dto.setComentario(versionDocumento.getComentario());
+        dto.setExtencion(versionDocumento.getExtencion());
+        dto.setVersion(versionDocumento.getVersion());
+        dto.setSize(versionDocumento.getSize());
+        dto.setDate_creation(versionDocumento.getDate_creation());
+        dto.setDate_update(versionDocumento.getDate_update());
+        dto.setId_documento(versionDocumento.getDocumento_version_documento().getId());
+        dto.setId_user_creation(versionDocumento.getUser_version_documento().getId());
+        return dto;
+    }
+
 
 
 }

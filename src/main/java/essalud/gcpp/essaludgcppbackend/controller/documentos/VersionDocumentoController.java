@@ -30,8 +30,10 @@ public class VersionDocumentoController {
     }
 
     @GetMapping("/get-version-documento")
-    public List<VersionDocumentoDto> getVersionDocumento() {
-        return versionDocumentoService.getVersionDocumentos();
+
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    public List<VersionDocumentoDto> getAllVersionDocumentos() {
+        return versionDocumentoService.getAllVersionDocumentos();
     }
 
     @SneakyThrows
@@ -47,6 +49,13 @@ public class VersionDocumentoController {
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
                 .body(resource);
+    }
+
+
+    @GetMapping("/getVersionDocumento/{iddoc}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
+    public List<VersionDocumentoDto> getD(@PathVariable Integer iddoc) {
+        return versionDocumentoService.getVersionDocumentos(iddoc);
     }
 
 

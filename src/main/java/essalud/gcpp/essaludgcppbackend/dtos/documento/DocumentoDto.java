@@ -22,7 +22,7 @@ public class DocumentoDto {
 
     private String codcas;
 
-    private String cod_red;
+    private String codred;
 
     private LocalDateTime date_creation;
 

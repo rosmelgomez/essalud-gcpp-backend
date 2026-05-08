@@ -28,6 +28,7 @@ public class VersionDocumento {
     @Column(name = "comentario")
     private String comentario;
 
+
     @Column(name = "extencion", nullable = false)
     private String extencion;
 

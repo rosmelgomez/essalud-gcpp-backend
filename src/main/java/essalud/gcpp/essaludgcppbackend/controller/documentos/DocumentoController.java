@@ -23,8 +23,27 @@ public class DocumentoController {
     }
 
     @GetMapping("/getDocumentos")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
     public List<DocumentoDto> getDocumentos(){
         return documentoService.getDocumentos();
+    }
+
+    @GetMapping("/getDocumentosByCodred/{codred}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    public List<DocumentoDto> getDocumentosByCodred(@PathVariable String codred){
+        return documentoService.getDocumentosByCodred(codred);
+    }
+
+    @GetMapping("/getDocumentosByCodcas/{codcas}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    public List<DocumentoDto> getDocumentosByCodcas(@PathVariable String codcas){
+        return documentoService.getDocumentosByCodcas(codcas);
+    }
+
+    @GetMapping("/getDocumentosByUser/{iduser}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    public List<DocumentoDto> getDocumentosUser(@PathVariable Integer iduser){
+        return documentoService.getDocumentosByUser(iduser);
     }
 
 
