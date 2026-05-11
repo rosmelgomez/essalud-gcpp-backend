@@ -1,6 +1,5 @@
 package essalud.gcpp.essaludgcppbackend.controller.documentos;
 
-import essalud.gcpp.essaludgcppbackend.dtos.documento.FlujoAprobacionDocumentoDto;
 import essalud.gcpp.essaludgcppbackend.dtos.documento.VersionDocumentoDto;
 import essalud.gcpp.essaludgcppbackend.serviceinterfaz.documentos.VersionDocumentoService;
 import lombok.SneakyThrows;
@@ -57,5 +56,10 @@ public class VersionDocumentoController {
         return versionDocumentoService.getVersionDocumentos(iddoc);
     }
 
+    @PutMapping(value = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED', 'USER')")
+    public void updateVersionDocumento(@RequestBody VersionDocumentoDto versionDocumentoDto)  throws IOException  {
+        versionDocumentoService.updateVersionDocumento(versionDocumentoDto);
+    }
 
 }

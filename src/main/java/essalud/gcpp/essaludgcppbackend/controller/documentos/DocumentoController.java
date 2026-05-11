@@ -46,6 +46,4 @@ public class DocumentoController {
         return documentoService.getDocumentosByUser(iduser);
     }
 
-
-
 }

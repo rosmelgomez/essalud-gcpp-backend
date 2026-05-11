@@ -30,4 +30,8 @@ public class EstablecimientosAsistencialesService {
     public List<Map<String, Object>>getRedesWithCentros(){
         return this.EAR.getRedesWithCentros();
     }
+
+    public Map<String, Object>getredeswithcentrosbycodcas(String codcas) {
+        return this.EAR.getredeswithcentrosbycodcas(codcas);
+    }
 }

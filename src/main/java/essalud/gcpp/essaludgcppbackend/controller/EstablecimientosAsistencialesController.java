@@ -43,4 +43,9 @@ public class EstablecimientosAsistencialesController {
     public ResponseEntity<List<Map<String, Object>>> getRedesWithCentros() {
         return ResponseEntity.ok(EAS.getRedesWithCentros());
     }
+
+    @GetMapping("/getredeswithcentrosbycodcas/{codcas}")
+    public ResponseEntity<Map<String, Object>> getredeswithcentrosbycodcas( @PathVariable String codcas) {
+        return ResponseEntity.ok(EAS.getredeswithcentrosbycodcas(codcas));
+    }
 }

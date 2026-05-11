@@ -30,7 +30,6 @@ public class VersionDocumentoService {
         this.fads = fads;
     }
 
-
     public void saveVersionDocumento(VersionDocumentoDto versionDocumentoDto) throws IOException {
        Documento documento = documentoRepository.findById(versionDocumentoDto.getId_documento()).orElse(null);
        Users user = usersRepository.findById(versionDocumentoDto.getId_user_creation()).orElse(null);
@@ -54,9 +53,6 @@ public class VersionDocumentoService {
             this.fads.saveFlujoAprobacionDocumento(versionDocumentoDto.getId_user_aprobador(), versionDocumento);
            }
        }
-
-
-
     }
 
     public List<VersionDocumentoDto> getAllVersionDocumentos(){
@@ -76,7 +72,6 @@ public class VersionDocumentoService {
         return new ByteArrayResource(data.getArchivo());
     }
 
-
     public List<VersionDocumentoDto> getVersionDocumentos(Integer iddoc){
         List<VersionDocumento> versionDocumentos = versionDocumentoRepository.getVersionByDocumento(iddoc);
         List<VersionDocumentoDto> versionDocumentosDto = new ArrayList<>();
@@ -84,6 +79,20 @@ public class VersionDocumentoService {
             versionDocumentosDto.add(versionDocumentoDto(versionDocumento));
         }
         return versionDocumentosDto;
+    }
+
+    public void updateVersionDocumento(VersionDocumentoDto versionDocumentoDto) throws IOException {
+        VersionDocumento versionDocumento = versionDocumentoRepository.findById(versionDocumentoDto.getId()).orElse(null);
+        if (versionDocumento != null) {
+            versionDocumento.setNombre(versionDocumentoDto.getNombre());
+            versionDocumento.setDescripcion(versionDocumentoDto.getDescripcion());
+            versionDocumento.setExtencion(versionDocumentoDto.getArchivo().getContentType());
+            versionDocumento.setVersion(versionDocumentoDto.getVersion());
+            versionDocumento.setSize(versionDocumentoDto.getArchivo().getSize());
+            versionDocumento.setArchivo(versionDocumentoDto.getArchivo().getBytes());
+            versionDocumento.setDate_update(LocalDateTime.now());
+            versionDocumento = versionDocumentoRepository.save(versionDocumento);
+        }
     }
 
 
@@ -101,7 +110,6 @@ public class VersionDocumentoService {
         dto.setId_user_creation(versionDocumento.getUser_version_documento().getId());
         return dto;
     }
-
 
 
 }

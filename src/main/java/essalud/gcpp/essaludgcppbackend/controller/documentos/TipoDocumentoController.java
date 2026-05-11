@@ -18,7 +18,7 @@ public class TipoDocumentoController {
     }
 
     @PostMapping("/save")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED')")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public void saveTipoDocumento(@RequestBody TipoDocumentoDto tipoDocumentoDto) {
         tds.saveTipoDocumento(tipoDocumentoDto);
     }
@@ -30,7 +30,9 @@ public class TipoDocumentoController {
     }
 
 
-
-
-
+    @PutMapping("/update")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public void updateTipoDocumento(@RequestBody TipoDocumentoDto tipoDocumentoDto) {
+        tds.updateTipoDocumento(tipoDocumentoDto);
+    }
 }

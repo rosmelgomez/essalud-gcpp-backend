@@ -77,4 +77,22 @@ public class EstablecimientosAsistencialesRepository {
         """.formatted(tabla);
         return secondJdbcTemplate.queryForList(sql);
     }
+
+    public Map<String, Object> getredeswithcentrosbycodcas(String codcas) {
+
+        String tabla= "dwsge.sgss_cmcas10";
+        String sql = """
+        SELECT
+            r.redasiscod,
+            r.redasisdes,
+            c.cenasicod,
+            c.cenasides
+        FROM %s c
+        LEFT JOIN dwsge.sgss_cmras10 r
+            ON c.redasiscod = r.redasiscod
+        AND c.estregcod ='1'
+        WHERE c.cenasicod= ?
+        """.formatted(tabla);
+        return secondJdbcTemplate.queryForMap(sql, codcas);
+    }
 }

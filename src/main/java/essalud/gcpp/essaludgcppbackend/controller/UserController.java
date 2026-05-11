@@ -37,7 +37,6 @@ public class UserController {
         return  usersService.getUserByDni(dni);
     }
 
-
     @PostMapping("/register")
     @PreAuthorize("hasAuthority('ADMIN')")
     public void saveUser(@RequestBody UsersDto user) {
@@ -84,5 +83,10 @@ public class UserController {
             throw new Exception("INVALID_CREDENTIALS", e);
         }
 
+    }
+
+    @GetMapping("/getUserByCodred/{code_red}")
+    public List<UsersDto> getUserByCodred(@PathVariable String code_red) {
+        return usersService.getUsersByCod_red(code_red);
     }
 }

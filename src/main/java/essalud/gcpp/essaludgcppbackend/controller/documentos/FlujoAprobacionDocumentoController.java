@@ -3,10 +3,7 @@ package essalud.gcpp.essaludgcppbackend.controller.documentos;
 import essalud.gcpp.essaludgcppbackend.dtos.documento.FlujoAprobacionDocumentoDto;
 import essalud.gcpp.essaludgcppbackend.serviceinterfaz.documentos.FlujoAprobacionDocumentoService;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,5 +28,9 @@ public class FlujoAprobacionDocumentoController {
         return fads.getFlujoAprobacionDocumentosByUser(idUser);
     }
 
-
+    @PutMapping("update")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ADMIN_RED')")
+    public void updateFlujoAprobacionDocumento(@RequestBody FlujoAprobacionDocumentoDto dto){
+        fads.updateFlujoAprobacionDocumento(dto);
+    }
 }

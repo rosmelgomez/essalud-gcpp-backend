@@ -42,6 +42,21 @@ public class TipoDocumentoService {
         return tipoDocumentosDto;
     }
 
+    public void updateTipoDocumento(TipoDocumentoDto tipoDocumentoDto) {
+        TipoDocumento tipoDocumento = tdr.findById(tipoDocumentoDto.getId()).orElse(null);
+        if (tipoDocumento != null) {
+            tipoDocumento.setNombre(tipoDocumentoDto.getNombre());
+            tipoDocumento.setDescripcion(tipoDocumentoDto.getDescripcion());
+            tipoDocumento.setExtensiones_permitidas(tipoDocumentoDto.getExtensiones_permitidas());
+            tipoDocumento.setMax_size_mb(tipoDocumentoDto.getMax_size_mb());
+            tipoDocumento.setFlag(tipoDocumentoDto.getFlag());
+            tipoDocumento.setDate_creation(LocalDateTime.now());
+            tipoDocumento.setDate_update(LocalDateTime.now());
+            tdr.save(tipoDocumento);
+        }
+    }
+
+
 
 
 

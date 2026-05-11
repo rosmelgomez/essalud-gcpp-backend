@@ -177,6 +177,15 @@ public class UsersService {
         }
     }
 
+    public  List<UsersDto> getUsersByCod_red(String code_red) {
+        List<UsersDto> usersDtos = new ArrayList<>();
+        List<Users> users= usersRepository.findByCode_red(code_red);
+        for (Users user : users) {
+            usersDtos.add(user(user,null));
+        }
+        return usersDtos;
+    }
+
     private UsersDto user (Users  user, List<Rol> roles) {
         UsersDto usersDto = new UsersDto();
         usersDto.setId(user.getId());
@@ -197,6 +206,9 @@ public class UsersService {
         usersDto.setDate_update(user.getDate_update());
         return usersDto;
     }
+
+
+
 
 
 }
