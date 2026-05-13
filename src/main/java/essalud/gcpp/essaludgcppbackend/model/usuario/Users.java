@@ -45,8 +45,8 @@ public class Users {
     @Column(name = "codcas")
     private String codcas;
 
-    @Column(name = "code_red")
-    private String code_red;
+    @Column(name = "codred")
+    private String codred;
 
     @Column(name = "email")
     private String email;

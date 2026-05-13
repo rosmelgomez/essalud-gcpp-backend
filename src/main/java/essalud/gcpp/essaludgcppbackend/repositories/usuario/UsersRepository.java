@@ -2,6 +2,8 @@ package essalud.gcpp.essaludgcppbackend.repositories.usuario;
 
 import essalud.gcpp.essaludgcppbackend.model.usuario.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,6 +16,10 @@ public interface UsersRepository extends JpaRepository<Users,Integer> {
 
     Users findByDni(String dni);
 
-    List<Users> findByCode_red (String code);
-
+    @Query(value = "SELECT us.*\n" +
+            "FROM users us\n" +
+            "JOIN user_rol ur ON ur.id_user =us.id\n" +
+            "JOIN rol r ON r.id =ur.id_rol\n" +
+            "WHERE us.codred=:codred  and r.id = 2", nativeQuery = true)
+    List<Users> findByCode_red (@Param("codred") String codred);
 }

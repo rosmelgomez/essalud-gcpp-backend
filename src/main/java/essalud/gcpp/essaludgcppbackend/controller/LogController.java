@@ -18,7 +18,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/log")
 @RequiredArgsConstructor
-public class LogsController {
+public class LogController {
 
     private final UsersRepository userRepository;
     private final LogService logService;

@@ -33,7 +33,7 @@ public class LogService {
             logFilterDto.setBrowser(log.getBrowser());
             logFilterDto.setUser_role(log.getRol_user());
             logFilterDto.setCodcas(log.getUser_log().getCodcas());
-            logFilterDto.setCode_red(log.getUser_log().getCode_red());
+            logFilterDto.setCode_red(log.getUser_log().getCodred());
             logFilterDto.setDate(log.getDate_creation());
             logFilterDto.setId_user(log.getUser_log().getId());
             logFilterDtos.add(logFilterDto);

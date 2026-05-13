@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Table(
         name = "user_rol",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"user_id", "rol_id"})
+                @UniqueConstraint(columnNames = {"id_user", "id_rol"})
         }
 )
 public class UserRol {
@@ -32,13 +32,13 @@ public class UserRol {
 
     /// relacion con Usuario
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "id_user")
     private Users usuario_rol;
 
 
     /// relacion con Rol
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "rol_id")
+    @JoinColumn(name = "id_rol")
     private Rol rol_user;
 
 }

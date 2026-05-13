@@ -16,7 +16,7 @@ public interface UserRolRepository extends JpaRepository<UserRol, Integer> {
     @Query (value = """
     SELECT ur.*
     FROM user_rol ur
-    JOIN users u ON ur.user_id = u.id
+    JOIN users u ON ur.id_user = u.id
     WHERE u.id=:userId
     """, nativeQuery = true)
     List<UserRol> findByUserId(@Param("userId")Integer userId);

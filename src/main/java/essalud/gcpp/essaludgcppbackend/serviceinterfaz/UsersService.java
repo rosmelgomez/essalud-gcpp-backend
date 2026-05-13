@@ -41,7 +41,7 @@ public class UsersService {
             newUser.setLastname(usersDto.getLastname());
             newUser.setDni(usersDto.getDni());
             newUser.setCodcas(usersDto.getCodcas());
-            newUser.setCode_red(usersDto.getCode_red());
+            newUser.setCodred(usersDto.getCodred());
             newUser.setUsername(usersDto.getUsername());
             newUser.setPassword(encodedPassword);
             newUser.setFlag(usersDto.getFlag());
@@ -107,7 +107,7 @@ public class UsersService {
         user.setLastname(usersDto.getLastname());
         user.setDni(usersDto.getDni());
         user.setCodcas(usersDto.getCodcas());
-        user.setCode_red(usersDto.getCode_red());
+        user.setCodred(usersDto.getCodred());
         user.setUsername(usersDto.getUsername());
         user.setFlag(usersDto.getFlag());
 
@@ -181,7 +181,8 @@ public class UsersService {
         List<UsersDto> usersDtos = new ArrayList<>();
         List<Users> users= usersRepository.findByCode_red(code_red);
         for (Users user : users) {
-            usersDtos.add(user(user,null));
+            List<Rol> roles =  rolRepository.listaRolesByUsername(user.getUsername());
+            usersDtos.add(user(user,roles));
         }
         return usersDtos;
     }
@@ -193,7 +194,7 @@ public class UsersService {
         usersDto.setLastname(user.getLastname());
         usersDto.setDni(user.getDni());
         usersDto.setCodcas(user.getCodcas());
-        usersDto.setCode_red(user.getCode_red());
+        usersDto.setCodred(user.getCodred());
         usersDto.setUsername(user.getUsername());
         usersDto.setPassword("");
         List<String> roleNames = new ArrayList<>();

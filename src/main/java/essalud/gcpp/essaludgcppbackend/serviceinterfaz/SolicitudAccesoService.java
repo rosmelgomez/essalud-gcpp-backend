@@ -66,7 +66,7 @@ public class SolicitudAccesoService {
         SolicitudAcceso solicitudAcceso = solicitudAccesoRepository.findById(solicitudAccesoDto.getId()).orElse(null);
         if (user != null && solicitudAcceso != null) {
             user.setCodcas(solicitudAccesoDto.getCodcas());
-            user.setCode_red(solicitudAccesoDto.getCode_red());
+            user.setCodred(solicitudAccesoDto.getCode_red());
             user.setDate_update(LocalDateTime.now());
             user.setFlag(true);
             usersRepository.save(user);

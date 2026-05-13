@@ -20,7 +20,7 @@ public class UsersDto {
 
     private String codcas;
 
-    private String code_red;
+    private String codred;
 
     private String email;
 
