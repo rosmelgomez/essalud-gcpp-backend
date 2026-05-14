@@ -6,6 +6,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/flujo-aprobacion-documento")
@@ -24,7 +25,7 @@ public class FlujoAprobacionDocumentoController {
 
     @GetMapping("/getflujobyuser/{idUser}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED')")
-    public List<FlujoAprobacionDocumentoDto> getFlujoByUser(@PathVariable Integer idUser){
+    public List<Map<String, Object>> getFlujoByUser(@PathVariable Integer idUser){
         return fads.getFlujoAprobacionDocumentosByUser(idUser);
     }
 

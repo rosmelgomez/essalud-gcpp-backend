@@ -9,19 +9,37 @@ import java.util.List;
 
 public interface VersionDocumentoRepository extends JpaRepository<VersionDocumento, Integer> {
 
-    @Query(value = "SELECT\n" +
-            "vd.id,\n" +
-            "vd.nombre,\n" +
-            "vd.comentario,\n" +
-            "vd.extencion,\n" +
-            "vd.version,\n" +
-            "vd.size,\n" +
-            "vd.date_creation,\n" +
-            "vd.date_update,\n" +
-            "NULL as archivo,\n" +
-            "vd.id_user_creation,\n" +
-            "vd.id_documento\n" +
-            "FROM version_documento vd\n" +
-            "WHERE vd.id_documento = :idDocumento", nativeQuery = true)
+    @Query(value = """
+            SELECT
+            vd.id,
+            vd.nombre,
+            vd.descripcion,
+            vd.extencion,
+            vd.version,
+            vd.size,
+            vd.date_creation,
+            vd.date_update,
+            NULL as archivo,
+            vd.id_user_creation,
+            vd.id_documento
+            FROM version_documento vd
+            WHERE vd.id_documento = :idDocumento""", nativeQuery = true)
     List<VersionDocumento> getVersionByDocumento(@Param("idDocumento") Integer idDocumento);
+
+    @Query(value = """
+            SELECT
+            vd.id,
+            vd.nombre,
+            vd.descripcion,
+            vd.extencion,
+            vd.version,
+            vd.size,
+            vd.date_creation,
+            vd.date_update,
+            NULL as archivo,
+            vd.id_user_creation,
+            vd.id_documento
+            FROM version_documento vd
+            WHERE vd.id_user_creation = :idUser""", nativeQuery = true)
+    List<VersionDocumento> getVersionByUser(@Param("idUser") Integer idUser);
 }

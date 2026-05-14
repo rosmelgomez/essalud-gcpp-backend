@@ -35,19 +35,22 @@ public class VersionDocumentoService {
        Users user = usersRepository.findById(versionDocumentoDto.getId_user_creation()).orElse(null);
 
        if(documento != null && user != null){
+           System.out.println("Bytes: " + versionDocumentoDto.getArchivo().getSize());
+           System.out.println("Mb: " + (versionDocumentoDto.getArchivo().getSize() / (1024*1024)));
            VersionDocumento versionDocumento = new VersionDocumento();
            versionDocumento.setNombre(versionDocumentoDto.getNombre());
            versionDocumento.setDescripcion(versionDocumentoDto.getDescripcion());
            versionDocumento.setExtencion(versionDocumentoDto.getArchivo().getContentType());
            versionDocumento.setVersion(versionDocumentoDto.getVersion());
-           versionDocumento.setSize(versionDocumentoDto.getArchivo().getSize());
+           versionDocumento.setSize((double) (versionDocumentoDto.getArchivo().getSize() / (1024*1024)));
+
            versionDocumento.setDate_creation(LocalDateTime.now());
            versionDocumento.setDate_update(LocalDateTime.now());
            versionDocumento.setArchivo( versionDocumentoDto.getArchivo().getBytes());
            versionDocumento.setUser_version_documento(user);
            versionDocumento.setDocumento_version_documento(documento);
            versionDocumento = versionDocumentoRepository.save(versionDocumento);
-           System.out.println(documentoRepository.requiere_aprobacion(documento.getId()));
+
 
            if(documentoRepository.requiere_aprobacion(documento.getId())){
             this.fads.saveFlujoAprobacionDocumento(versionDocumentoDto.getId_user_aprobador(), versionDocumento);
@@ -91,10 +94,18 @@ public class VersionDocumentoService {
             versionDocumento.setSize(versionDocumentoDto.getArchivo().getSize());
             versionDocumento.setArchivo(versionDocumentoDto.getArchivo().getBytes());
             versionDocumento.setDate_update(LocalDateTime.now());
-            versionDocumento = versionDocumentoRepository.save(versionDocumento);
+            versionDocumentoRepository.save(versionDocumento);
         }
     }
 
+    public List<VersionDocumentoDto> getVersionDocumentosByUser(Integer idUser){
+        List<VersionDocumento> versionDocumentos = versionDocumentoRepository.getVersionByUser(idUser);
+        List<VersionDocumentoDto> versionDocumentosDto = new ArrayList<>();
+        for (VersionDocumento versionDocumento : versionDocumentos){
+            versionDocumentosDto.add(versionDocumentoDto(versionDocumento));
+        }
+        return versionDocumentosDto;
+    }
 
     private VersionDocumentoDto versionDocumentoDto(VersionDocumento versionDocumento) {
         VersionDocumentoDto dto = new VersionDocumentoDto();

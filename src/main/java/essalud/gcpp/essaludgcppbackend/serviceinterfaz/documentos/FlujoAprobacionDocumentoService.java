@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class FlujoAprobacionDocumentoService {
@@ -30,7 +31,6 @@ public class FlujoAprobacionDocumentoService {
 
     public void saveFlujoAprobacionDocumento(Integer id_user_aprobador, VersionDocumento versionDocumento) throws IOException {
         Users user = usersRepository.findById(id_user_aprobador).orElse(null);
-        //VersionDocumento versionDocumento = vdr.findById(id_documento).orElse(null);
 
         if (versionDocumento != null && user != null) {
             FlujoAprobacionDocumento fad = new FlujoAprobacionDocumento();
@@ -53,13 +53,8 @@ public class FlujoAprobacionDocumentoService {
         return listaDto;
     }
 
-    public List<FlujoAprobacionDocumentoDto> getFlujoAprobacionDocumentosByUser(Integer id_user_aprobador){
-        List<FlujoAprobacionDocumento> lista= fadr.findByUser(id_user_aprobador);
-        List<FlujoAprobacionDocumentoDto> listaDto = new ArrayList<>();
-        for(FlujoAprobacionDocumento f : lista){
-            listaDto.add(flujoAprobacionDocumentoDto(f));
-        }
-        return listaDto;
+    public List<Map<String, Object>> getFlujoAprobacionDocumentosByUser(Integer id_user_aprobador){
+      return fadr.findByUser(id_user_aprobador);
     }
 
     public void updateFlujoAprobacionDocumento(FlujoAprobacionDocumentoDto fadDto) {

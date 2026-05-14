@@ -35,9 +35,7 @@ public class TipoDocumentoService {
         List<TipoDocumento>  tipoDocumentos = tdr.findAll();
         List<TipoDocumentoDto> tipoDocumentosDto = new ArrayList<>();
         for (TipoDocumento tipoDocumento : tipoDocumentos) {
-            ModelMapper modelMapper = new ModelMapper();
-            TipoDocumentoDto tipoDocumentoDto  = modelMapper.map(tipoDocumento, TipoDocumentoDto.class);
-            tipoDocumentosDto.add(tipoDocumentoDto);
+            tipoDocumentosDto.add(tipoDocumentoDto(tipoDocumento));
         }
         return tipoDocumentosDto;
     }
@@ -56,8 +54,13 @@ public class TipoDocumentoService {
         }
     }
 
+    public TipoDocumentoDto getTipoDocumentoById(Integer id) {
+        TipoDocumento tipoDocumento = tdr.findById(id).orElse(null);
+        return tipoDocumentoDto(tipoDocumento);
+    }
 
-
-
-
+    private TipoDocumentoDto tipoDocumentoDto(TipoDocumento tipoDocumento) {
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(tipoDocumento, TipoDocumentoDto.class);
+    }
 }

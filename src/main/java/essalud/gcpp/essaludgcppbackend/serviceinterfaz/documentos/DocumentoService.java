@@ -83,6 +83,11 @@ public class DocumentoService {
         return documentosDto;
     }
 
+    public DocumentoDto getDocumentoById(Integer id){
+        Documento documento = documentoRepository.findById(id).orElse(null);
+        return getDocumentoDto(documento);
+    }
+
     private DocumentoDto getDocumentoDto(Documento documento){
         ModelMapper modelMapper = new ModelMapper();
         DocumentoDto documentoDto = modelMapper.map(documento, DocumentoDto.class);
@@ -90,4 +95,9 @@ public class DocumentoService {
         documentoDto.setId_tipo_documento(documento.getTipo_documento().getId());
         return documentoDto;
     }
+
+
+
+
+
 }

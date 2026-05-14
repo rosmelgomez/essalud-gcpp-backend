@@ -62,4 +62,12 @@ public class VersionDocumentoController {
         versionDocumentoService.updateVersionDocumento(versionDocumentoDto);
     }
 
+
+    @GetMapping("/getByUser/{idUser}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    public List<VersionDocumentoDto> getByUser(@PathVariable Integer idUser) {
+        return versionDocumentoService.getVersionDocumentosByUser(idUser);
+    }
+
+
 }
