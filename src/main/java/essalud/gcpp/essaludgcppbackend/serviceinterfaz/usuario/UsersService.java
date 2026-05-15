@@ -1,7 +1,7 @@
-package essalud.gcpp.essaludgcppbackend.serviceinterfaz;
+package essalud.gcpp.essaludgcppbackend.serviceinterfaz.usuario;
 
-import essalud.gcpp.essaludgcppbackend.dtos.UserLoginDto;
-import essalud.gcpp.essaludgcppbackend.dtos.UsersDto;
+import essalud.gcpp.essaludgcppbackend.dtos.usuario.UserLoginDto;
+import essalud.gcpp.essaludgcppbackend.dtos.usuario.UsersDto;
 import essalud.gcpp.essaludgcppbackend.model.usuario.Rol;
 import essalud.gcpp.essaludgcppbackend.model.usuario.UserRol;
 import essalud.gcpp.essaludgcppbackend.model.usuario.Users;

@@ -1,4 +1,4 @@
-package essalud.gcpp.essaludgcppbackend.controller;
+package essalud.gcpp.essaludgcppbackend.controller.usuario;
 
 import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import essalud.gcpp.essaludgcppbackend.dtos.UserLoginDto;
+import essalud.gcpp.essaludgcppbackend.dtos.usuario.UserLoginDto;
 import essalud.gcpp.essaludgcppbackend.security.JwtTokenUtil;
 import essalud.gcpp.essaludgcppbackend.serviceimplements.JwtUserDetailsService;
 import jakarta.servlet.http.Cookie;

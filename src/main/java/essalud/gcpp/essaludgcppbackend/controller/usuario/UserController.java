@@ -1,8 +1,10 @@
-package essalud.gcpp.essaludgcppbackend.controller;
+package essalud.gcpp.essaludgcppbackend.controller.usuario;
 
-import essalud.gcpp.essaludgcppbackend.dtos.UserLoginDto;
-import essalud.gcpp.essaludgcppbackend.dtos.UsersDto;
-import essalud.gcpp.essaludgcppbackend.serviceinterfaz.UsersService;
+import essalud.gcpp.essaludgcppbackend.dtos.usuario.RolDto;
+import essalud.gcpp.essaludgcppbackend.dtos.usuario.UserLoginDto;
+import essalud.gcpp.essaludgcppbackend.dtos.usuario.UsersDto;
+import essalud.gcpp.essaludgcppbackend.serviceinterfaz.usuario.RolService;
+import essalud.gcpp.essaludgcppbackend.serviceinterfaz.usuario.UsersService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,10 +21,12 @@ public class UserController {
 
     private final AuthenticationManager authenticationManager;
     private final UsersService usersService;
+    private final RolService rolService;
 
-    public UserController(AuthenticationManager authenticationManager, UsersService usersService) {
+    public UserController(AuthenticationManager authenticationManager, UsersService usersService,  RolService rolService) {
         this.authenticationManager = authenticationManager;
         this.usersService = usersService;
+        this.rolService = rolService;
     }
 
     @GetMapping("/getUser/{username}")
@@ -86,7 +90,16 @@ public class UserController {
     }
 
     @GetMapping("/getUserByCodred/{code_red}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public List<UsersDto> getUserByCodred(@PathVariable String code_red) {
         return usersService.getUsersByCod_red(code_red);
     }
+
+    @GetMapping("/getRoles")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
+    public List<RolDto> getRoles() {
+        return rolService.getRols();
+    }
+
+
 }

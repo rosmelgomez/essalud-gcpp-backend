@@ -1,4 +1,4 @@
-package essalud.gcpp.essaludgcppbackend.dtos;
+package essalud.gcpp.essaludgcppbackend.dtos.usuario;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -36,3 +36,6 @@ public class UsersDto {
 
     private List<String> roles;
 }
+
+
+
