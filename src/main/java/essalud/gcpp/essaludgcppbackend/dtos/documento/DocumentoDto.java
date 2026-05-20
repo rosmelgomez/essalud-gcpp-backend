@@ -17,6 +17,7 @@ public class DocumentoDto {
     private String descripcion;
     private String codcas;
     private String codred;
+    private Boolean visibilidad;
     private LocalDateTime date_creation;
     private LocalDateTime date_update;
     private Boolean flag;

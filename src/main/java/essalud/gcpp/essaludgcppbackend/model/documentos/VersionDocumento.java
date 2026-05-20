@@ -27,7 +27,6 @@ public class VersionDocumento {
     @Column(name = "descripcion")
     private String descripcion;
 
-
     @Column(name = "extencion", nullable = false)
     private String extencion;
 
@@ -51,7 +50,6 @@ public class VersionDocumento {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_user_creation")
     private Users user_version_documento;
-
 
     /// relacion con documento
     @ManyToOne(fetch = FetchType.LAZY)

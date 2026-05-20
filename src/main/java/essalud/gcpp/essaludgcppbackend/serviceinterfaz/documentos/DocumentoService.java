@@ -40,6 +40,7 @@ public class DocumentoService {
             documentoNew.setDate_creation(LocalDateTime.now());
             documentoNew.setDate_update(LocalDateTime.now());
             documentoNew.setFlag(documento.getFlag());
+            documentoNew.setVisibilidad(documento.getVisibilidad());
             documentoNew.setTipo_documento(tipoDocumento);
             documentoNew.setUser_documento(user);
             documentoRepository.save(documentoNew);
@@ -51,7 +52,7 @@ public class DocumentoService {
         List<Documento> documentos = documentoRepository.findAll();
         List<DocumentoDto> documentosDto = new ArrayList<>();
         for (Documento documento : documentos) {
-            documentosDto.add(getDocumentoDto(documento));
+            documentosDto.add(documentoDto(documento));
         }
         return documentosDto;
     }
@@ -60,7 +61,7 @@ public class DocumentoService {
         List<Documento> documentos = documentoRepository.getDocumentosByCodred(codred);
         List<DocumentoDto> documentosDto = new ArrayList<>();
         for (Documento documento : documentos) {
-            documentosDto.add(getDocumentoDto(documento));
+            documentosDto.add(documentoDto(documento));
         }
         return documentosDto;
     }
@@ -69,7 +70,7 @@ public class DocumentoService {
         List<Documento> documentos = documentoRepository.getDocumentosByCodcas(codcas);
         List<DocumentoDto> documentosDto = new ArrayList<>();
         for (Documento documento : documentos) {
-            documentosDto.add(getDocumentoDto(documento));
+            documentosDto.add(documentoDto(documento));
         }
         return documentosDto;
     }
@@ -78,17 +79,24 @@ public class DocumentoService {
         List<Documento> documentos = documentoRepository.getDocumentoByUser(iduser);
         List<DocumentoDto> documentosDto = new ArrayList<>();
         for (Documento documento : documentos) {
-            documentosDto.add(getDocumentoDto(documento));
+            documentosDto.add(documentoDto(documento));
         }
         return documentosDto;
     }
 
     public DocumentoDto getDocumentoById(Integer id){
         Documento documento = documentoRepository.findById(id).orElse(null);
-        return getDocumentoDto(documento);
+        return documentoDto(documento);
     }
 
-    private DocumentoDto getDocumentoDto(Documento documento){
+    public DocumentoDto getDocumentoByIdVersion(Integer idversion){
+        Documento documento= documentoRepository.getDocumentoByIdVersion(idversion);
+        return documentoDto(documento);
+    }
+
+
+
+    private DocumentoDto documentoDto(Documento documento){
         ModelMapper modelMapper = new ModelMapper();
         DocumentoDto documentoDto = modelMapper.map(documento, DocumentoDto.class);
         documentoDto.setId_user_creation(documento.getUser_documento().getId());

@@ -46,4 +46,16 @@ public class DocumentoController {
         return documentoService.getDocumentosByUser(iduser);
     }
 
+    @GetMapping("/getdocbyiddoc/{iddoc}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    public DocumentoDto  getDocumentosByIdDoc(@PathVariable Integer iddoc){
+        return documentoService.getDocumentoById(iddoc);
+    }
+
+    @GetMapping("/getdocbyidversion/{idversion}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    public DocumentoDto getDocumentosByIdVersion(@PathVariable Integer idversion){
+        return documentoService.getDocumentoByIdVersion(idversion);
+    }
+
 }

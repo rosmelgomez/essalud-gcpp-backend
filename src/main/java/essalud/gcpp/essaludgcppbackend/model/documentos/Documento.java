@@ -35,6 +35,9 @@ public class Documento {
     @Column(name = "codred")
     private String codred;
 
+    @Column(name="visibilidad", nullable = false)
+    private Boolean visibilidad;
+
     @Column(name = "date_creation", nullable = false)
     private LocalDateTime date_creation;
 

@@ -27,7 +27,8 @@ public class EstablecimientosAsistencialesRepository {
     }
 
     public List<Map<String, Object>> getCentrosByCodeRed(String code_red) {
-        String tabla= "dwsge.sgss_cmcas10";
+        //String tabla= "dwsge.sgss_cmcas10";
+        String tabla= "public.sgss_cmcas10";
 
         String sql = """
         SELECT
@@ -64,6 +65,7 @@ public class EstablecimientosAsistencialesRepository {
     public List<Map<String, Object>> getRedesWithCentros() {
 
         String tabla= "dwsge.sgss_cmcas10";
+        //String tabla= "public.sgss_cmcas10";
         String sql = """
         SELECT
             r.redasiscod,
@@ -81,6 +83,7 @@ public class EstablecimientosAsistencialesRepository {
     public Map<String, Object> getredeswithcentrosbycodcas(String codcas) {
 
         String tabla= "dwsge.sgss_cmcas10";
+        //String tabla= "public.sgss_cmcas10";
         String sql = """
         SELECT
             r.redasiscod,

@@ -75,7 +75,12 @@ public class VersionDocumentoService {
         return new ByteArrayResource(data.getArchivo());
     }
 
-    public List<VersionDocumentoDto> getVersionDocumentos(Integer iddoc){
+    public VersionDocumentoDto getVersionDocumento(Integer id) {
+        return versionDocumentoDto(versionDocumentoRepository.getVersion(id));
+    }
+
+
+    public List<VersionDocumentoDto> getVersionByDoc(Integer iddoc){
         List<VersionDocumento> versionDocumentos = versionDocumentoRepository.getVersionByDocumento(iddoc);
         List<VersionDocumentoDto> versionDocumentosDto = new ArrayList<>();
         for (VersionDocumento versionDocumento : versionDocumentos){

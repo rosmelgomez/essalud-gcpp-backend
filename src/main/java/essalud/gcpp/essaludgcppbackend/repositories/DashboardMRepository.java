@@ -87,7 +87,6 @@ public class DashboardMRepository {
     public List<Map<String, Object>> queryDMAMHE(String anio, String periodo, String codcas) {
         String tabla = "dwsge.dwe_consulta_externa_horas_efectivas_" + anio + "_" + periodo;
 
-
         String sql = """
                         SELECT
                             ce.*,

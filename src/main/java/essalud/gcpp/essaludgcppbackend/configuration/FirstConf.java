@@ -55,6 +55,7 @@ public class FirstConf {
 	@Primary
 	public PlatformTransactionManager firstTransactionManager(
 			@Qualifier("firstEntityManagerFactory") LocalContainerEntityManagerFactoryBean firstEntityManagerFactory) {
-		return new JpaTransactionManager(firstEntityManagerFactory.getObject());
+        assert firstEntityManagerFactory.getObject() != null;
+        return new JpaTransactionManager(firstEntityManagerFactory.getObject());
 	}
 }

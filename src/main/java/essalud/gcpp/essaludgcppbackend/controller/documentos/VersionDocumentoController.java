@@ -33,6 +33,11 @@ public class VersionDocumentoController {
     public List<VersionDocumentoDto> getAllVersionDocumentos() {
         return versionDocumentoService.getAllVersionDocumentos();
     }
+    @GetMapping("/getversion/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    public VersionDocumentoDto getVersionDocumento(@PathVariable Integer id) {
+        return versionDocumentoService.getVersionDocumento(id);
+    }
 
     @SneakyThrows
     @GetMapping("/archivo/{id}")
@@ -50,23 +55,22 @@ public class VersionDocumentoController {
     }
 
 
-    @GetMapping("/getvdbyiddoc/{iddoc}")
+    @GetMapping("/getbyiddoc/{iddoc}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
-    public List<VersionDocumentoDto> getD(@PathVariable Integer iddoc) {
-        return versionDocumentoService.getVersionDocumentos(iddoc);
+    public List<VersionDocumentoDto> getVersionByDoc(@PathVariable Integer iddoc) {
+        return versionDocumentoService.getVersionByDoc(iddoc);
+    }
+
+    @GetMapping("/getbyuser/{idUser}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
+    public List<VersionDocumentoDto> getByUser(@PathVariable Integer idUser) {
+        return versionDocumentoService.getVersionDocumentosByUser(idUser);
     }
 
     @PutMapping(value = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED', 'USER')")
     public void updateVersionDocumento(@RequestBody VersionDocumentoDto versionDocumentoDto)  throws IOException  {
         versionDocumentoService.updateVersionDocumento(versionDocumentoDto);
-    }
-
-
-    @GetMapping("/getByUser/{idUser}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
-    public List<VersionDocumentoDto> getByUser(@PathVariable Integer idUser) {
-        return versionDocumentoService.getVersionDocumentosByUser(idUser);
     }
 
 
