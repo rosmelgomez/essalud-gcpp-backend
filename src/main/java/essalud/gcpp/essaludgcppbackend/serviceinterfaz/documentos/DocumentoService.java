@@ -40,7 +40,7 @@ public class DocumentoService {
             documentoNew.setDate_creation(LocalDateTime.now());
             documentoNew.setDate_update(LocalDateTime.now());
             documentoNew.setFlag(documento.getFlag());
-            documentoNew.setVisibilidad(documento.getVisibilidad());
+            documentoNew.setPublico(documento.getPublico());
             documentoNew.setTipo_documento(tipoDocumento);
             documentoNew.setUser_documento(user);
             documentoRepository.save(documentoNew);

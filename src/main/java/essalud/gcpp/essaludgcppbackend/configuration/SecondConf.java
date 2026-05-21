@@ -18,6 +18,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
@@ -53,8 +54,7 @@ public class SecondConf {
 	@Bean(name = "secondTransactionManager")
 	public PlatformTransactionManager secondTransactionManager(
 			@Qualifier("secondEntityManagerFactory") LocalContainerEntityManagerFactoryBean secondEntityManagerFactory) {
-        assert secondEntityManagerFactory.getObject() != null;
-        return new JpaTransactionManager(secondEntityManagerFactory.getObject());
+		return new JpaTransactionManager(secondEntityManagerFactory.getObject());
 	}
 
 	@Bean(name = "secondJdbcTemplate")

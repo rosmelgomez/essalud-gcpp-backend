@@ -1,6 +1,7 @@
 package essalud.gcpp.essaludgcppbackend.controller;
 
 import essalud.gcpp.essaludgcppbackend.serviceinterfaz.TablasHomolagadasService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,12 +22,14 @@ public class TablasHomologadasController {
 
     ///Tabla Homologada Emergencia
     @GetMapping("queryTHE/{codcas}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public List<Map<String, Object>> queryTHE(@PathVariable String codcas) {
         return THS.queryTHE(codcas);
     }
 
     ///Tabla homologada consulta externa
     @GetMapping("/queryTHCE")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public List<Map<String, Object>> queryTHCE() {
         return THS.queryTHCE();
     }

@@ -5,8 +5,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -19,28 +20,29 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-        basePackages = "essalud.gcpp.essaludgcppbackend.repositories",
+        //basePackages = "essalud.gcpp.essaludgcppbackend.repositories",
         entityManagerFactoryRef = "firstOracleEntityManagerFactory",
-        transactionManagerRef = "oracleTransactionManager")
-public class FirstOracleConfig {
+        transactionManagerRef = "firstOracleTransactionManager")
+public class FirstOracleConf {
 
-    @Bean
-    @Primary
+    @Bean("firstOracleDataSource")
     @ConfigurationProperties(prefix = "spring.datasource.firstoracle")
-    public DataSource firstOracleDataSource() {return DataSourceBuilder.create().build();}
+    public DataSource firstOracleDataSource() {
+        return DataSourceBuilder.create().build();
+    }
 
     @Bean(name = "firstOracleEntityManagerFactory")
-    @Primary
     public LocalContainerEntityManagerFactoryBean firstOracleEntityManagerFactory(
             @Qualifier("firstOracleDataSource") DataSource firstOracleDataSource) {
+
         LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
         emf.setDataSource(firstOracleDataSource);
-        emf.setPersistenceUnitName("essalud.gcpp.essaludgcppbackend.model");
-        emf.setPersistenceUnitName("firstOracle");
+        emf.setPackagesToScan("essalud.gcpp.essaludgcppbackend.model");
+        emf.setPersistenceUnitName("firstoracle");
         emf.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 
         Properties jpaProperties = new Properties();
-        jpaProperties.setProperty("hibernate.hbm2ddl.auto", "update");
+        jpaProperties.setProperty("hibernate.hbm2ddl.auto", "none");
         jpaProperties.setProperty("hibernate.show_sql", "false");
         emf.setJpaProperties(jpaProperties);
 
@@ -48,12 +50,20 @@ public class FirstOracleConfig {
     }
 
     @Bean(name = "firstOracleTransactionManager")
-    @Primary
     public PlatformTransactionManager firstOracleTransactionManager(
-            @Qualifier("firstOracleEntityManagerFactory") LocalContainerEntityManagerFactoryBean firstOracleEntityManagerFactory
-    ){
-        assert firstOracleEntityManagerFactory.getObject() != null;
+            @Qualifier("firstOracleEntityManagerFactory") LocalContainerEntityManagerFactoryBean firstOracleEntityManagerFactory){
         return new JpaTransactionManager(firstOracleEntityManagerFactory.getObject());
+    }
+
+    @Bean(name = "firstOracleJdbcTemplate")
+    public JdbcTemplate firstOracleJdbcTemplate(@Qualifier("firstOracleDataSource") DataSource firstOracleDataSource) {
+        return new JdbcTemplate(firstOracleDataSource);
+    }
+
+    @Bean(name = "firstOracleNamedParameterJdbcTemplate")
+    public NamedParameterJdbcTemplate firstOracleNamedParameterJdbcTemplate(
+            @Qualifier("firstOracleDataSource") DataSource firstOracleDataSource) {
+        return new NamedParameterJdbcTemplate(firstOracleDataSource);
     }
 
 

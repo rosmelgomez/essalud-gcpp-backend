@@ -35,8 +35,8 @@ public class Documento {
     @Column(name = "codred")
     private String codred;
 
-    @Column(name="visibilidad", nullable = false)
-    private Boolean visibilidad;
+    @Column(name="publico", nullable = false)
+    private Boolean publico;
 
     @Column(name = "date_creation", nullable = false)
     private LocalDateTime date_creation;
@@ -56,7 +56,6 @@ public class Documento {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_tipo_documento")
     private TipoDocumento tipo_documento;
-
 
     /// relacion con version documento
     @OneToMany(mappedBy = "documento_version_documento" , fetch = FetchType.LAZY, cascade = CascadeType.ALL)

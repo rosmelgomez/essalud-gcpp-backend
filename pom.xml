@@ -51,7 +51,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!--Base de datos-->
+        <!--Base de datos postgresql-->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -60,6 +60,13 @@
         <dependency>
             <groupId>jakarta.persistence</groupId>
             <artifactId>jakarta.persistence-api</artifactId>
+        </dependency>
+
+        <!--Base de datos oracle-->
+        <dependency>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc11</artifactId>
+            <version>23.3.0.23.09</version>
         </dependency>
 
         <!-- Mapper -->
