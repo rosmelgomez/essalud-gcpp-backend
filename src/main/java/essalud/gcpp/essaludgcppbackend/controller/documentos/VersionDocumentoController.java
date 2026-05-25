@@ -73,5 +73,19 @@ public class VersionDocumentoController {
         versionDocumentoService.updateVersionDocumento(versionDocumentoDto);
     }
 
+    @GetMapping("/getbycodcas/{codcas}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED', 'USER')")
+    public List<VersionDocumentoDto> getByCodcas(@PathVariable String codcas) {
+        return versionDocumentoService.getVersionDocumentosByCodcas(codcas);
+    }
+
+    @GetMapping("/getbycodred/{codred}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED', 'USER')")
+    public List<VersionDocumentoDto> getByCodred(@PathVariable String codred) {
+        return versionDocumentoService.getVersionDocumentosByCodred(codred);
+    }
+
+
+
 
 }

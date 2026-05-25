@@ -112,6 +112,24 @@ public class VersionDocumentoService {
         return versionDocumentosDto;
     }
 
+    public List<VersionDocumentoDto> getVersionDocumentosByCodcas(String codcas){
+        List<VersionDocumento> versionDocumentos=versionDocumentoRepository.getVersionDocumentoByCodcas(codcas);
+        List<VersionDocumentoDto> versionDocumentosDto = new ArrayList<>();
+        for (VersionDocumento versionDocumento : versionDocumentos){
+            versionDocumentosDto.add(versionDocumentoDto(versionDocumento));
+        }
+        return versionDocumentosDto;
+    }
+
+    public List<VersionDocumentoDto> getVersionDocumentosByCodred(String codred){
+        List<VersionDocumento> versionDocumentos = versionDocumentoRepository.getVersionDocumentoByCodred(codred);
+        List<VersionDocumentoDto> versionDocumentosDto = new ArrayList<>();
+        for (VersionDocumento versionDocumento : versionDocumentos){
+            versionDocumentosDto.add(versionDocumentoDto(versionDocumento));
+        }
+        return versionDocumentosDto;
+    }
+
     private VersionDocumentoDto versionDocumentoDto(VersionDocumento versionDocumento) {
         VersionDocumentoDto dto = new VersionDocumentoDto();
         dto.setId(versionDocumento.getId());
