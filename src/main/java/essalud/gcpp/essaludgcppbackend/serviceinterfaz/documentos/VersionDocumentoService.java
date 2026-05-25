@@ -23,7 +23,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
+
 @Service
+@Transactional
 public class VersionDocumentoService {
     private final UsersRepository usersRepository;
     private final DocumentoRepository documentoRepository;
