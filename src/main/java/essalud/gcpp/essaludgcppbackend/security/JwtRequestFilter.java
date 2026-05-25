@@ -1,11 +1,12 @@
 package essalud.gcpp.essaludgcppbackend.security;
 
-
 import java.io.IOException;
 
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,13 +33,20 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Value(value = "${app.security.cookie.api.name}")
     private String apiCookieName;
 
+    @Value(value = "${app.security.cookie.secure}")
+    private boolean secureCookie;
+
+    @Value(value = "${app.security.cookie.same-site}")
+    private String sameSite;
+
     public JwtRequestFilter(JwtTokenUtil jwtTokenUtil, JwtUserDetailsService jwtUserDetailsService) {
         this.jwtTokenUtil = jwtTokenUtil;
         this.jwtUserDetailsService = jwtUserDetailsService;
     }
 
     @Override
-    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
+    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
+            @NonNull FilterChain filterChain)
             throws ServletException, IOException {
         final boolean useApiToken = requiresApiToken(request);
         String username = null;
@@ -56,12 +64,50 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
         }
 
+        // Si el usuario no fue autenticado (el access token no existe o expiro),
+        // y no estamos en una ruta que requiere explicitamente el api token,
+        // intentamos refrescarlo en el backend de forma transparente.
+        if (username == null && !useApiToken) {
+            String apiToken = resolveToken(request, true); // true = resolver apiCookieName
+            if (apiToken != null) {
+                try {
+                    String refreshUsername = jwtTokenUtil.getUsernameFromToken(apiToken);
+                    if (refreshUsername != null) {
+                        UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(refreshUsername);
+                        if (jwtTokenUtil.validateApiToken(apiToken, userDetails)) {
+                            // Generamos un nuevo access_token
+                            String newAccessToken = jwtTokenUtil.generateAccessToken(userDetails);
+
+                            // Inyectamos la nueva cookie en la respuesta HTTP
+                            ResponseCookie accessCookie = ResponseCookie.from(accessCookieName, newAccessToken)
+                                    .httpOnly(true)
+                                    .secure(secureCookie)
+                                    .path("/")
+                                    .sameSite(sameSite)
+                                    .maxAge(jwtTokenUtil.getAccessTokenValiditySeconds())
+                                    .build();
+
+                            response.addHeader(HttpHeaders.SET_COOKIE, accessCookie.toString());
+
+                            // Autenticamos al usuario para la peticion actual
+                            username = refreshUsername;
+                            jwtToken = newAccessToken;
+                            System.out.println(
+                                    "Access token regenerado y refrescado de forma transparente en el Backend.");
+                        }
+                    }
+                } catch (Exception ex) {
+                    logger.warn("No se pudo refrescar el token de acceso desde el api token: " + ex.getMessage());
+                }
+            }
+        }
+
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(username);
-             ////verificando
+            //// verificando
             boolean validToken = useApiToken
-                ? jwtTokenUtil.validateApiToken(jwtToken, userDetails)
-                : jwtTokenUtil.validateAccessToken(jwtToken, userDetails);
+                    ? jwtTokenUtil.validateApiToken(jwtToken, userDetails)
+                    : jwtTokenUtil.validateAccessToken(jwtToken, userDetails);
 
             if (validToken) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
@@ -83,7 +129,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         return null;
     }
 
-    private  @Nullable String getTokenFromCookie(HttpServletRequest request, String cookieName) {
+    private @Nullable String getTokenFromCookie(HttpServletRequest request, String cookieName) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
@@ -100,8 +146,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private boolean requiresApiToken(HttpServletRequest request) {
         String requestPath = request.getRequestURI();
         return requestPath.endsWith("/api-token")
-            || requestPath.endsWith("/refresh-token")
-            || requestPath.endsWith("/logout")
-            || requestPath.endsWith("/logout-user");
+                || requestPath.endsWith("/refresh-token")
+                || requestPath.endsWith("/logout")
+                || requestPath.endsWith("/logout-user");
     }
 }

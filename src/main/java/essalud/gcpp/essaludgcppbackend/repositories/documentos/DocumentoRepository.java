@@ -17,14 +17,19 @@ public interface DocumentoRepository extends JpaRepository<Documento, Integer> {
             WHERE d.id=:id""", nativeQuery = true )
     Boolean requiere_aprobacion(@Param("id") Integer id);
 
-    List<Documento> getDocumentosByCodcas(String codcas);
+    @Query(value = "SELECT d FROM Documento d WHERE d.flag = true AND d.deletedAt IS NULL")
+    List<Documento> findAllActive();
 
-    List<Documento> getDocumentosByCodred(String codred);
+    @Query(value = "SELECT d FROM Documento d WHERE d.codcas = :codcas AND d.flag = true AND d.deletedAt IS NULL")
+    List<Documento> getDocumentosByCodcas(@Param("codcas") String codcas);
+
+    @Query(value = "SELECT d FROM Documento d WHERE d.codred = :codred AND d.flag = true AND d.deletedAt IS NULL")
+    List<Documento> getDocumentosByCodred(@Param("codred") String codred);
 
     @Query(value = """
             SELECT d.*
             FROM documento d
-            WHERE d.id_user_creation=:iduser""", nativeQuery = true)
+            WHERE d.id_user_creation=:iduser AND d.flag = true AND d.deleted_at IS NULL""", nativeQuery = true)
     List<Documento> getDocumentoByUser (@Param("iduser") Integer iduser);
 
     @Query(value = """
@@ -33,6 +38,4 @@ public interface DocumentoRepository extends JpaRepository<Documento, Integer> {
             JOIN version_documento vd ON doc.id = vd.id_documento
             WHERE vd.id =:idversion""", nativeQuery = true )
     Documento getDocumentoByIdVersion( @Param("idversion") Integer idversion);
-
-
 }

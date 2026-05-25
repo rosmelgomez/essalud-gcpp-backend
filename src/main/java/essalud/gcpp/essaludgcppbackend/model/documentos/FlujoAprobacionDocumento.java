@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -42,5 +43,6 @@ public class FlujoAprobacionDocumento {
     @JoinColumn(name = "id_version_documento")
     private VersionDocumento version_documento_aprobacion;
 
-
+    @OneToMany(mappedBy = "flujo_aprobacion", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<HistorialAprobacionDocumento> historialAprobaciones;
 }

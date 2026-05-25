@@ -1,6 +1,5 @@
 package essalud.gcpp.essaludgcppbackend.dtos.documento;
 
-import jakarta.persistence.Column;
 import lombok.*;
 
 import java.time.LocalDateTime;

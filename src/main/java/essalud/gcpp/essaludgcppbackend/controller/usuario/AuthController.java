@@ -44,12 +44,12 @@ public class AuthController {
     private final JwtTokenUtil jwtTokenUtil;
     private final JwtUserDetailsService jwtUserDetailsService;
 
-    public AuthController(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil, JwtUserDetailsService jwtUserDetailsService) {
+    public AuthController(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil,
+            JwtUserDetailsService jwtUserDetailsService) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
         this.jwtUserDetailsService = jwtUserDetailsService;
     }
-
 
     @PostMapping("/login")
     public ResponseEntity<?> createAuthenticateUser(@RequestBody UserLoginDto user) throws Exception {
@@ -59,25 +59,25 @@ public class AuthController {
         final String apiToken = jwtTokenUtil.generateApiToken(userDetails);
 
         ResponseCookie accessCookie = ResponseCookie.from(accessCookieName, accessToken)
-            .httpOnly(true)
-            .secure(secureCookie)
-            .path("/")
-            .sameSite(sameSite)
-            .maxAge(jwtTokenUtil.getAccessTokenValiditySeconds())
-            .build();
+                .httpOnly(true)
+                .secure(secureCookie)
+                .path("/")
+                .sameSite(sameSite)
+                .maxAge(jwtTokenUtil.getAccessTokenValiditySeconds())
+                .build();
 
         ResponseCookie refreshCookie = ResponseCookie.from(apiCookieName, apiToken)
-            .httpOnly(true)
-            .secure(secureCookie)
-            .path(apiCookiePath)
-            .sameSite(sameSite)
-            .maxAge(jwtTokenUtil.getRefreshTokenValiditySeconds())
-            .build();
+                .httpOnly(true)
+                .secure(secureCookie)
+                .path(apiCookiePath)
+                .sameSite(sameSite)
+                .maxAge(jwtTokenUtil.getRefreshTokenValiditySeconds())
+                .build();
 
         return ResponseEntity.ok()
-            .header(HttpHeaders.SET_COOKIE, accessCookie.toString())
-            .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
-            .body("Login Successfull");
+                .header(HttpHeaders.SET_COOKIE, accessCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
+                .body("Login Successfull");
     }
 
     @GetMapping("/api-token")
@@ -102,7 +102,7 @@ public class AuthController {
 
         return ResponseEntity.ok("Api token valido");
     }
-   
+
     @PostMapping("/refresh-token")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
     public ResponseEntity<?> refreshAccessToken(HttpServletRequest request) {
@@ -125,40 +125,40 @@ public class AuthController {
 
         String newAccessToken = jwtTokenUtil.generateAccessToken(userDetails);
         ResponseCookie accessCookie = ResponseCookie.from(accessCookieName, newAccessToken)
-            .httpOnly(true)
-            .secure(secureCookie)
-            .path("/")
-            .sameSite(sameSite)
-            .maxAge(jwtTokenUtil.getAccessTokenValiditySeconds())
-            .build();
+                .httpOnly(true)
+                .secure(secureCookie)
+                .path("/")
+                .sameSite(sameSite)
+                .maxAge(jwtTokenUtil.getAccessTokenValiditySeconds())
+                .build();
 
         return ResponseEntity.ok()
-            .header(HttpHeaders.SET_COOKIE, accessCookie.toString())
-            .body("Access token renovado");
+                .header(HttpHeaders.SET_COOKIE, accessCookie.toString())
+                .body("Access token renovado");
     }
 
-    @PostMapping({"/logout", "/logout-user"})
+    @PostMapping({ "/logout", "/logout-user" })
     public ResponseEntity<?> logoutUser() {
         ResponseCookie deleteAccessCookie = ResponseCookie.from(accessCookieName, "")
-            .httpOnly(true)
-            .secure(secureCookie)
-            .path("/")
-            .sameSite(sameSite)
-            .maxAge(0)
-            .build();
+                .httpOnly(true)
+                .secure(secureCookie)
+                .path("/")
+                .sameSite(sameSite)
+                .maxAge(0)
+                .build();
 
         ResponseCookie deleteApiCookie = ResponseCookie.from(apiCookieName, "")
-            .httpOnly(true)
-            .secure(secureCookie)
-            .path(apiCookiePath)
-            .sameSite(sameSite)
-            .maxAge(0)
-            .build();
+                .httpOnly(true)
+                .secure(secureCookie)
+                .path(apiCookiePath)
+                .sameSite(sameSite)
+                .maxAge(0)
+                .build();
 
         return ResponseEntity.ok()
-            .header(HttpHeaders.SET_COOKIE, deleteAccessCookie.toString())
-            .header(HttpHeaders.SET_COOKIE, deleteApiCookie.toString())
-            .body("Logout Successfull");
+                .header(HttpHeaders.SET_COOKIE, deleteAccessCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, deleteApiCookie.toString())
+                .body("Logout Successfull");
     }
 
     private @Nullable String getCookieValue(HttpServletRequest request, String cookieName) {
@@ -179,9 +179,9 @@ public class AuthController {
     private void authenticateUser(String username, String password) throws Exception {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        }catch(DisabledException e) {
+        } catch (DisabledException e) {
             throw new Exception("USER_DISABLED", e);
-        }catch(BadCredentialsException e) {
+        } catch (BadCredentialsException e) {
             throw new Exception("INVALID_CREDENTIALS", e);
         }
 

@@ -19,7 +19,7 @@ public interface FlujoAprobacionDocumentoRepository extends JpaRepository<FlujoA
             vd.date_creation as data_creation_version,
             vd.date_update as data_update_version,
             vd.id_documento,
-            us.name as name_creation_version,\s
+            us.name as name_creation_version,
             us.lastname as lastname_creation_version,
             fad.comentario,
             fad.status,
@@ -31,8 +31,8 @@ public interface FlujoAprobacionDocumentoRepository extends JpaRepository<FlujoA
             JOIN flujo_aprobacion_documento fad ON vd.id = fad.id_version_documento
             JOIN users usa ON fad.id_user_aprobador = usa.id
             WHERE fad.id_user_aprobador=:id""", nativeQuery = true)
-    List<Map<String, Object>>findByUser(@Param("id") Integer id);
+    List<Map<String, Object>> findByUser(@Param("id") Integer id);
 
-
-
+    @Query("SELECT f FROM FlujoAprobacionDocumento f WHERE f.version_documento_aprobacion.id = :versionId")
+    List<FlujoAprobacionDocumento> findByVersionId(@Param("versionId") Integer versionId);
 }

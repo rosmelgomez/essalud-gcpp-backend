@@ -58,4 +58,9 @@ public class DocumentoController {
         return documentoService.getDocumentoByIdVersion(idversion);
     }
 
+    @DeleteMapping("/delete/{id}/{userid}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED')")
+    public void deleteDocumento(@PathVariable Integer id, @PathVariable Integer userid){
+        documentoService.deleteDocumento(id, userid);
+    }
 }

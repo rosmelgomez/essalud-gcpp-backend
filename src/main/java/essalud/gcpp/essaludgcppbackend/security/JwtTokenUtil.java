@@ -44,8 +44,10 @@ public class JwtTokenUtil implements Serializable {
     @Value(value = "${app.security.jwt.api-token-validity-ms}")
     private long apiTokenValidity;
 
+    @Value(value = "${app.security.jwt.access-secret:}")
     private String accessSecretBase64;
 
+    @Value(value = "${app.security.jwt.api-secret:}")
     private String apiSecretBase64;
 
     @Value(value = "${jwt.secret:}")

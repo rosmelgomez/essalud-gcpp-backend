@@ -1,9 +1,11 @@
 package essalud.gcpp.essaludgcppbackend.serviceinterfaz.documentos;
 
 import essalud.gcpp.essaludgcppbackend.dtos.documento.DocumentoDto;
+import essalud.gcpp.essaludgcppbackend.model.documentos.CategoriaDocumento;
 import essalud.gcpp.essaludgcppbackend.model.documentos.Documento;
 import essalud.gcpp.essaludgcppbackend.model.documentos.TipoDocumento;
 import essalud.gcpp.essaludgcppbackend.model.usuario.Users;
+import essalud.gcpp.essaludgcppbackend.repositories.documentos.CategoriaDocumentoRepository;
 import essalud.gcpp.essaludgcppbackend.repositories.documentos.DocumentoRepository;
 import essalud.gcpp.essaludgcppbackend.repositories.documentos.TipoDocumentoRepository;
 import essalud.gcpp.essaludgcppbackend.repositories.usuario.UsersRepository;
@@ -19,16 +21,20 @@ public class DocumentoService {
     private final DocumentoRepository documentoRepository;
     private final UsersRepository usersRepository;
     private final TipoDocumentoRepository tipoDocumentoRepository;
+    private final CategoriaDocumentoRepository categoriaDocumentoRepository;
 
-    public DocumentoService(DocumentoRepository documentoRepository, UsersRepository usersRepository, TipoDocumentoRepository tipoDocumentoRepository) {
+    public DocumentoService(DocumentoRepository documentoRepository, UsersRepository usersRepository, TipoDocumentoRepository tipoDocumentoRepository, CategoriaDocumentoRepository categoriaDocumentoRepository) {
         this.documentoRepository = documentoRepository;
         this.usersRepository = usersRepository;
         this.tipoDocumentoRepository = tipoDocumentoRepository;
+        this.categoriaDocumentoRepository = categoriaDocumentoRepository;
     }
 
     public void saveDocumento(DocumentoDto documento)  {
         Users user= usersRepository.findById(documento.getId_user_creation()).orElse(null);
         TipoDocumento tipoDocumento = tipoDocumentoRepository.findById(documento.getId_tipo_documento()).orElse(null);
+        CategoriaDocumento categoria = documento.getId_categoria() != null ?
+                categoriaDocumentoRepository.findById(documento.getId_categoria()).orElse(null) : null;
 
         if (user != null && tipoDocumento != null) {
             Documento documentoNew = new Documento();
@@ -39,17 +45,18 @@ public class DocumentoService {
             documentoNew.setCodcas(documento.getCodcas());
             documentoNew.setDate_creation(LocalDateTime.now());
             documentoNew.setDate_update(LocalDateTime.now());
-            documentoNew.setFlag(documento.getFlag());
+            documentoNew.setFlag(documento.getFlag() != null ? documento.getFlag() : true);
             documentoNew.setPublico(documento.getPublico());
             documentoNew.setTipo_documento(tipoDocumento);
             documentoNew.setUser_documento(user);
+            documentoNew.setCategoriaDocumento(categoria);
             documentoRepository.save(documentoNew);
         }
 
     }
 
     public List<DocumentoDto> getDocumentos(){
-        List<Documento> documentos = documentoRepository.findAll();
+        List<Documento> documentos = documentoRepository.findAllActive();
         List<DocumentoDto> documentosDto = new ArrayList<>();
         for (Documento documento : documentos) {
             documentosDto.add(documentoDto(documento));
@@ -94,21 +101,24 @@ public class DocumentoService {
         return documentoDto(documento);
     }
 
-
+    public void deleteDocumento(Integer id, Integer userId) {
+        Documento doc = documentoRepository.findById(id).orElse(null);
+        Users user = usersRepository.findById(userId).orElse(null);
+        if (doc != null && user != null) {
+            doc.setFlag(false);
+            doc.setDeletedAt(LocalDateTime.now());
+            doc.setDeletedBy(user);
+            documentoRepository.save(doc);
+        }
+    }
 
     private DocumentoDto documentoDto(Documento documento){
         ModelMapper modelMapper = new ModelMapper();
         DocumentoDto documentoDto = modelMapper.map(documento, DocumentoDto.class);
         documentoDto.setId_user_creation(documento.getUser_documento().getId());
         documentoDto.setId_tipo_documento(documento.getTipo_documento().getId());
+        documentoDto.setId_categoria(documento.getCategoriaDocumento() != null ? documento.getCategoriaDocumento().getId() : null);
         return documentoDto;
     }
-
-
-
-
-
-
-
 
 }
