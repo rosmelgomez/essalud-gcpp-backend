@@ -18,17 +18,19 @@ public class EstablecimientosAsistencialesRepository {
 
     public List<Map<String, Object>> getCentros() {
 
+        String tabla = "dwsge.sgss_cmcas10";
+
         String sql = """
         SELECT cenasicod, cenasides
-        FROM dwsge.sgss_cmcas10
+        FROM %s
         WHERE estregcod ='1'
-        ORDER BY id ASC""";
+        ORDER BY id ASC""".formatted(tabla);
         return secondJdbcTemplate.queryForList(sql);
     }
 
     public List<Map<String, Object>> getCentrosByCodeRed(String code_red) {
-        //String tabla= "dwsge.sgss_cmcas10";
-        String tabla= "public.sgss_cmcas10";
+        String tabla= "dwsge.sgss_cmcas10";
+        //String tabla= "public.sgss_cmcas10";
 
         String sql = """
         SELECT
@@ -48,17 +50,19 @@ public class EstablecimientosAsistencialesRepository {
 
     public List<Map<String, Object>> getRedes() {
 
+        String tabla = "dwsge.sgss_cmcas10";
+
         String sql = """
         SELECT DISTINCT
             r.redasiscod,
             r.redasisdes
-        FROM dwsge.sgss_cmcas10 c
+        FROM %s c
         LEFT JOIN dwsge.sgss_cmras10 r
             ON c.redasiscod = r.redasiscod
         WHERE r.redasiscod IS NOT NULL
         AND c.estregcod ='1'
         ORDER BY r.redasisdes ASC
-        """;
+        """.formatted(tabla);
         return secondJdbcTemplate.queryForList(sql);
     }
 

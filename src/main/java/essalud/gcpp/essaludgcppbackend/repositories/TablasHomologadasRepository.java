@@ -18,6 +18,7 @@ public class TablasHomologadasRepository {
 
     ///Tabla Homologada Emergencia
     public List<Map<String, Object>> queryTHE(String codcas) {
+		String tabla ="dssge.dw_homologacion_enlaces_emergencia";
 
         String sql = """
 		SELECT
@@ -29,7 +30,7 @@ public class TablasHomologadasRepository {
 			e.desc_emergencia,
 			h.cod_estandar,
 			s.des_estandar
-		FROM dssge.dw_homologacion_enlaces_emergencia h
+		FROM %s h
 		LEFT OUTER JOIN dwsge.sgss_cmcas10 c
 			ON c.cenasicod = h.cod_centro
 		LEFT OUTER JOIN dssge.sgss_mbtoe10 t
@@ -41,12 +42,14 @@ public class TablasHomologadasRepository {
 		WHERE h.cod_estado = '1'
 			AND h.cod_centro = ?
 		ORDER BY h.cod_topico, h.cod_emergencia, h.cod_estandar
-		""";
+		""".formatted(tabla);
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
 
     ///Tabla homologada consulta externa
     public List<Map<String, Object>> queryTHCE() {
+
+		String tabla ="dssge.dw_homologacion_enlaces";
 
         String sql = """
 		SELECT
@@ -69,9 +72,9 @@ public class TablasHomologadasRepository {
 			variable,
 			anio,
 			anio_uso
-		FROM dssge.dw_homologacion_enlaces
+		FROM %s
 		ORDER BY desc_gpo_ocup, cod_area, cod_actividad, cod_subactividad, cod_servicio
-		""";
+		""".formatted(tabla);
         return secondJdbcTemplate.queryForList(sql);
     }
 }

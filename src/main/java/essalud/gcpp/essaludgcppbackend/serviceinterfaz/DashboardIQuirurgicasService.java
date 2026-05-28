@@ -19,7 +19,7 @@ public class DashboardIQuirurgicasService {
 
     /// Query Dashboard intervenciones quirurgicas
     /// Grado de complejidad
-    public List<Map<String, Object>> queryDIQGC(String anio, String periodo, String codcas, String codasegu,
+    public List<Map<String, Object>> queryDIQGC(int anio, int periodo, String codcas, int codasegu,
             String complejidad) {
 
         List<Map<String, Object>> data = diqr.queryDIQGC(anio, periodo, codcas, codasegu);
@@ -28,12 +28,12 @@ public class DashboardIQuirurgicasService {
     }
 
     /// emergencia
-    public List<Map<String, Object>> queryDIQE(String anio, String periodo, String codcas, String codasegu) {
+    public List<Map<String, Object>> queryDIQE(int anio, int periodo, String codcas, int codasegu) {
         return diqr.queryDIQE(anio, periodo, codcas, codasegu);
     }
 
     /// horas quirurgicas electivas
-    public Map<String, Object> queryDIQHQE(String anio, String periodo, String codcas, String codasegu) {
+    public Map<String, Object> queryDIQHQE(int anio, int periodo, String codcas, int codasegu) {
         List<Map<String, Object>> data = diqr.queryDIQH(anio, periodo, codcas, codasegu);
 
         String programacion = "1";
@@ -62,7 +62,7 @@ public class DashboardIQuirurgicasService {
     }
 
     /// horas quirurgicas emergencia
-    public Map<String, Object> queryDIQHQEME(String anio, String periodo, String codcas, String codasegu) {
+    public Map<String, Object> queryDIQHQEME(int anio, int periodo, String codcas, int codasegu) {
         List<Map<String, Object>> data = diqr.queryDIQH(anio, periodo, codcas, codasegu);
 
         String programacion = "2";
@@ -91,7 +91,7 @@ public class DashboardIQuirurgicasService {
     }
 
     /// Indicadores de grado de complejidad
-    public List<Map<String, Object>> queryDIQIGC(String anio, String periodo, String codcas, String codasegu,
+    public List<Map<String, Object>> queryDIQIGC(int anio, int periodo, String codcas, int codasegu,
             String complejidad) {
         List<Map<String, Object>> data = diqr.queryDIQIGC(anio, periodo, codcas, codasegu);
         return getMaps(complejidad, data);

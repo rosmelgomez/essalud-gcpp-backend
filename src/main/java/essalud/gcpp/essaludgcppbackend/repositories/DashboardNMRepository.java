@@ -15,20 +15,29 @@ public class DashboardNMRepository {
     public DashboardNMRepository(@Qualifier("secondJdbcTemplate") JdbcTemplate secondJdbcTemplate) {
         this.secondJdbcTemplate = secondJdbcTemplate;
     }
-    private String code_asegurado(String codasegu) {
+    private String code_asegurado(int codasegu) {
         return switch (codasegu) {
-            case "1" -> "('1')"; /// Asegurado
-            case "2" -> "('2')"; /// No asegurado
-            case "3" -> "('1','2')"; /// Todos
+            case 1 -> "('1')"; /// Asegurado
+            case 2 -> "('2')"; /// No asegurado
+            case 3 -> "('1','2')"; /// Todos
             default -> "('1','2')";
         };
     }
 
+    private String periodo_str(int periodo) {
+        if (periodo < 10) {
+            return   "0" + periodo;
+        } else {
+            return String.valueOf(periodo);
+        }
+    }
+
+
     /// Query Dashboard no medicas
     /// Obstetricia - Atenciones Medicas
-    public List<Map<String, Object>> queryDNMOA(String anio, String periodo, String codcas, String codasegu) {
-        String tabla1 = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
-        String tabla2 ="dssge.dw_proc_"+ anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMOA(int anio, int periodo, String codcas, int codasegu) {
+        String tabla1 = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
+        String tabla2 ="dssge.dw_proc_"+ anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -84,8 +93,8 @@ public class DashboardNMRepository {
         return secondJdbcTemplate.queryForList(sql, codcas, codcas);
     }
     /// Obstetricia - Prenatal
-    public List<Map<String, Object>> queryDNMOP(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMOP(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -120,8 +129,8 @@ public class DashboardNMRepository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
     /// Obstetricia - Familiar
-    public List<Map<String, Object>> queryDNMOF(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMOF(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -130,7 +139,7 @@ public class DashboardNMRepository {
                     FROM %s ce
                     LEFT OUTER JOIN dwsge.sgss_cmdia10 dg
                         ON dg.diagcod=ce.diagcod
-                    LEFT JOIN dwsge.sgss_cmsho10 AS c 
+                    LEFT JOIN dwsge.sgss_cmsho10 AS c
                         ON ce.cod_servicio = c.servhoscod
                     LEFT JOIN dwsge.sgss_cmace10 AS a
                         ON ce.cod_actividad = a.actcod
@@ -145,7 +154,7 @@ public class DashboardNMRepository {
                         AND cod_actividad = 'B1'
                         AND ce.cod_subactividad ='694'
                         AND (
-                                CASE 
+                                CASE
                                     WHEN ce.cod_tipo_paciente = '4' THEN '2'
                                     ELSE '1'
                                 END
@@ -155,16 +164,16 @@ public class DashboardNMRepository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
     /// Obstetricia - Complementarias
-    public List<Map<String, Object>> queryDNMOC(String anio, String periodo, String codcas, String codasegu) {
-        String tabla1 = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
-        String tabla2 ="dssge.dw_proc_"+ anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMOC(int anio, int periodo, String codcas, int codasegu) {
+        String tabla1 = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
+        String tabla2 ="dssge.dw_proc_"+ anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
         String sql = """
                     SELECT ce.cod_oricentro, ce.cod_centro,ca.cenasides,ce.cod_servicio, ce.cod_actividad, ce.cod_subactividad,a.actespnom,ce.acto_med, ce.doc_paciente
                     FROM %s ce
-                    LEFT JOIN dwsge.sgss_cmsho10 AS c 
+                    LEFT JOIN dwsge.sgss_cmsho10 AS c
                         ON ce.cod_servicio = c.servhoscod
                     LEFT JOIN dwsge.sgss_cmace10 AS a
                         ON ce.cod_actividad = a.actcod
@@ -211,8 +220,8 @@ public class DashboardNMRepository {
         return secondJdbcTemplate.queryForList(sql, codcas, codcas);
     }
     /// Obstetricia - Preconcepcional
-    public List<Map<String, Object>> queryDNMOPC(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMOPC(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -246,11 +255,10 @@ public class DashboardNMRepository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
 
-
     /// Preventivo Promocional
     ///  Preventivo Promocional - Atenciones
-    public List<Map<String, Object>> queryDNMPPA(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMPPA(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -287,8 +295,8 @@ public class DashboardNMRepository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
     ///  Preventivo Promocional - domiciliaria
-    public List<Map<String, Object>> queryDNMPPD(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMPPD(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -322,17 +330,17 @@ public class DashboardNMRepository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
     ///  Preventivo Promocional - grupal
-    public List<Map<String, Object>> queryDNMPPG(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMPPG(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
         String sql = """
                     SELECT ce.cod_oricentro, ce.cod_centro,ca.cenasides,a.actespnom,c.servhosdes,ce.cod_servicio, ce.cod_actividad, ce.cod_subactividad,ce.acto_med, ce.doc_paciente, ce.diagcod, dg.diagdes
                     FROM %s ce
-                    LEFT OUTER JOIN dwsge.sgss_cmdia10 dg 
+                    LEFT OUTER JOIN dwsge.sgss_cmdia10 dg
                         ON dg.diagcod=ce.diagcod
-                    LEFT JOIN dwsge.sgss_cmsho10 AS c 
+                    LEFT JOIN dwsge.sgss_cmsho10 AS c
                         ON ce.cod_servicio = c.servhoscod
                     LEFT JOIN dwsge.sgss_cmace10 AS a
                         ON ce.cod_actividad = a.actcod
@@ -357,8 +365,8 @@ public class DashboardNMRepository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
     ///  Preventivo Promocional - psicoprofilaxis
-    public List<Map<String, Object>> queryDNMPPP(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMPPP(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -392,8 +400,8 @@ public class DashboardNMRepository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
     ///  Preventivo Promocional - consejeria
-    public List<Map<String, Object>> queryDNMPPC(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMPPC(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -429,8 +437,8 @@ public class DashboardNMRepository {
 
     /// Nutricion
     ///  Nutricion - nutricion_total
-    public List<Map<String, Object>> queryDNMNNT(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMNNT(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -466,8 +474,8 @@ public class DashboardNMRepository {
 
     /// Enfermeria
     ///  Enfermeria - enfermeria_total
-    public List<Map<String, Object>> queryDNMEET(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMEET(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -501,8 +509,8 @@ public class DashboardNMRepository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
     ///  Enfermeria - enfermeria_tuberculosis
-    public List<Map<String, Object>> queryDNMEETU(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMEETU(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -536,8 +544,8 @@ public class DashboardNMRepository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
     ///  Enfermeria - enfermeria_vih
-    public List<Map<String, Object>> queryDNMEEV(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMEEV(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -571,8 +579,8 @@ public class DashboardNMRepository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
     ///  Enfermeria - enfermeria_cronicas_am
-    public List<Map<String, Object>> queryDNMEECA(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMEECA(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -606,8 +614,8 @@ public class DashboardNMRepository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
     ///  Enfermeria - enfermeria_otros
-    public List<Map<String, Object>> queryDNMEEO(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMEEO(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -641,8 +649,8 @@ public class DashboardNMRepository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
     ///  Enfermeria - enfermeria_prev_anemia
-    public List<Map<String, Object>> queryDNMEEPA(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMEEPA(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -676,12 +684,11 @@ public class DashboardNMRepository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
 
-
     /// Psicologia
     /// psicologia total consultantes
-    public List<Map<String, Object>> queryDNMPSTCS(String anio, String periodo, String codcas, String codasegu) {
+    public List<Map<String, Object>> queryDNMPSTCS(int anio, int periodo, String codcas, int codasegu) {
         String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio ;
-        String periodo_sql= anio+periodo;
+        String periodo_sql= String.valueOf(anio+periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -710,8 +717,8 @@ public class DashboardNMRepository {
         return secondJdbcTemplate.queryForList(sql, codcas, periodo_sql);
     }
     /// psicologia - total - consultas
-    public List<Map<String, Object>> queryDNMPSTC(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMPSTC(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -745,8 +752,8 @@ public class DashboardNMRepository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
     /// Psicologia - horas - efectivas
-    public List<Map<String, Object>> queryDNMPSHE(String anio, String periodo, String codcas) {
-        String tabla = "dwsge.dwe_consulta_externa_horas_efectivas_nm_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMPSHE(int anio, int periodo, String codcas) {
+        String tabla = "dwsge.dwe_consulta_externa_horas_efectivas_nm_" + anio + "_" + periodo_str(periodo);
 
         String sql = """
                 SELECT 
@@ -775,8 +782,8 @@ public class DashboardNMRepository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
     /// Psicologia - horas - programadas
-    public List<Map<String, Object>> queryDNMPHP(String anio, String periodo, String codcas) {
-        String tabla = "dwsge.dwe_consulta_externa_horas_efectivas_nm_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMPHP(int anio, int periodo, String codcas) {
+        String tabla = "dwsge.dwe_consulta_externa_horas_efectivas_nm_" + anio + "_" + periodo_str(periodo);
 
         String sql = """
                 SELECT 
@@ -808,8 +815,8 @@ public class DashboardNMRepository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
     /// Psicologia - medicos
-    public List<Map<String, Object>> queryDNMPSM(String anio, String periodo, String codcas) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMPSM(int anio, int periodo, String codcas) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String sql = """
                 SELECT c.cod_centro,
@@ -840,8 +847,8 @@ public class DashboardNMRepository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
     /// Psicologia - procedimiento terapéutico
-    public List<Map<String, Object>> queryDNMPSPT(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMPSPT(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -875,8 +882,8 @@ public class DashboardNMRepository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
     /// Psicologia - procedimiento diagnóstico
-    public List<Map<String, Object>> queryDNMPSPD(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMPSPD(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -910,11 +917,10 @@ public class DashboardNMRepository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
 
-
     ///Trabajo Social (TS)
     ///Trabajo - social - total
-    public List<Map<String, Object>> queryDNMTST(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMTST(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -950,8 +956,8 @@ public class DashboardNMRepository {
 
     /// CRED
     /// CRED -total
-    public List<Map<String, Object>> queryDNMCREDT(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMCREDT(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -1013,13 +1019,13 @@ public class DashboardNMRepository {
 
     /// Indicadores de obstetricia
     /// total atenciones - servicio - subactividad
-    public List<Map<String, Object>> queryDNMOBTASS(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMOBTASS(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
         String sql = """
-        SELECT 
+        SELECT
             c.servhosdes AS descripcion_servicio,
             a.actespnom AS descripcion_subactividad
         
@@ -1050,8 +1056,8 @@ public class DashboardNMRepository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
     /// total atenciones - diagnostico
-    public List<Map<String, Object>> queryDNMOBTAD(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMOBTAD(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -1084,8 +1090,8 @@ public class DashboardNMRepository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
     /// total atenciones - csv
-    public List<Map<String, Object>> queryDNMOBTACSV(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMOBTACSV(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -1121,8 +1127,8 @@ public class DashboardNMRepository {
 
     /// Indicadores de preventiva promocional
     /// total atenciones - servicio - subactividad
-    public List<Map<String, Object>> queryDNMPPTASS(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMPPTASS(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -1157,8 +1163,8 @@ public class DashboardNMRepository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
     /// total atenciones - diagnostico
-    public List<Map<String, Object>> queryDNMPPTAD(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMPPTAD(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -1191,8 +1197,8 @@ public class DashboardNMRepository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
     /// total atenciones - csv
-    public List<Map<String, Object>> queryDNMPPTACSV(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMPPTACSV(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -1228,8 +1234,8 @@ public class DashboardNMRepository {
 
     /// Indicadores de nutricion
     /// total atenciones - servicio - subactividad
-    public List<Map<String, Object>> queryDNMNUTASS(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMNUTASS(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -1264,8 +1270,8 @@ public class DashboardNMRepository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
     /// total atenciones - diagnostico
-    public List<Map<String, Object>> queryDNMNUTAD(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMNUTAD(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -1298,8 +1304,8 @@ public class DashboardNMRepository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
     /// total atenciones - csv
-    public List<Map<String, Object>> queryDNMNUTACSV(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMNUTACSV(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -1336,8 +1342,8 @@ public class DashboardNMRepository {
 
     /// Indicadores de enfermeria
     /// total atenciones - servicio - subactividad
-    public List<Map<String, Object>> queryDNMENTASS(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMENTASS(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -1373,8 +1379,8 @@ public class DashboardNMRepository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
     /// total atenciones - diagnostico
-    public List<Map<String, Object>> queryDNMENTAD(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMENTAD(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -1408,8 +1414,8 @@ public class DashboardNMRepository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
     /// total atenciones - csv
-    public List<Map<String, Object>> queryDNMENTACSV(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMENTACSV(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -1445,8 +1451,8 @@ public class DashboardNMRepository {
 
     /// Indicadores de psicologia
     /// total atenciones - servicio - subactividad
-    public List<Map<String, Object>> queryDNMPSTASS(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMPSTASS(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -1482,8 +1488,8 @@ public class DashboardNMRepository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
     /// total atenciones - diagnostico
-    public List<Map<String, Object>> queryDNMPSTAD(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMPSTAD(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -1517,8 +1523,8 @@ public class DashboardNMRepository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
     /// total atenciones - csv
-    public List<Map<String, Object>> queryDNMPSTACSV(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMPSTACSV(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -1555,8 +1561,8 @@ public class DashboardNMRepository {
 
     /// Indicadores de trabajo social
     /// total atenciones - servicio - subactividad
-    public List<Map<String, Object>> queryDNMTSTASS(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMTSTASS(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -1592,8 +1598,8 @@ public class DashboardNMRepository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
     /// total atenciones - diagnostico
-    public List<Map<String, Object>> queryDNMTSTAD(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMTSTAD(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -1627,17 +1633,17 @@ public class DashboardNMRepository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
     /// total atenciones - csv
-    public List<Map<String, Object>> queryDNMTSTACSV(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDNMTSTACSV(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
         String sql = """
                     SELECT ce.cod_oricentro, ce.cod_centro,a.actespnom,c.servhosdes,ce.cod_servicio, ce.cod_actividad, ce.cod_subactividad,ce.acto_med, ce.doc_paciente, ce.diagcod, dg.diagdes
                     FROM %s ce
-                    LEFT OUTER JOIN dwsge.sgss_cmdia10 dg 
+                    LEFT OUTER JOIN dwsge.sgss_cmdia10 dg
                         ON dg.diagcod=ce.diagcod
-                    LEFT JOIN dwsge.sgss_cmsho10 AS c 
+                    LEFT JOIN dwsge.sgss_cmsho10 AS c
                         ON ce.cod_servicio = c.servhoscod
                     LEFT JOIN dwsge.sgss_cmace10 AS a
                         ON ce.cod_actividad = a.actcod

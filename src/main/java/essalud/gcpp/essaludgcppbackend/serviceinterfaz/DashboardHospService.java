@@ -16,7 +16,7 @@ public class DashboardHospService {
     }
 
     /// Query Total Egresos
-    public List<Map<String, Object>> queryDHTE(String anio, String periodo, String codcas, String codasegu) {
+    public List<Map<String, Object>> queryDHTE(int anio, int periodo, String codcas, int codasegu) {
         return dhqr.queryDHTE(anio, periodo, codcas, codasegu);
     }
 

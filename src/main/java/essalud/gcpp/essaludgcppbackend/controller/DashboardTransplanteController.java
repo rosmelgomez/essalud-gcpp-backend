@@ -23,7 +23,7 @@ public class DashboardTransplanteController {
     /// transplante
     @GetMapping("/queryDTrans/{anio}/{periodo}/{codcas}/{codasegu}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
-    public ResponseEntity<List<Map<String, Object>>> queryDTrans(@PathVariable String anio, @PathVariable String periodo, @PathVariable String codcas, @PathVariable String codasegu) {
+    public ResponseEntity<List<Map<String, Object>>> queryDTrans(@PathVariable int anio, @PathVariable int periodo, @PathVariable String codcas, @PathVariable int codasegu) {
         return ResponseEntity.ok(service.queryDTrans(anio, periodo, codcas, codasegu));
     }
 

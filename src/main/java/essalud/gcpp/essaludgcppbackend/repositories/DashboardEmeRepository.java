@@ -15,21 +15,31 @@ public class DashboardEmeRepository {
         this.secondJdbcTemplate = secondJdbcTemplate;
     }
 
-    private String code_asegurado(String codasegu) {
+    private String code_asegurado(int codasegu) {
         return switch (codasegu) {
-            case "1" -> "('1')"; /// Asegurado
-            case "2" -> "('2')"; /// No asegurado
-            case "3" -> "('1','2')"; /// Todos
+            case 1 -> "('1')"; /// Asegurado
+            case 2 -> "('2')"; /// No asegurado
+            case 3 -> "('1','2')"; /// Todos
             default -> "('1','2')";
         };
+    }
+
+    private String periodo_str(int periodo) {
+        if (periodo < 10) {
+            return   "0" + periodo;
+        } else {
+            return String.valueOf(periodo);
+        }
     }
 
 
     ///Dashboard Emergencias
     /// Prioridad
-    public List<Map<String, Object>> queryDEP(String anio, String periodo, String codcas, String codasegu, String prioridad) {
+    public List<Map<String, Object>> queryDEP(int anio, int periodo, String codcas, int codasegu, int prioridad) {
         String tabla = "dwsge.dwe_emergencia_atenciones_homologacion_" + anio;
-        String periodo_sql=anio+periodo;
+        //String periodo_sql=anio+periodo;
+        String periodo_sql = String.format("%d%02d", anio, periodo);
+
         String code_asegurado = code_asegurado(codasegu);
 
         String sql = """
@@ -120,8 +130,8 @@ public class DashboardEmeRepository {
     }
 
     /// defunciones
-    public List<Map<String, Object>> queryDED(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_emergencia_defunciones_homologacion_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDED(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_emergencia_defunciones_homologacion_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -140,8 +150,8 @@ public class DashboardEmeRepository {
     }
 
     /// mayor a 24h
-    public List<Map<String, Object>> queryDEMY24HR(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_emergencia_estancia_homologacion_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDEMY24HR(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_emergencia_estancia_homologacion_"+anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -164,8 +174,8 @@ public class DashboardEmeRepository {
     }
 
     /// menor a 24h
-    public List<Map<String, Object>> queryDEMN24HR(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_emergencia_estancia_homologacion_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDEMN24HR(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dwe_emergencia_estancia_homologacion_"+ anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 

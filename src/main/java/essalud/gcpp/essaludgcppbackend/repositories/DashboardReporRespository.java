@@ -81,9 +81,17 @@ public class DashboardReporRespository {
         return secondJdbcTemplate.queryForList(sql );
     }
 
+    private String periodo_str(int periodo) {
+        if (periodo < 10) {
+            return   "0" + periodo;
+        } else {
+            return String.valueOf(periodo);
+        }
+    }
+
     /// Dashboard Reporteador query
     public List<Map<String, Object>> queryDRQ(ReporteadorDto repDto) {
-        String tabla = "dwsge.dwe_consulta_externa_homologacion_" + repDto.getAnio() + "_" + repDto.getPeriodo() ;
+        String tabla = "dwsge.dwe_consulta_externa_homologacion_" + repDto.getAnio() + "_" +periodo_str(repDto.getPeriodo()) ;
         String filtro = filter(repDto);
 
         String sql = """
@@ -131,10 +139,10 @@ public class DashboardReporRespository {
 
     private String filter (ReporteadorDto repDto) {
         String filtro = "";
-        if (!Objects.equals(repDto.getAnio(), "")) {
+        if (repDto.getAnio() != 0) {
             filtro = "anio = " + "'" + repDto.getAnio() + "'";
         }
-        if (!Objects.equals(repDto.getPeriodo(), "")) {
+        if (repDto.getPeriodo() != 0) {
             filtro = filtro + " AND periodo = " + "'"+repDto.getAnio() + repDto.getPeriodo() + "'";
         }
         if (!Objects.equals(repDto.getRedasiscod(), "")) {

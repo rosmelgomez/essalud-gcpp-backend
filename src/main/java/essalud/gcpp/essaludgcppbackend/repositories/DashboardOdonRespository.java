@@ -14,19 +14,27 @@ public class DashboardOdonRespository {
     public DashboardOdonRespository(@Qualifier("secondJdbcTemplate") JdbcTemplate secondJdbcTemplate) {
         this.secondJdbcTemplate = secondJdbcTemplate;
     }
-    private String code_asegurado(String codasegu) {
+    private String code_asegurado(int codasegu) {
         return switch (codasegu) {
-            case "1" -> "('1')"; /// Asegurado
-            case "2" -> "('2')"; /// No asegurado
-            case "3" -> "('1','2')"; /// Todos
+            case 1 -> "('1')"; /// Asegurado
+            case 2 -> "('2')"; /// No asegurado
+            case 3 -> "('1','2')"; /// Todos
             default -> "('1','2')";
         };
     }
 
+    private String periodo_str(int periodo) {
+        if (periodo < 10) {
+            return   "0" + periodo;
+        } else {
+            return String.valueOf(periodo);
+        }
+    }
+
     ///Dashboard odontologicas
     ///  sesiones odontologicas - Atenciones
-    public List<Map<String, Object>> queryDOSOA(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dw_consulta_externa_odonto_homologacion_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDOSOA(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dwsge.dw_consulta_externa_odonto_homologacion_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -51,7 +59,7 @@ public class DashboardOdonRespository {
                     fecha_atencion,
                     acto_med
                 FROM %s AS ce
-                LEFT JOIN dwsge.sgss_cmsho10 AS c 
+                LEFT JOIN dwsge.sgss_cmsho10 AS c
                     ON ce.cod_servicio = c.servhoscod
                 LEFT JOIN dwsge.dim_especialidad AS e
                     ON ce.cod_especialidad = e.cod_especialidad
@@ -73,7 +81,7 @@ public class DashboardOdonRespository {
                 AND ce.cod_actividad = '91'
                 AND ce.cod_subactividad in ('003','004','074','262')
                 AND (
-                        CASE 
+                        CASE
                             WHEN ce.cod_tipo_paciente = '4' THEN '2'
                             ELSE '1'
                         END
@@ -83,11 +91,11 @@ public class DashboardOdonRespository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
     ///  sesiones odontologicas - horas efectivas
-    public List<Map<String, Object>> queryDOSOHE(String anio, String periodo, String codcas) {
-        String tabla = "dwsge.dwe_consulta_externa_horas_efectivas_nm_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDOSOHE(int anio, int periodo, String codcas) {
+        String tabla = "dwsge.dwe_consulta_externa_horas_efectivas_nm_" + anio + "_" + periodo_str(periodo);
 
         String sql = """
-                SELECT 
+                SELECT
                     ce.*,
                     c.servhosdes,
                     e.especialidad,
@@ -96,7 +104,7 @@ public class DashboardOdonRespository {
                     ag.agrupador,
                     ca.cenasides
                 FROM %s AS ce
-                LEFT JOIN dwsge.sgss_cmsho10 AS c 
+                LEFT JOIN dwsge.sgss_cmsho10 AS c
                     ON ce.cod_servicio = c.servhoscod
                 LEFT JOIN dwsge.dim_especialidad AS e
                     ON ce.cod_especialidad = e.cod_especialidad
@@ -119,20 +127,20 @@ public class DashboardOdonRespository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
     ///  sesiones odontologicas - horas programadas
-    public List<Map<String, Object>> queryDOSOHP(String anio, String periodo, String codcas) {
-        String tabla = "dwsge.dwe_consulta_externa_horas_efectivas_nm_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDOSOHP(int anio, int periodo, String codcas) {
+        String tabla = "dwsge.dwe_consulta_externa_horas_efectivas_nm_" + anio + "_" + periodo_str(periodo);
 
         String sql = """
-                SELECT 
+                SELECT
                     p.*,
                     c.servhosdes,
                     e.especialidad,
                     ag.agrupador,
                     a.actespnom,
                     am.actdes,
-                    ca.cenasides 
+                    ca.cenasides
                 FROM %s p
-                LEFT JOIN dwsge.sgss_cmsho10 AS c 
+                LEFT JOIN dwsge.sgss_cmsho10 AS c
                     ON p.cod_servicio = c.servhoscod
                 LEFT JOIN dwsge.dim_especialidad AS e
                     ON p.cod_especialidad = e.cod_especialidad
@@ -146,7 +154,7 @@ public class DashboardOdonRespository {
                     AND p.cod_centro = ca.cenasicod
                 LEFT JOIN dwsge.dim_agrupador as ag ON p.cod_agrupador = ag.cod_agrupador
                 WHERE  (
-                        p.cod_mot_suspension IS NULL 
+                        p.cod_mot_suspension IS NULL
                         OR p.cod_mot_suspension NOT IN ('04','09','10','99','13','16','11')
                     )
                 AND p.cod_centro = ?
@@ -158,8 +166,8 @@ public class DashboardOdonRespository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
     ///  sesiones odontologicas - medicos
-    public List<Map<String, Object>> queryDOSOM(String anio, String periodo, String codcas) {
-        String tabla = "dwsge.dw_consulta_externa_odonto_homologacion_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDOSOM(int anio, int periodo, String codcas) {
+        String tabla = "dwsge.dw_consulta_externa_odonto_homologacion_" + anio + "_" + periodo_str(periodo);
 
         String sql = """
                 SELECT c.cod_centro,
@@ -181,7 +189,7 @@ public class DashboardOdonRespository {
                                     CASE WHEN a.cod_tipo_paciente = '4' THEN '2' ELSE '1' END AS cod_tipo_paciente,
                                     count(*) AS cantidad_medicos
                                 FROM (SELECT * FROM %s) a
-                                LEFT JOIN dwsge.dim_agrupador ag 
+                                LEFT JOIN dwsge.dim_agrupador ag
                                 ON a.cod_agrupador = ag.cod_agrupador
                                 WHERE a.cod_centro=?
                                 AND a.cod_servicio = 'E11'
@@ -195,9 +203,9 @@ public class DashboardOdonRespository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
     ///  sesiones odontologicas - total consultante atencion
-    public List<Map<String, Object>> queryDOSOTCA(String anio, String periodo, String codcas, String codasegu) {
+    public List<Map<String, Object>> queryDOSOTCA(int anio, int periodo, String codcas, int codasegu) {
         String tabla = "dwsge.dw_consulta_externa_odonto_homologacion_" + anio;
-        String periodo_sql=anio+periodo;
+        String periodo_sql= String.valueOf(anio+periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -212,7 +220,7 @@ public class DashboardOdonRespository {
                 AND cod_subactividad in ('003','004','074','262')
                 AND cod_centro= ?
                 AND (
-                        CASE 
+                        CASE
                             WHEN cod_tipo_paciente = '4' THEN '2'
                             ELSE '1'
                         END
@@ -221,14 +229,14 @@ public class DashboardOdonRespository {
             )
             SELECT COUNT(DISTINCT doc_paciente) AS cantidad
             FROM fecha_min_paciente WHERE periodo= ?
-                """.formatted(tabla, code_asegurado);
+            """.formatted(tabla, code_asegurado);
 
         return secondJdbcTemplate.queryForList(sql, codcas,periodo_sql);
     }
     ///  sesiones odontologicas - total consultante servicio
-    public List<Map<String, Object>> queryDOSOTCS(String anio, String periodo, String codcas, String codasegu) {
+    public List<Map<String, Object>> queryDOSOTCS(int anio, int periodo, String codcas, int codasegu) {
         String tabla = "dwsge.dw_consulta_externa_odonto_homologacion_" + anio;
-        String periodo_sql=anio+periodo;
+        String periodo_sql= String.valueOf(anio+periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -244,7 +252,7 @@ public class DashboardOdonRespository {
                 AND p.cod_subactividad in ('003','004','074','262')
                 AND p.cod_centro= ?
                 AND (
-                        CASE 
+                        CASE
                             WHEN p.cod_tipo_paciente = '4' THEN '2'
                             ELSE '1'
                         END
@@ -253,7 +261,7 @@ public class DashboardOdonRespository {
             )
             SELECT agrupador,COUNT(DISTINCT doc_paciente) AS cantidad
             FROM fecha_min_paciente WHERE periodo= ? GROUP BY agrupador
-                """.formatted(tabla, code_asegurado);
+            """.formatted(tabla, code_asegurado);
 
         return secondJdbcTemplate.queryForList(sql, codcas, periodo_sql);
     }

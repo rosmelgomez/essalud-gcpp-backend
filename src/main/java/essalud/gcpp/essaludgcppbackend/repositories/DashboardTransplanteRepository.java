@@ -17,18 +17,26 @@ public class DashboardTransplanteRepository {
         this.secondJdbcTemplate = secondJdbcTemplate;
     }
 
-    private String code_asegurado(String codasegu) {
+    private String code_asegurado(int codasegu) {
         return switch (codasegu) {
-            case "1" -> "('1')"; /// Asegurado
-            case "2" -> "('2')"; /// No asegurado
-            case "3" -> "('1','2')"; /// Todos
+            case 1 -> "('1')"; /// Asegurado
+            case 2 -> "('2')"; /// No asegurado
+            case 3 -> "('1','2')"; /// Todos
             default -> "('1','2')";
         };
     }
 
+    private String periodo_str(int periodo) {
+        if (periodo < 10) {
+            return   "0" + periodo;
+        } else {
+            return String.valueOf(periodo);
+        }
+    }
+
     /// Query Dashboard Transplate
-    public List<Map<String, Object>> queryDTrans(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dssge.dwe_centro_quirurgico_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDTrans(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dssge.dwe_centro_quirurgico_" + anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 

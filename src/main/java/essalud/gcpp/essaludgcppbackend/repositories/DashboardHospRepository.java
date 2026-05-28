@@ -15,18 +15,19 @@ public class DashboardHospRepository {
         this.secondJdbcTemplate = secondJdbcTemplate;
     }
 
-    private String code_asegurado(String codasegu) {
+    private String code_asegurado(int codasegu) {
         return switch (codasegu) {
-            case "1" -> "('1')"; /// Asegurado
-            case "2" -> "('2')"; /// No asegurado
-            case "3" -> "('1','2')"; /// Todos
+            case 1 -> "('1')"; /// Asegurado
+            case 2 -> "('2')"; /// No asegurado
+            case 3 -> "('1','2')"; /// Todos
             default -> "('1','2')";
         };
     }
 
     /// Query Total Egresos
-    public List<Map<String, Object>> queryDHTE(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dwsge.dwe_hosp_egresos_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDHTE(int anio, int periodo, String codcas, int codasegu) {
+
+        String tabla = String.format("dwsge.dwe_hosp_egresos_%d_%02d", anio, periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -78,8 +79,7 @@ public class DashboardHospRepository {
                 WHERE ce.cod_centro = ?
                 AND (CASE WHEN ce.cod_tipo_paciente = '4' THEN '2' ELSE '1' END) IN %s
                 AND ce.cod_tipo_cama IN ('1')
-                        """
-                .formatted(tabla, code_asegurado);
+                """.formatted(tabla, code_asegurado);
 
         return secondJdbcTemplate.queryForList(sql, codcas);
     }

@@ -22,8 +22,7 @@ public class DashboardHospController {
     }
 
     @GetMapping("/queryDHTE/{anio}/{periodo}/{codcas}/{codasegu}")
-    public ResponseEntity<List<Map<String, Object>>> queryDHTE(@PathVariable String anio, @PathVariable String periodo,
-            @PathVariable String codcas, @PathVariable String codasegu) {
+    public ResponseEntity<List<Map<String, Object>>> queryDHTE(@PathVariable int anio, @PathVariable int periodo, @PathVariable String codcas, @PathVariable int codasegu) {
         return ResponseEntity.ok(dhs.queryDHTE(anio, periodo, codcas, codasegu));
     }
 

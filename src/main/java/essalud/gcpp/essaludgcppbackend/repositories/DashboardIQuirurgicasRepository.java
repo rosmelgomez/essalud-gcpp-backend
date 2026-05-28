@@ -16,19 +16,27 @@ public class DashboardIQuirurgicasRepository {
         this.secondJdbcTemplate = secondJdbcTemplate;
     }
 
-    private String code_asegurado(String codasegu) {
+    private String code_asegurado(int codasegu) {
         return switch (codasegu) {
-            case "1" -> "('1')"; /// Asegurado
-            case "2" -> "('2')"; /// No asegurado
-            case "3" -> "('1','2')"; /// Todos
+            case 1 -> "('1')"; /// Asegurado
+            case 2 -> "('2')"; /// No asegurado
+            case 3 -> "('1','2')"; /// Todos
             default -> "('1','2')";
         };
     }
 
+    private String periodo_str(int periodo) {
+        if (periodo < 10) {
+            return   "0" + periodo;
+        } else {
+            return String.valueOf(periodo);
+        }
+    }
+
     /// Query Dashboard intervenciones quirurgicas
     /// Grado de complejidad
-    public List<Map<String, Object>> queryDIQGC(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dssge.dwe_centro_quirurgico_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDIQGC(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dssge.dwe_centro_quirurgico_" +anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -88,8 +96,8 @@ public class DashboardIQuirurgicasRepository {
     }
 
     /// emergencia
-    public List<Map<String, Object>> queryDIQE(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dssge.dwe_centro_quirurgico_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDIQE(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dssge.dwe_centro_quirurgico_" +anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -150,77 +158,10 @@ public class DashboardIQuirurgicasRepository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
 
-    /// horas quirurgicas electivas
-    public List<Map<String, Object>> queryDIQHQE(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dssge.dwe_centro_quirurgico_" + anio + "_" + periodo;
-
-        String code_asegurado = code_asegurado(codasegu);
-
-        String sql = """
-                    SELECT
-                        SUM(
-                            SPLIT_PART(t.duracion_sala, ':', 1)::numeric
-                            + SPLIT_PART(t.duracion_sala, ':', 2)::numeric / 60
-                        ) AS horas_quirurgicas_realizadas_iq_electivas
-                    FROM (
-                        SELECT DISTINCT ON (cq.acto_med, cq.cod_cpms)
-                            cq.cod_oricentro,
-                            cq.cod_centro,
-                            ca.cenasides AS cenasides,
-                            cq.periodo,
-                            cq.anio,
-                            cq.cod_area,
-                            h.arehosdes AS area,
-                            cq.cod_servicio,
-                            c.servhosdes AS servicio,
-                            cq.cod_cpms,
-                            cp.cpsdes AS cpms,
-                            cq.cod_tipdoc_paciente,
-                            cq.doc_paciente,
-                            cq.anio_edad,
-                            cq.meses,
-                            cq.sexo,
-                            cq.cod_sala,
-                            cq.acto_med,
-                            cq.cod_complejidad,
-                            cq.cod_anest,
-                            cq.cod_tipo_programacion,
-                            b.conopedes AS des_tipo_programacion,
-                            cq.num_solicitud,
-                            cq.cod_quirof,
-                            ---q.salopedes,
-                            cq.fec_oper,
-                            cq.duracion_sala
-                        FROM %s cq
-                        LEFT JOIN dwsge.sgss_cmsho10 AS c
-                            ON cq.cod_servicio = c.servhoscod
-                        LEFT JOIN dwsge.sgss_cmcas10 AS ca
-                            ON cq.cod_oricentro = ca.oricenasicod
-                        AND cq.cod_centro = ca.cenasicod
-                        ---LEFT JOIN dwsge.sgss_qmcqs10 AS q
-                        ---    ON q.cenasicod = cq.cod_centro
-                        ---AND q.salopecod = cq.cod_sala_operacion
-                        ---AND cq.cod_quirof = q.cenquicod
-                        LEFT JOIN dwsge.sgss_cmcpp10 AS cp
-                            ON cp.cpscod = cq.cod_cpms
-                        LEFT JOIN dwsge.sgss_cmaho10 AS h
-                            ON h.arehoscod = cq.cod_area
-                        LEFT JOIN dwsge.sgss_qbcep10 AS b
-                            ON b.conopecod = cq.cod_tipo_programacion
-                        WHERE cq.cod_centro = ?
-                        AND (CASE WHEN cq.cod_tipo_paciente = '4' THEN '2' ELSE '1' END) IN %s
-                        AND cq.cod_tipo_programacion = '1'
-                        ORDER BY cq.acto_med, cq.cod_cpms, cq.fec_oper DESC
-                    ) t;
-                """.formatted(tabla, code_asegurado);
-
-        return secondJdbcTemplate.queryForList(sql, codcas);
-    }
-
     /// Horas
-    public List<Map<String, Object>> queryDIQH(String anio, String periodo, String codcas, String codasegu) {
+    public List<Map<String, Object>> queryDIQH(int anio, int periodo, String codcas, int codasegu) {
 
-        String tabla = "dssge.dwe_centro_quirurgico_" + anio + "_" + periodo;
+        String tabla = "dssge.dwe_centro_quirurgico_" +anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -244,76 +185,9 @@ public class DashboardIQuirurgicasRepository {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
 
-    /// horas quirurgicas emergencia
-    public List<Map<String, Object>> queryDIQHQEME(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dssge.dwe_centro_quirurgico_" + anio + "_" + periodo;
-
-        String code_asegurado = code_asegurado(codasegu);
-
-        String sql = """
-                        SELECT
-                            SUM(
-                                SPLIT_PART(t.duracion_sala, ':', 1)::numeric
-                                + SPLIT_PART(t.duracion_sala, ':', 2)::numeric / 60
-                            ) AS horas_quirurgicas_realizadas_iq_emergencia
-                        FROM (
-                            SELECT DISTINCT ON (cq.acto_med, cq.cod_cpms)
-                                cq.cod_oricentro,
-                                cq.cod_centro,
-                                ca.cenasides AS cenasides,
-                                cq.periodo,
-                                cq.anio,
-                                cq.cod_area,
-                                h.arehosdes AS area,
-                                cq.cod_servicio,
-                                c.servhosdes AS servicio,
-                                cq.cod_cpms,
-                                cp.cpsdes AS cpms,
-                                cq.cod_tipdoc_paciente,
-                                cq.doc_paciente,
-                                cq.anio_edad,
-                                cq.meses,
-                                cq.sexo,
-                                cq.cod_sala,
-                                cq.acto_med,
-                                cq.cod_complejidad,
-                                cq.cod_anest,
-                                cq.cod_tipo_programacion,
-                                b.conopedes AS des_tipo_programacion,
-                                cq.num_solicitud,
-                                cq.cod_quirof,
-                                ---q.salopedes,
-                                cq.fec_oper,
-                                cq.duracion_sala
-                            FROM %s cq
-                            LEFT JOIN dwsge.sgss_cmsho10 AS c
-                                ON cq.cod_servicio = c.servhoscod
-                            LEFT JOIN dwsge.sgss_cmcas10 AS ca
-                                ON cq.cod_oricentro = ca.oricenasicod
-                            AND cq.cod_centro = ca.cenasicod
-                            ---LEFT JOIN dwsge.sgss_qmcqs10 AS q
-                            ---    ON q.cenasicod = cq.cod_centro
-                            ---AND q.salopecod = cq.cod_sala_operacion
-                            ---AND cq.cod_quirof = q.cenquicod
-                            LEFT JOIN dwsge.sgss_cmcpp10 AS cp
-                                ON cp.cpscod = cq.cod_cpms
-                            LEFT JOIN dwsge.sgss_cmaho10 AS h
-                                ON h.arehoscod = cq.cod_area
-                            LEFT JOIN dwsge.sgss_qbcep10 AS b
-                                ON b.conopecod = cq.cod_tipo_programacion
-                            WHERE cq.cod_centro = ?
-                            AND (CASE WHEN cq.cod_tipo_paciente = '4' THEN '2' ELSE '1' END) IN %s
-                            AND cq.cod_tipo_programacion = '2'
-                            ORDER BY cq.acto_med, cq.cod_cpms, cq.fec_oper DESC
-                        ) t;
-                """.formatted(tabla, code_asegurado);
-
-        return secondJdbcTemplate.queryForList(sql, codcas);
-    }
-
     /// Indicadores de grado de complejidad
-    public List<Map<String, Object>> queryDIQIGC(String anio, String periodo, String codcas, String codasegu) {
-        String tabla = "dssge.dwe_centro_quirurgico_" + anio + "_" + periodo;
+    public List<Map<String, Object>> queryDIQIGC(int anio, int periodo, String codcas, int codasegu) {
+        String tabla = "dssge.dwe_centro_quirurgico_" +anio + "_" + periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 

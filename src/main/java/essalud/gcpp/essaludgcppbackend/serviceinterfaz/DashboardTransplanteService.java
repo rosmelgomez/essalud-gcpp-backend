@@ -16,7 +16,7 @@ public class DashboardTransplanteService {
     }
 
     /// Query Dashboard Transplate
-    public List<Map<String, Object>> queryDTrans(String anio, String periodo, String codcas, String codasegu) {
+    public List<Map<String, Object>> queryDTrans(int anio, int periodo, String codcas, int codasegu) {
         return DTR.queryDTrans(anio, periodo, codcas, codasegu);
     }
 }

@@ -8,8 +8,8 @@ import lombok.*;
 @AllArgsConstructor
 @Data
 public class ReporteadorDto {
-    private String anio;
-    private String periodo;
+    private int anio;
+    private int periodo;
     private String redasiscod;
     private String cod_centro;
     private String cod_servicio;

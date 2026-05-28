@@ -16,21 +16,21 @@ public class DashboardEmeService {
 
     ///Dashboard Emergencias
     /// Prioridad
-    public List<Map<String, Object>> queryDEP(String anio, String periodo, String codcas, String codasegu,  String prioridad ) {
+    public List<Map<String, Object>> queryDEP(int anio, int periodo, String codcas, int codasegu,  int prioridad ) {
         return DER.queryDEP(anio, periodo, codcas, codasegu, prioridad);
     }
 
     /// defunciones
-    public List<Map<String, Object>> queryDED(String anio, String periodo, String codcas, String codasegu) {
+    public List<Map<String, Object>> queryDED(int anio, int periodo, String codcas, int codasegu) {
         return DER.queryDED(anio, periodo, codcas, codasegu);
     }
 
     /// mayor a 24h
-    public List<Map<String, Object>> queryDEMY24HR(String anio, String periodo, String codcas, String codasegu) {
+    public List<Map<String, Object>> queryDEMY24HR(int anio, int periodo, String codcas, int codasegu) {
         return DER.queryDEMY24HR(anio, periodo, codcas, codasegu);
     }
     /// menor a 24h
-    public List<Map<String, Object>> queryDEMN24HR(String anio, String periodo, String codcas, String codasegu) {
+    public List<Map<String, Object>> queryDEMN24HR(int anio, int periodo, String codcas, int codasegu) {
         return DER.queryDEMN24HR(anio, periodo, codcas, codasegu);
     }
 
