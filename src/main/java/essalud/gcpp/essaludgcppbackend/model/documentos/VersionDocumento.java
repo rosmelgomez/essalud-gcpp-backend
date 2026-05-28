@@ -4,7 +4,6 @@ import essalud.gcpp.essaludgcppbackend.model.usuario.Users;
 import jakarta.persistence.*;
 import lombok.*;
 
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -30,10 +29,10 @@ public class VersionDocumento {
     @Column(name = "extencion", nullable = false)
     private String extencion;
 
-    @Column(name = "version" , nullable = false)
+    @Column(name = "version", nullable = false)
     private int version;
 
-    @Column(name = "size" , nullable = false)
+    @Column(name = "size", nullable = false)
     private double size;
 
     @Column(name = "date_creation", nullable = false)
@@ -70,6 +69,6 @@ public class VersionDocumento {
     private Documento documento_version_documento;
 
     /// relacion con flujo Aprobacion
-    @OneToMany(mappedBy = "version_documento_aprobacion" , fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "version_documento_aprobacion", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<FlujoAprobacionDocumento> flujo_aprobaciones;
 }

@@ -27,14 +27,17 @@ public class FlujoAprobacionDocumentoService {
     private final VersionDocumentoRepository vdr;
     private final HistorialAprobacionDocumentoRepository historialAprobacionDocumentoRepository;
 
-    public FlujoAprobacionDocumentoService(FlujoAprobacionDocumentoRepository fadr, UsersRepository usersRepository, VersionDocumentoRepository vdr, HistorialAprobacionDocumentoRepository historialAprobacionDocumentoRepository) {
+    public FlujoAprobacionDocumentoService(FlujoAprobacionDocumentoRepository fadr, UsersRepository usersRepository,
+            VersionDocumentoRepository vdr,
+            HistorialAprobacionDocumentoRepository historialAprobacionDocumentoRepository) {
         this.fadr = fadr;
         this.usersRepository = usersRepository;
         this.vdr = vdr;
         this.historialAprobacionDocumentoRepository = historialAprobacionDocumentoRepository;
     }
 
-    public void saveFlujoAprobacionDocumento(Integer id_user_aprobador, VersionDocumento versionDocumento) throws IOException {
+    public void saveFlujoAprobacionDocumento(Integer id_user_aprobador, VersionDocumento versionDocumento)
+            throws IOException {
         Users user = usersRepository.findById(id_user_aprobador).orElse(null);
 
         if (versionDocumento != null && user != null) {
@@ -49,8 +52,8 @@ public class FlujoAprobacionDocumentoService {
         }
     }
 
-    public List<FlujoAprobacionDocumentoDto> getFlujoAprobacionDocumentos(){
-        List<FlujoAprobacionDocumento> lista =fadr.findAll();
+    public List<FlujoAprobacionDocumentoDto> getFlujoAprobacionDocumentos() {
+        List<FlujoAprobacionDocumento> lista = fadr.findAll();
         List<FlujoAprobacionDocumentoDto> listaDto = new ArrayList<>();
         for (FlujoAprobacionDocumento f : lista) {
             listaDto.add(flujoAprobacionDocumentoDto(f));
@@ -58,43 +61,44 @@ public class FlujoAprobacionDocumentoService {
         return listaDto;
     }
 
-    public List<Map<String, Object>> getFlujoAprobacionDocumentosByUser(Integer id_user_aprobador){
-      return fadr.findByUser(id_user_aprobador);
+    public List<Map<String, Object>> getFlujoAprobacionDocumentosByUser(Integer id_user_aprobador) {
+        return fadr.findByUser(id_user_aprobador);
     }
 
     public void updateFlujoAprobacionDocumento(FlujoAprobacionDocumentoDto fadDto) {
-       FlujoAprobacionDocumento fad = fadr.findById(fadDto.getId()).orElse(null);
-       if (fad != null) {
-           String estadoAnterior = fad.getStatus();
-           fad.setComentario(fadDto.getComentario());
-           fad.setStatus(fadDto.getStatus());
-           fad.setDate_update(LocalDateTime.now());
-           fadr.save(fad);
+        FlujoAprobacionDocumento fad = fadr.findById(fadDto.getId()).orElse(null);
+        if (fad != null) {
+            String estadoAnterior = fad.getStatus();
+            fad.setComentario(fadDto.getComentario());
+            fad.setStatus(fadDto.getStatus());
+            fad.setDate_update(LocalDateTime.now());
+            fadr.save(fad);
 
-           // Registrar en el historial
-           Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-           String currentUsername = null;
-           if (principal instanceof UserDetails) {
-               currentUsername = ((UserDetails) principal).getUsername();
-           } else if (principal != null) {
-               currentUsername = principal.toString();
-           }
-           Users userAccion = currentUsername != null ? usersRepository.findByUsername(currentUsername) : null;
+            // Registrar en el historial
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String currentUsername = null;
+            if (principal instanceof UserDetails) {
+                currentUsername = ((UserDetails) principal).getUsername();
+            } else if (principal != null) {
+                currentUsername = principal.toString();
+            }
+            Users userAccion = currentUsername != null ? usersRepository.findByUsername(currentUsername) : null;
 
-           HistorialAprobacionDocumento hist = HistorialAprobacionDocumento.builder()
-                   .flujo_aprobacion(fad)
-                   .estado_anterior(estadoAnterior)
-                   .estado_nuevo(fadDto.getStatus())
-                   .comentario(fadDto.getComentario())
-                   .fecha_accion(LocalDateTime.now())
-                   .user_accion(userAccion)
-                   .build();
-           historialAprobacionDocumentoRepository.save(hist);
-       }
+            HistorialAprobacionDocumento hist = HistorialAprobacionDocumento.builder()
+                    .flujo_aprobacion(fad)
+                    .estado_anterior(estadoAnterior)
+                    .estado_nuevo(fadDto.getStatus())
+                    .comentario(fadDto.getComentario())
+                    .fecha_accion(LocalDateTime.now())
+                    .user_accion(userAccion)
+                    .build();
+            historialAprobacionDocumentoRepository.save(hist);
+        }
     }
 
     public List<java.util.Map<String, Object>> getHistorialByFlujoId(Integer flujoId) {
-        List<HistorialAprobacionDocumento> hist = historialAprobacionDocumentoRepository.findByFlujoIdOrderByFechaDesc(flujoId);
+        List<HistorialAprobacionDocumento> hist = historialAprobacionDocumentoRepository
+                .findByFlujoIdOrderByFechaDesc(flujoId);
         List<java.util.Map<String, Object>> result = new java.util.ArrayList<>();
         for (HistorialAprobacionDocumento h : hist) {
             java.util.Map<String, Object> map = new java.util.HashMap<>();

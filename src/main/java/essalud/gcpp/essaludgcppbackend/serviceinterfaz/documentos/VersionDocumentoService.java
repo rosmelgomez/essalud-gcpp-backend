@@ -34,7 +34,9 @@ public class VersionDocumentoService {
     private final FlujoAprobacionDocumentoService fads;
     private final AuditoriaDocumentariaRepository auditoriaDocumentariaRepository;
 
-    public VersionDocumentoService(UsersRepository usersRepository, DocumentoRepository documentoRepository, VersionDocumentoRepository versionDocumentoRepository,  FlujoAprobacionDocumentoService fads, AuditoriaDocumentariaRepository auditoriaDocumentariaRepository) {
+    public VersionDocumentoService(UsersRepository usersRepository, DocumentoRepository documentoRepository,
+            VersionDocumentoRepository versionDocumentoRepository, FlujoAprobacionDocumentoService fads,
+            AuditoriaDocumentariaRepository auditoriaDocumentariaRepository) {
         this.usersRepository = usersRepository;
         this.documentoRepository = documentoRepository;
         this.versionDocumentoRepository = versionDocumentoRepository;
@@ -43,66 +45,69 @@ public class VersionDocumentoService {
     }
 
     public void saveVersionDocumento(VersionDocumentoDto versionDocumentoDto) throws IOException {
-       Documento documento = documentoRepository.findById(versionDocumentoDto.getId_documento()).orElse(null);
-       Users user = usersRepository.findById(versionDocumentoDto.getId_user_creation()).orElse(null);
+        Documento documento = documentoRepository.findById(versionDocumentoDto.getId_documento()).orElse(null);
+        Users user = usersRepository.findById(versionDocumentoDto.getId_user_creation()).orElse(null);
 
-       if(documento != null && user != null){
-           TipoDocumento tipo = documento.getTipo_documento();
-           if (tipo != null) {
-               // 1. Validar tamaño máximo
-               double fileSizeMb = (double) versionDocumentoDto.getArchivo().getSize() / (1024.0 * 1024.0);
-               if (tipo.getMax_size_mb() != null && fileSizeMb > tipo.getMax_size_mb()) {
-                   throw new IllegalArgumentException("El archivo excede el tamaño máximo permitido de " + tipo.getMax_size_mb() + " MB.");
-               }
+        if (documento != null && user != null) {
+            TipoDocumento tipo = documento.getTipo_documento();
+            if (tipo != null) {
+                // 1. Validar tamaño máximo
+                double fileSizeMb = (double) versionDocumentoDto.getArchivo().getSize() / (1024.0 * 1024.0);
+                if (tipo.getMax_size_mb() != null && fileSizeMb > tipo.getMax_size_mb()) {
+                    throw new IllegalArgumentException(
+                            "El archivo excede el tamaño máximo permitido de " + tipo.getMax_size_mb() + " MB.");
+                }
 
-               // 2. Validar extensión permitida
-               String fileName = versionDocumentoDto.getArchivo().getOriginalFilename();
-               if (fileName != null && tipo.getExtensiones_permitidas() != null) {
-                   String ext = "";
-                   int dotIndex = fileName.lastIndexOf('.');
-                   if (dotIndex > 0) {
-                       ext = fileName.substring(dotIndex).toLowerCase();
-                   }
-                   boolean extAllowed = false;
-                   String[] allowedExts = tipo.getExtensiones_permitidas().split(",");
-                   for (String allowed : allowedExts) {
-                       if (allowed.trim().toLowerCase().equals(ext)) {
-                           extAllowed = true;
-                           break;
-                       }
-                   }
-                   if (!extAllowed) {
-                       throw new IllegalArgumentException("La extensión del archivo " + ext + " no está permitida para este tipo de documento (" + tipo.getExtensiones_permitidas() + ").");
-                   }
-               }
-           }
+                // 2. Validar extensión permitida
+                String fileName = versionDocumentoDto.getArchivo().getOriginalFilename();
+                if (fileName != null && tipo.getExtensiones_permitidas() != null) {
+                    String ext = "";
+                    int dotIndex = fileName.lastIndexOf('.');
+                    if (dotIndex > 0) {
+                        ext = fileName.substring(dotIndex).toLowerCase();
+                    }
+                    boolean extAllowed = false;
+                    String[] allowedExts = tipo.getExtensiones_permitidas().split(",");
+                    for (String allowed : allowedExts) {
+                        if (allowed.trim().toLowerCase().equals(ext)) {
+                            extAllowed = true;
+                            break;
+                        }
+                    }
+                    if (!extAllowed) {
+                        throw new IllegalArgumentException(
+                                "La extensión del archivo " + ext + " no está permitida para este tipo de documento ("
+                                        + tipo.getExtensiones_permitidas() + ").");
+                    }
+                }
+            }
 
-           System.out.println("Bytes: " + versionDocumentoDto.getArchivo().getSize());
-           System.out.println("Mb: " + (versionDocumentoDto.getArchivo().getSize() / (1024*1024)));
-           VersionDocumento versionDocumento = new VersionDocumento();
-           versionDocumento.setNombre(versionDocumentoDto.getNombre());
-           versionDocumento.setDescripcion(versionDocumentoDto.getDescripcion());
-           versionDocumento.setExtencion(versionDocumentoDto.getArchivo().getContentType());
-           versionDocumento.setVersion(versionDocumentoDto.getVersion());
-           versionDocumento.setSize((double) (versionDocumentoDto.getArchivo().getSize() / (1024*1024)));
+            System.out.println("Bytes: " + versionDocumentoDto.getArchivo().getSize());
+            System.out.println("Mb: " + (versionDocumentoDto.getArchivo().getSize() / (1024 * 1024)));
+            VersionDocumento versionDocumento = new VersionDocumento();
+            versionDocumento.setNombre(versionDocumentoDto.getNombre());
+            versionDocumento.setDescripcion(versionDocumentoDto.getDescripcion());
+            versionDocumento.setExtencion(versionDocumentoDto.getArchivo().getContentType());
+            versionDocumento.setVersion(versionDocumentoDto.getVersion());
+            versionDocumento.setSize((double) (versionDocumentoDto.getArchivo().getSize() / (1024 * 1024)));
 
-           versionDocumento.setDate_creation(LocalDateTime.now());
-           versionDocumento.setDate_update(LocalDateTime.now());
-           versionDocumento.setArchivo( versionDocumentoDto.getArchivo().getBytes());
-           versionDocumento.setUser_version_documento(user);
-           versionDocumento.setDocumento_version_documento(documento);
-           versionDocumento = versionDocumentoRepository.save(versionDocumento);
+            versionDocumento.setDate_creation(LocalDateTime.now());
+            versionDocumento.setDate_update(LocalDateTime.now());
+            versionDocumento.setArchivo(versionDocumentoDto.getArchivo().getBytes());
+            versionDocumento.setUser_version_documento(user);
+            versionDocumento.setDocumento_version_documento(documento);
+            versionDocumento = versionDocumentoRepository.save(versionDocumento);
 
-           if(documentoRepository.requiere_aprobacion(documento.getId())){
-               this.fads.saveFlujoAprobacionDocumento(versionDocumentoDto.getId_user_aprobador(), versionDocumento);
-           }
-       }
+            if (documentoRepository.requiere_aprobacion(documento.getId())) {
+                this.fads.saveFlujoAprobacionDocumento(versionDocumentoDto.getId_user_aprobador(), versionDocumento);
+            }
+        }
     }
 
-    public List<VersionDocumentoDto> getAllVersionDocumentos(){
+    public List<VersionDocumentoDto> getAllVersionDocumentos() {
         List<VersionDocumento> versionDocumentos = versionDocumentoRepository.findAll();
         List<VersionDocumentoDto> versionDocumentosDto = new ArrayList<>();
-        for (VersionDocumento versionDocumento : versionDocumentos){
+        for (VersionDocumento versionDocumento : versionDocumentos) {
             versionDocumentosDto.add(versionDocumentoDto(versionDocumento));
         }
         return versionDocumentosDto;
@@ -127,11 +132,13 @@ public class VersionDocumentoService {
 
             boolean isAuthorized = false;
             if (currentUsername != null) {
-                if (data.getUser_version_documento() != null && currentUsername.equals(data.getUser_version_documento().getUsername())) {
+                if (data.getUser_version_documento() != null
+                        && currentUsername.equals(data.getUser_version_documento().getUsername())) {
                     isAuthorized = true;
                 } else if (data.getFlujo_aprobaciones() != null) {
                     for (FlujoAprobacionDocumento flujo : data.getFlujo_aprobaciones()) {
-                        if (flujo.getUser_flujo_aprobacion() != null && currentUsername.equals(flujo.getUser_flujo_aprobacion().getUsername())) {
+                        if (flujo.getUser_flujo_aprobacion() != null
+                                && currentUsername.equals(flujo.getUser_flujo_aprobacion().getUsername())) {
                             isAuthorized = true;
                             break;
                         }
@@ -140,7 +147,8 @@ public class VersionDocumentoService {
             }
 
             if (!isAuthorized) {
-                throw new AccessDeniedException("La versión del documento no ha sido aprobada y no tiene permisos para descargarla.");
+                throw new AccessDeniedException(
+                        "La versión del documento no ha sido aprobada y no tiene permisos para descargarla.");
             }
         }
 
@@ -148,7 +156,8 @@ public class VersionDocumentoService {
     }
 
     private boolean isApproved(VersionDocumento version) {
-        if (version.getDocumento_version_documento() == null || version.getDocumento_version_documento().getTipo_documento() == null) {
+        if (version.getDocumento_version_documento() == null
+                || version.getDocumento_version_documento().getTipo_documento() == null) {
             return true;
         }
         Boolean requiere = version.getDocumento_version_documento().getTipo_documento().getRequiere_aprobacion();
@@ -170,18 +179,18 @@ public class VersionDocumentoService {
         return versionDocumentoDto(versionDocumentoRepository.getVersion(id));
     }
 
-
-    public List<VersionDocumentoDto> getVersionByDoc(Integer iddoc){
+    public List<VersionDocumentoDto> getVersionByDoc(Integer iddoc) {
         List<VersionDocumento> versionDocumentos = versionDocumentoRepository.getVersionByDocumento(iddoc);
         List<VersionDocumentoDto> versionDocumentosDto = new ArrayList<>();
-        for (VersionDocumento versionDocumento : versionDocumentos){
+        for (VersionDocumento versionDocumento : versionDocumentos) {
             versionDocumentosDto.add(versionDocumentoDto(versionDocumento));
         }
         return versionDocumentosDto;
     }
 
     public void updateVersionDocumento(VersionDocumentoDto versionDocumentoDto) throws IOException {
-        VersionDocumento versionDocumento = versionDocumentoRepository.findById(versionDocumentoDto.getId()).orElse(null);
+        VersionDocumento versionDocumento = versionDocumentoRepository.findById(versionDocumentoDto.getId())
+                .orElse(null);
         if (versionDocumento != null) {
             versionDocumento.setNombre(versionDocumentoDto.getNombre());
             versionDocumento.setDescripcion(versionDocumentoDto.getDescripcion());
@@ -194,28 +203,28 @@ public class VersionDocumentoService {
         }
     }
 
-    public List<VersionDocumentoDto> getVersionDocumentosByUser(Integer idUser){
+    public List<VersionDocumentoDto> getVersionDocumentosByUser(Integer idUser) {
         List<VersionDocumento> versionDocumentos = versionDocumentoRepository.getVersionByUser(idUser);
         List<VersionDocumentoDto> versionDocumentosDto = new ArrayList<>();
-        for (VersionDocumento versionDocumento : versionDocumentos){
+        for (VersionDocumento versionDocumento : versionDocumentos) {
             versionDocumentosDto.add(versionDocumentoDto(versionDocumento));
         }
         return versionDocumentosDto;
     }
 
-    public List<VersionDocumentoDto> getVersionDocumentosByCodcas(String codcas){
-        List<VersionDocumento> versionDocumentos=versionDocumentoRepository.getVersionDocumentoByCodcas(codcas);
+    public List<VersionDocumentoDto> getVersionDocumentosByCodcas(String codcas) {
+        List<VersionDocumento> versionDocumentos = versionDocumentoRepository.getVersionDocumentoByCodcas(codcas);
         List<VersionDocumentoDto> versionDocumentosDto = new ArrayList<>();
-        for (VersionDocumento versionDocumento : versionDocumentos){
+        for (VersionDocumento versionDocumento : versionDocumentos) {
             versionDocumentosDto.add(versionDocumentoDto(versionDocumento));
         }
         return versionDocumentosDto;
     }
 
-    public List<VersionDocumentoDto> getVersionDocumentosByCodred(String codred){
+    public List<VersionDocumentoDto> getVersionDocumentosByCodred(String codred) {
         List<VersionDocumento> versionDocumentos = versionDocumentoRepository.getVersionDocumentoByCodred(codred);
         List<VersionDocumentoDto> versionDocumentosDto = new ArrayList<>();
-        for (VersionDocumento versionDocumento : versionDocumentos){
+        for (VersionDocumento versionDocumento : versionDocumentos) {
             versionDocumentosDto.add(versionDocumentoDto(versionDocumento));
         }
         return versionDocumentosDto;
@@ -235,6 +244,5 @@ public class VersionDocumentoService {
         dto.setId_user_creation(versionDocumento.getUser_version_documento().getId());
         return dto;
     }
-
 
 }
