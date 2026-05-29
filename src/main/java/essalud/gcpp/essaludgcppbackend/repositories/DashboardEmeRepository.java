@@ -35,10 +35,11 @@ public class DashboardEmeRepository {
 
     ///Dashboard Emergencias
     /// Prioridad
-    public List<Map<String, Object>> queryDEP(int anio, int periodo, String codcas, int codasegu, int prioridad) {
+    public List<Map<String, Object>> queryDEP(int anio, int periodo, String codcas, int codasegu, String prioridad) {
         String tabla = "dwsge.dwe_emergencia_atenciones_homologacion_" + anio;
         //String periodo_sql=anio+periodo;
         String periodo_sql = String.format("%d%02d", anio, periodo);
+        System.out.println(periodo_sql);
 
         String code_asegurado = code_asegurado(codasegu);
 

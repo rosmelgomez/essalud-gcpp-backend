@@ -22,7 +22,7 @@ public class DashboardEmeController {
 
     @GetMapping("/queryDEP/{anio}/{periodo}/{codcas}/{codasegu}/{prioridad}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
-    public ResponseEntity<List<Map<String, Object>>> queryDEP(@PathVariable int anio, @PathVariable int periodo, @PathVariable String codcas, @PathVariable int codasegu , @PathVariable int prioridad) {
+    public ResponseEntity<List<Map<String, Object>>> queryDEP(@PathVariable int anio, @PathVariable int periodo, @PathVariable String codcas, @PathVariable int codasegu , @PathVariable String prioridad) {
         return ResponseEntity.ok(DES.queryDEP(anio, periodo, codcas, codasegu, prioridad));
     }
     /// defunciones

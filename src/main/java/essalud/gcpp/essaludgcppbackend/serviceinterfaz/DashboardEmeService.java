@@ -16,7 +16,7 @@ public class DashboardEmeService {
 
     ///Dashboard Emergencias
     /// Prioridad
-    public List<Map<String, Object>> queryDEP(int anio, int periodo, String codcas, int codasegu,  int prioridad ) {
+    public List<Map<String, Object>> queryDEP(int anio, int periodo, String codcas, int codasegu,  String prioridad ) {
         return DER.queryDEP(anio, periodo, codcas, codasegu, prioridad);
     }
 
