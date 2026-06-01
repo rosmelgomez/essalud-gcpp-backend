@@ -15,8 +15,8 @@ public class VersionDocumentoDto {
     private String nombre;
     private String descripcion;
     private String extencion;
-    private int version;
-    private double size;
+    private Integer version;
+    private Double size;
     private LocalDateTime date_creation;
     private LocalDateTime date_update;
     private MultipartFile archivo;

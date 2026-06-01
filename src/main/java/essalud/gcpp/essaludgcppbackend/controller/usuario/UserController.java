@@ -35,7 +35,6 @@ public class UserController {
         return  usersService.getUserByUsernameOrEmail(username);
     }
 
-
     @GetMapping("/getUserByDni/{dni}")
     public UsersDto getUser(@PathVariable String dni) {
         return  usersService.getUserByDni(dni);
@@ -89,7 +88,7 @@ public class UserController {
 
     }
 
-    @GetMapping("/getUserByCodred/{code_red}")
+    @GetMapping("/getUsersByCodred/{code_red}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public List<UsersDto> getUserByCodred(@PathVariable String code_red) {
         return usersService.getUsersByCod_red(code_red);

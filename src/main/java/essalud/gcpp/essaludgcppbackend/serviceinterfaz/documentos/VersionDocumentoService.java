@@ -1,7 +1,6 @@
 package essalud.gcpp.essaludgcppbackend.serviceinterfaz.documentos;
 
 import essalud.gcpp.essaludgcppbackend.dtos.documento.VersionDocumentoDto;
-import essalud.gcpp.essaludgcppbackend.model.documentos.AuditoriaDocumentaria;
 import essalud.gcpp.essaludgcppbackend.model.documentos.Documento;
 import essalud.gcpp.essaludgcppbackend.model.documentos.FlujoAprobacionDocumento;
 import essalud.gcpp.essaludgcppbackend.model.documentos.TipoDocumento;
@@ -120,14 +119,15 @@ public class VersionDocumentoService {
         }
 
         Documento documento = data.getDocumento_version_documento();
-        
-        // REGLA 1: Si el documento es PÚBLICO, se autoriza la descarga de inmediato para cualquier usuario
+
+        // REGLA 1: Si el documento es PÚBLICO, se autoriza la descarga de inmediato
+        // para cualquier usuario
         if (documento != null && Boolean.TRUE.equals(documento.getPublico())) {
             return new ByteArrayResource(data.getArchivo());
         }
 
         // --- A PARTIR DE AQUÍ EL DOCUMENTO ES PRIVADO ---
-        
+
         // Obtener el usuario autenticado actual
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String currentUsername = null;
@@ -137,7 +137,7 @@ public class VersionDocumentoService {
         if (principal instanceof UserDetails) {
             UserDetails userDetails = (UserDetails) principal;
             currentUsername = userDetails.getUsername();
-            
+
             isAdmin = userDetails.getAuthorities().stream()
                     .anyMatch(auth -> "ADMIN".equals(auth.getAuthority()));
             isAdminRed = userDetails.getAuthorities().stream()
@@ -153,7 +153,7 @@ public class VersionDocumentoService {
         boolean isAuthorized = false;
 
         // REGLA 2: Si es el Creador/Dueño del documento/versión -> AUTORIZADO
-        if (data.getUser_version_documento() != null 
+        if (data.getUser_version_documento() != null
                 && currentUsername.equals(data.getUser_version_documento().getUsername())) {
             isAuthorized = true;
         }
@@ -161,10 +161,11 @@ public class VersionDocumentoService {
         else if (isAdmin || isAdminRed) {
             isAuthorized = true;
         }
-        // REGLA 4: Si es el Aprobador asignado en el flujo de aprobación -> AUTORIZADO (Revisión técnica)
+        // REGLA 4: Si es el Aprobador asignado en el flujo de aprobación -> AUTORIZADO
+        // (Revisión técnica)
         else if (data.getFlujo_aprobaciones() != null) {
             for (FlujoAprobacionDocumento flujo : data.getFlujo_aprobaciones()) {
-                if (flujo.getUser_flujo_aprobacion() != null 
+                if (flujo.getUser_flujo_aprobacion() != null
                         && currentUsername.equals(flujo.getUser_flujo_aprobacion().getUsername())) {
                     isAuthorized = true;
                     break;
@@ -172,12 +173,13 @@ public class VersionDocumentoService {
             }
         }
 
-        // Si es privado y se solicita descargar, solo permitimos si es usuario con privilegios (isAuthorized)
-        // Para visualización (download = false), los documentos privados también requieren que el usuario esté autorizado
+        // Si es privado y se solicita descargar, solo permitimos si es usuario con
+        // privilegios (isAuthorized)
+        // Para visualización (download = false), los documentos privados también
+        // requieren que el usuario esté autorizado
         if (!isAuthorized) {
             throw new AccessDeniedException(
-                "Acceso Denegado: Este documento es privado y usted no tiene permisos para visualizarlo o descargarlo."
-            );
+                    "Acceso Denegado: Este documento es privado y usted no tiene permisos para visualizarlo o descargarlo.");
         }
 
         return new ByteArrayResource(data.getArchivo());
