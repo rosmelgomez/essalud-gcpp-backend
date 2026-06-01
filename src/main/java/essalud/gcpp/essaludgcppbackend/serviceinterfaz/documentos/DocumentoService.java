@@ -1,58 +1,58 @@
 package essalud.gcpp.essaludgcppbackend.serviceinterfaz.documentos;
 
 import essalud.gcpp.essaludgcppbackend.dtos.documento.DocumentoDto;
-import essalud.gcpp.essaludgcppbackend.model.documentos.CategoriaDocumento;
 import essalud.gcpp.essaludgcppbackend.model.documentos.Documento;
 import essalud.gcpp.essaludgcppbackend.model.documentos.TipoDocumento;
 import essalud.gcpp.essaludgcppbackend.model.usuario.Users;
-import essalud.gcpp.essaludgcppbackend.repositories.documentos.CategoriaDocumentoRepository;
 import essalud.gcpp.essaludgcppbackend.repositories.documentos.DocumentoRepository;
 import essalud.gcpp.essaludgcppbackend.repositories.documentos.TipoDocumentoRepository;
 import essalud.gcpp.essaludgcppbackend.repositories.usuario.UsersRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class DocumentoService {
     private final DocumentoRepository documentoRepository;
     private final UsersRepository usersRepository;
     private final TipoDocumentoRepository tipoDocumentoRepository;
-    private final CategoriaDocumentoRepository categoriaDocumentoRepository;
 
-    public DocumentoService(DocumentoRepository documentoRepository, UsersRepository usersRepository, TipoDocumentoRepository tipoDocumentoRepository, CategoriaDocumentoRepository categoriaDocumentoRepository) {
+    public DocumentoService(DocumentoRepository documentoRepository, UsersRepository usersRepository, TipoDocumentoRepository tipoDocumentoRepository) {
         this.documentoRepository = documentoRepository;
         this.usersRepository = usersRepository;
         this.tipoDocumentoRepository = tipoDocumentoRepository;
-        this.categoriaDocumentoRepository = categoriaDocumentoRepository;
     }
 
     public void saveDocumento(DocumentoDto documento)  {
         Users user= usersRepository.findById(documento.getId_user_creation()).orElse(null);
         TipoDocumento tipoDocumento = tipoDocumentoRepository.findById(documento.getId_tipo_documento()).orElse(null);
-        CategoriaDocumento categoria = documento.getId_categoria() != null ?
-                categoriaDocumentoRepository.findById(documento.getId_categoria()).orElse(null) : null;
 
         if (user != null && tipoDocumento != null) {
-            Documento documentoNew = new Documento();
-            documentoNew.setCodigo(documento.getCodigo());
-            documentoNew.setTitulo(documento.getTitulo());
-            documentoNew.setDescripcion(documento.getDescripcion());
-            documentoNew.setCodred(documento.getCodred());
-            documentoNew.setCodcas(documento.getCodcas());
-            documentoNew.setDate_creation(LocalDateTime.now());
-            documentoNew.setDate_update(LocalDateTime.now());
-            documentoNew.setFlag(documento.getFlag() != null ? documento.getFlag() : true);
-            documentoNew.setPublico(documento.getPublico());
-            documentoNew.setTipo_documento(tipoDocumento);
-            documentoNew.setUser_documento(user);
-            documentoNew.setCategoriaDocumento(categoria);
-            documentoRepository.save(documentoNew);
+            Documento documentoEntity;
+            if (documento.getId() != null && documento.getId() > 0) {
+                documentoEntity = documentoRepository.findById(documento.getId()).orElse(new Documento());
+            } else {
+                documentoEntity = new Documento();
+                documentoEntity.setDate_creation(LocalDateTime.now());
+                documentoEntity.setUser_documento(user);
+            }
+            documentoEntity.setCodigo(documento.getCodigo());
+            documentoEntity.setTitulo(documento.getTitulo());
+            documentoEntity.setDescripcion(documento.getDescripcion());
+            documentoEntity.setCodred(documento.getCodred());
+            documentoEntity.setCodcas(documento.getCodcas());
+            documentoEntity.setDate_update(LocalDateTime.now());
+            documentoEntity.setFlag(documento.getFlag() != null ? documento.getFlag() : true);
+            documentoEntity.setPublico(documento.getPublico());
+            documentoEntity.setTipo_documento(tipoDocumento);
+            documentoRepository.save(documentoEntity);
         }
-
     }
 
     public List<DocumentoDto> getDocumentos(){
@@ -117,7 +117,6 @@ public class DocumentoService {
         DocumentoDto documentoDto = modelMapper.map(documento, DocumentoDto.class);
         documentoDto.setId_user_creation(documento.getUser_documento().getId());
         documentoDto.setId_tipo_documento(documento.getTipo_documento().getId());
-        documentoDto.setId_categoria(documento.getCategoriaDocumento() != null ? documento.getCategoriaDocumento().getId() : null);
         return documentoDto;
     }
 

@@ -61,11 +61,6 @@ public class Documento {
     @OneToMany(mappedBy = "documento_version_documento" , fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<VersionDocumento> version_documentos;
 
-    /// relacion con categoria
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_categoria")
-    private CategoriaDocumento categoriaDocumento;
-
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 

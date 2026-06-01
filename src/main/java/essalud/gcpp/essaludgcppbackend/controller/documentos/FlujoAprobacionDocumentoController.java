@@ -40,4 +40,10 @@ public class FlujoAprobacionDocumentoController {
     public List<Map<String, Object>> getHistorial(@PathVariable Integer flujoId) {
         return fads.getHistorialByFlujoId(flujoId);
     }
+
+    @GetMapping("/version/{versionId}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
+    public List<FlujoAprobacionDocumentoDto> getFlujoByVersionId(@PathVariable Integer versionId) {
+        return fads.getFlujoByVersionId(versionId);
+    }
 }

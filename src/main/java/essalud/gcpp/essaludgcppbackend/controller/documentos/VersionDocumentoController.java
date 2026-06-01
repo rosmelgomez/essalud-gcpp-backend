@@ -5,6 +5,7 @@ import essalud.gcpp.essaludgcppbackend.serviceinterfaz.documentos.VersionDocumen
 import lombok.SneakyThrows;
 import org.apache.tika.Tika;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -42,15 +43,19 @@ public class VersionDocumentoController {
     @SneakyThrows
     @GetMapping("/archivo/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
-    public ResponseEntity<Resource> getFile(@PathVariable Integer id) {
-        Resource resource = versionDocumentoService.loadResource(id);
+    public ResponseEntity<Resource> getFile(
+            @PathVariable Integer id,
+            @RequestParam(value = "download", defaultValue = "false") boolean download) {
+        Resource resource = versionDocumentoService.loadResource(id, download);
 
         Tika tika = new Tika();
         String contentType = tika.detect(resource.getInputStream());
+        
+        String disposition = download ? "attachment" : "inline";
 
-        System.out.println(contentType);
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, disposition + "; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
     }
 
@@ -67,10 +72,16 @@ public class VersionDocumentoController {
         return versionDocumentoService.getVersionDocumentosByUser(idUser);
     }
 
-    @PutMapping(value = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(value = "/update")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED', 'USER')")
-    public void updateVersionDocumento(@RequestBody VersionDocumentoDto versionDocumentoDto)  throws IOException  {
+    public void updateVersionDocumento(@RequestBody VersionDocumentoDto versionDocumentoDto) {
         versionDocumentoService.updateVersionDocumento(versionDocumentoDto);
+    }
+
+    @DeleteMapping("/delete/{id}/{userid}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED')")
+    public void deleteVersionDocumento(@PathVariable Integer id, @PathVariable Integer userid) {
+        versionDocumentoService.deleteVersionDocumento(id, userid);
     }
 
     @GetMapping("/getbycodcas/{codcas}")

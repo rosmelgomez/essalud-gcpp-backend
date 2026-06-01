@@ -23,5 +23,4 @@ public class DocumentoDto {
     private Boolean flag;
     private Integer id_user_creation;
     private Integer id_tipo_documento;
-    private Integer id_categoria;
 }

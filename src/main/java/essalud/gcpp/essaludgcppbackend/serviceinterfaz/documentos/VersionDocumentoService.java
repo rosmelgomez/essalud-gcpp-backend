@@ -113,43 +113,71 @@ public class VersionDocumentoService {
         return versionDocumentosDto;
     }
 
-    public Resource loadResource(Integer id) {
+    public Resource loadResource(Integer id, boolean download) {
         VersionDocumento data = versionDocumentoRepository.findById(id).orElse(null);
         if (data == null) {
             throw new RuntimeException("documento no encontrado");
         }
 
-        // Validar seguridad de la descarga
-        if (!isApproved(data)) {
-            // Verificar si el usuario autenticado es creador o aprobador asignado
-            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            String currentUsername = null;
-            if (principal instanceof UserDetails) {
-                currentUsername = ((UserDetails) principal).getUsername();
-            } else if (principal != null) {
-                currentUsername = principal.toString();
-            }
+        Documento documento = data.getDocumento_version_documento();
+        
+        // REGLA 1: Si el documento es PÚBLICO, se autoriza la descarga de inmediato para cualquier usuario
+        if (documento != null && Boolean.TRUE.equals(documento.getPublico())) {
+            return new ByteArrayResource(data.getArchivo());
+        }
 
-            boolean isAuthorized = false;
-            if (currentUsername != null) {
-                if (data.getUser_version_documento() != null
-                        && currentUsername.equals(data.getUser_version_documento().getUsername())) {
+        // --- A PARTIR DE AQUÍ EL DOCUMENTO ES PRIVADO ---
+        
+        // Obtener el usuario autenticado actual
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String currentUsername = null;
+        boolean isAdmin = false;
+        boolean isAdminRed = false;
+
+        if (principal instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) principal;
+            currentUsername = userDetails.getUsername();
+            
+            isAdmin = userDetails.getAuthorities().stream()
+                    .anyMatch(auth -> "ADMIN".equals(auth.getAuthority()));
+            isAdminRed = userDetails.getAuthorities().stream()
+                    .anyMatch(auth -> "ADMIN_RED".equals(auth.getAuthority()));
+        } else if (principal != null) {
+            currentUsername = principal.toString();
+        }
+
+        if (currentUsername == null) {
+            throw new AccessDeniedException("No se pudo identificar al usuario autenticado.");
+        }
+
+        boolean isAuthorized = false;
+
+        // REGLA 2: Si es el Creador/Dueño del documento/versión -> AUTORIZADO
+        if (data.getUser_version_documento() != null 
+                && currentUsername.equals(data.getUser_version_documento().getUsername())) {
+            isAuthorized = true;
+        }
+        // REGLA 3: Si es Administrador general o Administrador de Red -> AUTORIZADO
+        else if (isAdmin || isAdminRed) {
+            isAuthorized = true;
+        }
+        // REGLA 4: Si es el Aprobador asignado en el flujo de aprobación -> AUTORIZADO (Revisión técnica)
+        else if (data.getFlujo_aprobaciones() != null) {
+            for (FlujoAprobacionDocumento flujo : data.getFlujo_aprobaciones()) {
+                if (flujo.getUser_flujo_aprobacion() != null 
+                        && currentUsername.equals(flujo.getUser_flujo_aprobacion().getUsername())) {
                     isAuthorized = true;
-                } else if (data.getFlujo_aprobaciones() != null) {
-                    for (FlujoAprobacionDocumento flujo : data.getFlujo_aprobaciones()) {
-                        if (flujo.getUser_flujo_aprobacion() != null
-                                && currentUsername.equals(flujo.getUser_flujo_aprobacion().getUsername())) {
-                            isAuthorized = true;
-                            break;
-                        }
-                    }
+                    break;
                 }
             }
+        }
 
-            if (!isAuthorized) {
-                throw new AccessDeniedException(
-                        "La versión del documento no ha sido aprobada y no tiene permisos para descargarla.");
-            }
+        // Si es privado y se solicita descargar, solo permitimos si es usuario con privilegios (isAuthorized)
+        // Para visualización (download = false), los documentos privados también requieren que el usuario esté autorizado
+        if (!isAuthorized) {
+            throw new AccessDeniedException(
+                "Acceso Denegado: Este documento es privado y usted no tiene permisos para visualizarlo o descargarlo."
+            );
         }
 
         return new ByteArrayResource(data.getArchivo());
@@ -188,18 +216,34 @@ public class VersionDocumentoService {
         return versionDocumentosDto;
     }
 
-    public void updateVersionDocumento(VersionDocumentoDto versionDocumentoDto) throws IOException {
+    public void updateVersionDocumento(VersionDocumentoDto versionDocumentoDto) {
         VersionDocumento versionDocumento = versionDocumentoRepository.findById(versionDocumentoDto.getId())
                 .orElse(null);
         if (versionDocumento != null) {
             versionDocumento.setNombre(versionDocumentoDto.getNombre());
             versionDocumento.setDescripcion(versionDocumentoDto.getDescripcion());
-            versionDocumento.setExtencion(versionDocumentoDto.getArchivo().getContentType());
             versionDocumento.setVersion(versionDocumentoDto.getVersion());
-            versionDocumento.setSize(versionDocumentoDto.getArchivo().getSize());
-            versionDocumento.setArchivo(versionDocumentoDto.getArchivo().getBytes());
+            if (versionDocumentoDto.getArchivo() != null && versionDocumentoDto.getArchivo().getSize() > 0) {
+                try {
+                    versionDocumento.setExtencion(versionDocumentoDto.getArchivo().getContentType());
+                    versionDocumento.setSize((double) (versionDocumentoDto.getArchivo().getSize() / (1024.0 * 1024.0)));
+                    versionDocumento.setArchivo(versionDocumentoDto.getArchivo().getBytes());
+                } catch (IOException e) {
+                    throw new RuntimeException("Error al leer bytes de archivo de la versión", e);
+                }
+            }
             versionDocumento.setDate_update(LocalDateTime.now());
             versionDocumentoRepository.save(versionDocumento);
+        }
+    }
+
+    public void deleteVersionDocumento(Integer id, Integer userId) {
+        VersionDocumento version = versionDocumentoRepository.findById(id).orElse(null);
+        Users user = usersRepository.findById(userId).orElse(null);
+        if (version != null && user != null) {
+            version.setDeletedAt(LocalDateTime.now());
+            version.setDeletedBy(user);
+            versionDocumentoRepository.save(version);
         }
     }
 

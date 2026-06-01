@@ -21,7 +21,11 @@ public interface VersionDocumentoRepository extends JpaRepository<VersionDocumen
             vd.date_update,
             NULL as archivo,
             vd.id_user_creation,
-            vd.id_documento
+            vd.id_documento,
+            vd.deleted_at,
+            vd.deleted_by_user_id,
+            vd.file_key,
+            vd.storage_provider
             FROM version_documento vd
             WHERE vd.id = :id""", nativeQuery = true)
     VersionDocumento getVersion(@Param("id") Integer id);
@@ -38,9 +42,13 @@ public interface VersionDocumentoRepository extends JpaRepository<VersionDocumen
             vd.date_update,
             NULL as archivo,
             vd.id_user_creation,
-            vd.id_documento
+            vd.id_documento,
+            vd.deleted_at,
+            vd.deleted_by_user_id,
+            vd.file_key,
+            vd.storage_provider
             FROM version_documento vd
-            WHERE vd.id_documento =:idDocumento""", nativeQuery = true)
+            WHERE vd.id_documento =:idDocumento AND vd.deleted_at IS NULL""", nativeQuery = true)
     List<VersionDocumento> getVersionByDocumento(@Param("idDocumento") Integer idDocumento);
 
     @Query(value = """
@@ -55,9 +63,13 @@ public interface VersionDocumentoRepository extends JpaRepository<VersionDocumen
             vd.date_update,
             NULL as archivo,
             vd.id_user_creation,
-            vd.id_documento
+            vd.id_documento,
+            vd.deleted_at,
+            vd.deleted_by_user_id,
+            vd.file_key,
+            vd.storage_provider
             FROM version_documento vd
-            WHERE vd.id_user_creation = :idUser""", nativeQuery = true)
+            WHERE vd.id_user_creation = :idUser AND vd.deleted_at IS NULL""", nativeQuery = true)
     List<VersionDocumento> getVersionByUser(@Param("idUser") Integer idUser);
 
     @Query(value = """
@@ -72,10 +84,14 @@ public interface VersionDocumentoRepository extends JpaRepository<VersionDocumen
             vd.date_update,
             NULL as archivo,
             vd.id_user_creation,
-            vd.id_documento
+            vd.id_documento,
+            vd.deleted_at,
+            vd.deleted_by_user_id,
+            vd.file_key,
+            vd.storage_provider
             FROM version_documento vd
             JOIN documento doc ON doc.id=vd.id_documento
-            WHERE doc.codcas=:codcas""", nativeQuery = true)
+            WHERE doc.codcas=:codcas AND vd.deleted_at IS NULL""", nativeQuery = true)
     List<VersionDocumento> getVersionDocumentoByCodcas(@Param("codcas")  String codcas);
 
     @Query(value = """
@@ -90,10 +106,14 @@ public interface VersionDocumentoRepository extends JpaRepository<VersionDocumen
             vd.date_update,
             NULL as archivo,
             vd.id_user_creation,
-            vd.id_documento
+            vd.id_documento,
+            vd.deleted_at,
+            vd.deleted_by_user_id,
+            vd.file_key,
+            vd.storage_provider
             FROM version_documento vd
             JOIN documento doc ON doc.id=vd.id_documento
-            WHERE doc.codred=:codred""", nativeQuery = true)
+            WHERE doc.codred=:codred AND vd.deleted_at IS NULL""", nativeQuery = true)
     List<VersionDocumento> getVersionDocumentoByCodred(@Param("codred")  String codred);
 
 }

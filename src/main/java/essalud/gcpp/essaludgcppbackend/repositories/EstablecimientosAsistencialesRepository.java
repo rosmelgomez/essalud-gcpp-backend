@@ -18,7 +18,8 @@ public class EstablecimientosAsistencialesRepository {
 
     public List<Map<String, Object>> getCentros() {
 
-        String tabla = "dwsge.sgss_cmcas10";
+        //String tabla = "dwsge.sgss_cmcas10";
+        String tabla = "public.sgss_cmcas10";
 
         String sql = """
         SELECT cenasicod, cenasides
@@ -29,8 +30,8 @@ public class EstablecimientosAsistencialesRepository {
     }
 
     public List<Map<String, Object>> getCentrosByCodeRed(String code_red) {
-        String tabla= "dwsge.sgss_cmcas10";
-        //String tabla= "public.sgss_cmcas10";
+        //String tabla= "dwsge.sgss_cmcas10";
+        String tabla= "public.sgss_cmcas10";
 
         String sql = """
         SELECT
@@ -50,26 +51,30 @@ public class EstablecimientosAsistencialesRepository {
 
     public List<Map<String, Object>> getRedes() {
 
-        String tabla = "dwsge.sgss_cmcas10";
+        //String tabla1 = "dwsge.sgss_cmcas10";
+        //String tabla2 = "dwsge.sgss_cmras10";
+
+        String tabla1 = "public.sgss_cmcas10";
+        String tabla2 = "public.sgss_cmras10";
 
         String sql = """
         SELECT DISTINCT
             r.redasiscod,
             r.redasisdes
         FROM %s c
-        LEFT JOIN dwsge.sgss_cmras10 r
+        LEFT JOIN %s r
             ON c.redasiscod = r.redasiscod
         WHERE r.redasiscod IS NOT NULL
         AND c.estregcod ='1'
         ORDER BY r.redasisdes ASC
-        """.formatted(tabla);
+        """.formatted(tabla1,tabla2);
         return secondJdbcTemplate.queryForList(sql);
     }
 
     public List<Map<String, Object>> getRedesWithCentros() {
 
-        String tabla= "dwsge.sgss_cmcas10";
-        //String tabla= "public.sgss_cmcas10";
+        //String tabla= "dwsge.sgss_cmcas10";
+        String tabla= "public.sgss_cmcas10";
         String sql = """
         SELECT
             r.redasiscod,
@@ -86,8 +91,10 @@ public class EstablecimientosAsistencialesRepository {
 
     public Map<String, Object> getredeswithcentrosbycodcas(String codcas) {
 
-        String tabla= "dwsge.sgss_cmcas10";
-        //String tabla= "public.sgss_cmcas10";
+        //String tabla= "dwsge.sgss_cmcas10";
+
+        String tabla1= "public.sgss_cmcas10";
+        String tabla2 = "public.sgss_cmras10";
         String sql = """
         SELECT
             r.redasiscod,
@@ -95,11 +102,11 @@ public class EstablecimientosAsistencialesRepository {
             c.cenasicod,
             c.cenasides
         FROM %s c
-        LEFT JOIN dwsge.sgss_cmras10 r
+        LEFT JOIN %s r
             ON c.redasiscod = r.redasiscod
         AND c.estregcod ='1'
         WHERE c.cenasicod= ?
-        """.formatted(tabla);
+        """.formatted(tabla1, tabla2);
         return secondJdbcTemplate.queryForMap(sql, codcas);
     }
 }
