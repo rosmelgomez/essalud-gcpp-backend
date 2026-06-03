@@ -19,10 +19,11 @@ public class VersionDocumentoDto {
     private Double size;
     private LocalDateTime date_creation;
     private LocalDateTime date_update;
+    private LocalDateTime date_delete;
     private MultipartFile archivo;
+    private Boolean visible;
     private Integer id_user_creation;
     private Integer id_documento;
-    private Boolean visible;
     ///flujo de aprobacion
    private Integer id_user_aprobador;
 }

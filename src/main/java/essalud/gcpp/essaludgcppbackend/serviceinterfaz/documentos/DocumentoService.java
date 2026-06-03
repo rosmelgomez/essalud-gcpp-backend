@@ -58,7 +58,7 @@ public class DocumentoService {
             documentoEntity.setDate_update(LocalDateTime.now());
             documentoEntity.setFlag(documento.getFlag() != null ? documento.getFlag() : true);
             documentoEntity.setPublico(documento.getPublico());
-            documentoEntity.setSoloMiRed(documento.getSolo_mi_red() != null ? documento.getSolo_mi_red() : false);
+            documentoEntity.setSolo_mi_red(documento.getSolo_mi_red() != null ? documento.getSolo_mi_red() : false);
             documentoEntity.setTipo_documento(tipoDocumento);
             documentoRepository.save(documentoEntity);
         }
@@ -148,7 +148,7 @@ public class DocumentoService {
         DocumentoDto documentoDto = modelMapper.map(documento, DocumentoDto.class);
         documentoDto.setId_user_creation(documento.getUser_documento().getId());
         documentoDto.setId_tipo_documento(documento.getTipo_documento().getId());
-        documentoDto.setSolo_mi_red(documento.getSoloMiRed());
+        documentoDto.setSolo_mi_red(documento.getSolo_mi_red());
         return documentoDto;
     }
 

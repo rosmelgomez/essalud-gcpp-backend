@@ -19,11 +19,17 @@ public class FlujoAprobacionDocumento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "comentario", nullable = false)
-    private String comentario;
+    @Column(name = "comentario_solicitante", nullable = false)
+    private String comentario_solicitante;
+
+    @Column(name = "comentario_aprobador", nullable = false)
+    private String comentario_aprobador;
 
     @Column(name = "status", nullable = false)
     private String status;
+
+    @Column(name = "prioridad", nullable = false)
+    private String prioridad;
 
     @Column(name = "date_creation", nullable = false)
     private LocalDateTime date_creation;
@@ -31,12 +37,10 @@ public class FlujoAprobacionDocumento {
     @Column(name = "date_update", nullable = false)
     private LocalDateTime date_update;
 
-
     /// relacion con usuario aprobador
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_user_aprobador")
     private Users user_flujo_aprobacion;
-
 
     /// relacion con version_documento
     @ManyToOne(fetch = FetchType.LAZY)

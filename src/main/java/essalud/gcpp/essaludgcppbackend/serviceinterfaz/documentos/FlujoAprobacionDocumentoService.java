@@ -43,7 +43,7 @@ public class FlujoAprobacionDocumentoService {
 
         if (versionDocumento != null && user != null) {
             FlujoAprobacionDocumento fad = new FlujoAprobacionDocumento();
-            fad.setComentario("");
+            fad.setComentario_solicitante("");
             fad.setStatus("Pendiente");
             fad.setDate_creation(LocalDateTime.now());
             fad.setDate_update(LocalDateTime.now());
@@ -71,7 +71,7 @@ public class FlujoAprobacionDocumentoService {
         FlujoAprobacionDocumento fad = fadr.findById(fadDto.getId()).orElse(null);
         if (fad != null) {
             String estadoAnterior = fad.getStatus();
-            fad.setComentario(fadDto.getComentario());
+            fad.setComentario_solicitante(fadDto.getComentario());
             fad.setStatus(fadDto.getStatus());
             fad.setDate_update(LocalDateTime.now());
             fadr.save(fad);
@@ -140,11 +140,11 @@ public class FlujoAprobacionDocumentoService {
 
         List<FlujoAprobacionDocumento> flujos = fadr.findByVersionId(versionDocumento.getId());
         if (flujos != null && !flujos.isEmpty()) {
-            FlujoAprobacionDocumento fad = flujos.get(0);
+            FlujoAprobacionDocumento fad = flujos.getFirst();
             String estadoAnterior = fad.getStatus();
             fad.setUser_flujo_aprobacion(aprobador);
             fad.setStatus("Pendiente");
-            fad.setComentario("Versión modificada por el creador");
+            fad.setComentario_solicitante("Versión modificada por el creador");
             fad.setDate_update(LocalDateTime.now());
             fadr.save(fad);
 
@@ -171,7 +171,7 @@ public class FlujoAprobacionDocumentoService {
     private FlujoAprobacionDocumentoDto flujoAprobacionDocumentoDto(FlujoAprobacionDocumento f) {
         FlujoAprobacionDocumentoDto dto = new FlujoAprobacionDocumentoDto();
         dto.setId(f.getId());
-        dto.setComentario(f.getComentario());
+        dto.setComentario(f.getComentario_solicitante());
         dto.setStatus(f.getStatus());
         dto.setDate_creation(f.getDate_creation());
         dto.setDate_update(f.getDate_update());

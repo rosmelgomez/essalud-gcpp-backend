@@ -1,5 +1,6 @@
 package essalud.gcpp.essaludgcppbackend.repositories.documentos;
 
+import essalud.gcpp.essaludgcppbackend.dtos.documento.VersionDocumentoDto;
 import essalud.gcpp.essaludgcppbackend.model.documentos.VersionDocumento;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,17 +20,16 @@ public interface VersionDocumentoRepository extends JpaRepository<VersionDocumen
             vd.size,
             vd.date_creation,
             vd.date_update,
+            vd.date_delete,
             NULL as archivo,
+            vd.visible,
             vd.id_user_creation,
             vd.id_documento,
-            vd.deleted_at,
-            vd.deleted_by_user_id,
-            vd.file_key,
-            vd.storage_provider,
-            vd.visible
+            fad.id_user_aprobador
             FROM version_documento vd
+            JOIN flujo_aprobacion_documento fad ON vd.id = fad.id_version_documento
             WHERE vd.id = :id""", nativeQuery = true)
-    VersionDocumento getVersion(@Param("id") Integer id);
+    VersionDocumentoDto getVersion(@Param("id") Integer id);
 
     @Query(value = """
             SELECT
@@ -41,62 +41,17 @@ public interface VersionDocumentoRepository extends JpaRepository<VersionDocumen
             vd.size,
             vd.date_creation,
             vd.date_update,
+            vd.date_delete,
             NULL as archivo,
+            vd.visible,
             vd.id_user_creation,
             vd.id_documento,
-            vd.deleted_at,
-            vd.deleted_by_user_id,
-            vd.file_key,
-            vd.storage_provider,
-            vd.visible
+            fad.id_user_aprobador
             FROM version_documento vd
-            WHERE vd.id_documento =:idDocumento AND vd.deleted_at IS NULL""", nativeQuery = true)
-    List<VersionDocumento> getVersionByDocumento(@Param("idDocumento") Integer idDocumento);
-
-    @Query(value = """
-            SELECT
-            vd.id,
-            vd.nombre,
-            vd.descripcion,
-            vd.extencion,
-            vd.version,
-            vd.size,
-            vd.date_creation,
-            vd.date_update,
-            NULL as archivo,
-            vd.id_user_creation,
-            vd.id_documento,
-            vd.deleted_at,
-            vd.deleted_by_user_id,
-            vd.file_key,
-            vd.storage_provider,
-            vd.visible
-            FROM version_documento vd
-            WHERE vd.id_user_creation = :idUser AND vd.deleted_at IS NULL""", nativeQuery = true)
-    List<VersionDocumento> getVersionByUser(@Param("idUser") Integer idUser);
-
-    @Query(value = """
-            SELECT
-            vd.id,
-            vd.nombre,
-            vd.descripcion,
-            vd.extencion,
-            vd.version,
-            vd.size,
-            vd.date_creation,
-            vd.date_update,
-            NULL as archivo,
-            vd.id_user_creation,
-            vd.id_documento,
-            vd.deleted_at,
-            vd.deleted_by_user_id,
-            vd.file_key,
-            vd.storage_provider,
-            vd.visible
-            FROM version_documento vd
+            JOIN flujo_aprobacion_documento fad ON vd.id = fad.id_version_documento
             JOIN documento doc ON doc.id=vd.id_documento
-            WHERE doc.codcas=:codcas AND vd.deleted_at IS NULL""", nativeQuery = true)
-    List<VersionDocumento> getVersionDocumentoByCodcas(@Param("codcas")  String codcas);
+            WHERE vd.id_documento =:idDocumento AND vd.date_delete IS NULL""", nativeQuery = true)
+    List<VersionDocumentoDto> getVersionByDocumento(@Param("idDocumento") Integer idDocumento);
 
     @Query(value = """
             SELECT
@@ -108,18 +63,60 @@ public interface VersionDocumentoRepository extends JpaRepository<VersionDocumen
             vd.size,
             vd.date_creation,
             vd.date_update,
+            vd.date_delete,
             NULL as archivo,
+            vd.visible,
             vd.id_user_creation,
             vd.id_documento,
-            vd.deleted_at,
-            vd.deleted_by_user_id,
-            vd.file_key,
-            vd.storage_provider,
-            vd.visible
+            fad.id_user_aprobador
             FROM version_documento vd
+            JOIN flujo_aprobacion_documento fad ON vd.id = fad.id_version_documento
+            WHERE vd.id_user_creation = :idUser AND vd.date_delete IS NULL""", nativeQuery = true)
+    List<VersionDocumentoDto> getVersionByUser(@Param("idUser") Integer idUser);
+
+    @Query(value = """
+            SELECT
+            vd.id,
+            vd.nombre,
+            vd.descripcion,
+            vd.extencion,
+            vd.version,
+            vd.size,
+            vd.date_creation,
+            vd.date_update,
+            vd.date_delete,
+            NULL as archivo,
+            vd.visible,
+            vd.id_user_creation,
+            vd.id_documento,
+            fad.id_user_aprobador
+            FROM version_documento vd
+            JOIN flujo_aprobacion_documento fad ON vd.id = fad.id_version_documento
             JOIN documento doc ON doc.id=vd.id_documento
-            WHERE doc.codred=:codred AND vd.deleted_at IS NULL""", nativeQuery = true)
-    List<VersionDocumento> getVersionDocumentoByCodred(@Param("codred")  String codred);
+            WHERE doc.codcas=:codcas AND vd.date_delete IS NULL""", nativeQuery = true)
+    List<VersionDocumentoDto> getVersionDocumentoByCodcas(@Param("codcas")  String codcas);
+
+    @Query(value = """
+            SELECT
+            vd.id,
+            vd.nombre,
+            vd.descripcion,
+            vd.extencion,
+            vd.version,
+            vd.size,
+            vd.date_creation,
+            vd.date_update,
+            vd.date_delete,
+            NULL as archivo,
+            vd.visible,
+            vd.id_user_creation,
+            vd.id_documento,
+            fad.id_user_aprobador
+            FROM version_documento vd
+            JOIN flujo_aprobacion_documento fad ON vd.id = fad.id_version_documento
+            JOIN documento doc ON doc.id=vd.id_documento
+            WHERE doc.codred=:codred AND vd.date_delete IS NULL""", nativeQuery = true)
+    List<VersionDocumentoDto> getVersionDocumentoByCodred(@Param("codred")  String codred);
 
 
 

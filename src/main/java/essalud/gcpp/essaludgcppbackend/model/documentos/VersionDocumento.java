@@ -41,25 +41,15 @@ public class VersionDocumento {
     @Column(name = "date_update", nullable = false)
     private LocalDateTime date_update;
 
+    @Column(name = "date_delete")
+    private LocalDateTime date_delete;
+
     @Lob
     @Column(name = "archivo")
     private byte[] archivo;
 
-    @Column(name = "file_key", length = 512)
-    private String fileKey;
-
-    @Column(name = "storage_provider", length = 50)
-    private String storageProvider = "DATABASE";
-
     @Column(name = "visible", nullable = false)
     private Boolean visible = true;
-
-    @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "deleted_by_user_id")
-    private Users deletedBy;
 
     /// relacion con usuario creador
     @ManyToOne(fetch = FetchType.LAZY)
@@ -73,5 +63,5 @@ public class VersionDocumento {
 
     /// relacion con flujo Aprobacion
     @OneToMany(mappedBy = "version_documento_aprobacion", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<FlujoAprobacionDocumento> flujo_aprobaciones;
+    private List<FlujoAprobacionDocumento> flujo_aprobaciones_Version;
 }

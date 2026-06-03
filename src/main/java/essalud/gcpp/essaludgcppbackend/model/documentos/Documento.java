@@ -35,11 +35,11 @@ public class Documento {
     @Column(name = "codred")
     private String codred;
 
-    @Column(name="publico", nullable = false)
+    @Column(name = "publico", nullable = false)
     private Boolean publico;
 
     @Column(name = "solo_mi_red", nullable = false)
-    private Boolean soloMiRed = false;
+    private Boolean solo_mi_red = false;
 
     @Column(name = "date_creation", nullable = false)
     private LocalDateTime date_creation;
@@ -55,13 +55,13 @@ public class Documento {
     @JoinColumn(name = "id_user_creation")
     private Users user_documento;
 
-    ///relacion con tipo documento
+    /// relacion con tipo documento
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_tipo_documento")
     private TipoDocumento tipo_documento;
 
     /// relacion con version documento
-    @OneToMany(mappedBy = "documento_version_documento" , fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "documento_version_documento", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<VersionDocumento> version_documentos;
 
     @Column(name = "deleted_at")
