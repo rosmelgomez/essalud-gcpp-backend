@@ -46,7 +46,7 @@ public class VersionDocumentoController {
     public ResponseEntity<Resource> getFile(
             @PathVariable Integer id,
             @RequestParam(value = "download", defaultValue = "false") boolean download) {
-        Resource resource = versionDocumentoService.loadResource(id, download);
+        Resource resource = versionDocumentoService.loadResource(id);
 
         Tika tika = new Tika();
         String contentType = tika.detect(resource.getInputStream());
@@ -61,7 +61,7 @@ public class VersionDocumentoController {
 
 
     @GetMapping("/getbyiddoc/{iddoc}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
     public List<VersionDocumentoDto> getVersionByDoc(@PathVariable Integer iddoc) {
         return versionDocumentoService.getVersionByDoc(iddoc);
     }
@@ -72,14 +72,14 @@ public class VersionDocumentoController {
         return versionDocumentoService.getVersionDocumentosByUser(idUser);
     }
 
-    @PutMapping(value = "/update")
+    @PutMapping(value = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED', 'USER')")
-    public void updateVersionDocumento(@RequestBody VersionDocumentoDto versionDocumentoDto) {
+    public void updateVersionDocumento(@ModelAttribute VersionDocumentoDto versionDocumentoDto) throws IOException {
         versionDocumentoService.updateVersionDocumento(versionDocumentoDto);
     }
 
     @DeleteMapping("/delete/{id}/{userid}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
     public void deleteVersionDocumento(@PathVariable Integer id, @PathVariable Integer userid) {
         versionDocumentoService.deleteVersionDocumento(id, userid);
     }

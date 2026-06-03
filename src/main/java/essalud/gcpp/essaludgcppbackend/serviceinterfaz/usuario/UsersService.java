@@ -179,12 +179,29 @@ public class UsersService {
 
     public  List<UsersDto> getUsersByCod_red(String code_red) {
         List<UsersDto> usersDtos = new ArrayList<>();
-        List<Users> users= usersRepository.findByCode_red(code_red);
+        List<Users> users= usersRepository.findByCodred(code_red);
         for (Users user : users) {
             List<Rol> roles =  rolRepository.listaRolesByUsername(user.getUsername());
             usersDtos.add(user(user,roles));
         }
         return usersDtos;
+    }
+
+    public  List<UsersDto> getUsersByCodcas(String codcas) {
+        List<UsersDto> usersDtos = new ArrayList<>();
+        List<Users> users= usersRepository.findByCodcas(codcas);
+        for (Users user : users) {
+            List<Rol> roles =  rolRepository.listaRolesByUsername(user.getUsername());
+            usersDtos.add(user(user,roles));
+        }
+        return usersDtos;
+    }
+
+    public UsersDto getUserById(Integer id) {
+        Users user = usersRepository.findById(id).orElse(null);
+        assert user != null;
+        List<Rol> roles =  rolRepository.listaRolesByUsername(user.getUsername());
+        return user(user,roles);
     }
 
     private UsersDto user (Users  user, List<Rol> roles) {

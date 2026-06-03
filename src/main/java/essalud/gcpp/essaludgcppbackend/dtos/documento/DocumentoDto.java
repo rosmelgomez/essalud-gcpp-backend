@@ -18,6 +18,7 @@ public class DocumentoDto {
     private String codcas;
     private String codred;
     private Boolean publico;
+    private Boolean solo_mi_red;
     private LocalDateTime date_creation;
     private LocalDateTime date_update;
     private Boolean flag;

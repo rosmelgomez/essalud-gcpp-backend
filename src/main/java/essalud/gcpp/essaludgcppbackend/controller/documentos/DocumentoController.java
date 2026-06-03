@@ -6,6 +6,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/documento")
@@ -24,25 +25,25 @@ public class DocumentoController {
 
     @GetMapping("/getall")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
-    public List<DocumentoDto> getDocumentos(){
+    public List<Map<String, Object>> getDocumentos(){
         return documentoService.getDocumentos();
     }
 
     @GetMapping("/getdocbycodred/{codred}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
-    public List<DocumentoDto> getDocumentosByCodred(@PathVariable String codred){
+    public List<Map<String, Object>> getDocumentosByCodred(@PathVariable String codred){
         return documentoService.getDocumentosByCodred(codred);
     }
 
     @GetMapping("/getdocbycodcas/{codcas}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
-    public List<DocumentoDto> getDocumentosByCodcas(@PathVariable String codcas){
+    public List<Map<String, Object>> getDocumentosByCodcas(@PathVariable String codcas){
         return documentoService.getDocumentosByCodcas(codcas);
     }
 
     @GetMapping("/getdocbyuser/{iduser}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
-    public List<DocumentoDto> getDocumentosUser(@PathVariable Integer iduser){
+    public List<Map<String, Object>> getDocumentosUser(@PathVariable Integer iduser){
         return documentoService.getDocumentosByUser(iduser);
     }
 
@@ -59,7 +60,7 @@ public class DocumentoController {
     }
 
     @DeleteMapping("/delete/{id}/{userid}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
     public void deleteDocumento(@PathVariable Integer id, @PathVariable Integer userid){
         documentoService.deleteDocumento(id, userid);
     }

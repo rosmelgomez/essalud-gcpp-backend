@@ -51,6 +51,9 @@ public class VersionDocumento {
     @Column(name = "storage_provider", length = 50)
     private String storageProvider = "DATABASE";
 
+    @Column(name = "visible", nullable = false)
+    private Boolean visible = true;
+
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 

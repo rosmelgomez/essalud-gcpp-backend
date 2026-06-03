@@ -22,6 +22,7 @@ public class VersionDocumentoDto {
     private MultipartFile archivo;
     private Integer id_user_creation;
     private Integer id_documento;
+    private Boolean visible;
     ///flujo de aprobacion
    private Integer id_user_aprobador;
 }

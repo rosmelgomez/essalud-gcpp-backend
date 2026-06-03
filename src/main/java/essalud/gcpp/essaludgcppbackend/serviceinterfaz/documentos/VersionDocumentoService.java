@@ -6,13 +6,11 @@ import essalud.gcpp.essaludgcppbackend.model.documentos.FlujoAprobacionDocumento
 import essalud.gcpp.essaludgcppbackend.model.documentos.TipoDocumento;
 import essalud.gcpp.essaludgcppbackend.model.documentos.VersionDocumento;
 import essalud.gcpp.essaludgcppbackend.model.usuario.Users;
-import essalud.gcpp.essaludgcppbackend.repositories.documentos.AuditoriaDocumentariaRepository;
 import essalud.gcpp.essaludgcppbackend.repositories.documentos.DocumentoRepository;
 import essalud.gcpp.essaludgcppbackend.repositories.documentos.VersionDocumentoRepository;
 import essalud.gcpp.essaludgcppbackend.repositories.usuario.UsersRepository;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -21,6 +19,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,16 +30,15 @@ public class VersionDocumentoService {
     private final DocumentoRepository documentoRepository;
     private final VersionDocumentoRepository versionDocumentoRepository;
     private final FlujoAprobacionDocumentoService fads;
-    private final AuditoriaDocumentariaRepository auditoriaDocumentariaRepository;
+
 
     public VersionDocumentoService(UsersRepository usersRepository, DocumentoRepository documentoRepository,
-            VersionDocumentoRepository versionDocumentoRepository, FlujoAprobacionDocumentoService fads,
-            AuditoriaDocumentariaRepository auditoriaDocumentariaRepository) {
+            VersionDocumentoRepository versionDocumentoRepository, FlujoAprobacionDocumentoService fads
+         ) {
         this.usersRepository = usersRepository;
         this.documentoRepository = documentoRepository;
         this.versionDocumentoRepository = versionDocumentoRepository;
         this.fads = fads;
-        this.auditoriaDocumentariaRepository = auditoriaDocumentariaRepository;
     }
 
     public void saveVersionDocumento(VersionDocumentoDto versionDocumentoDto) throws IOException {
@@ -95,6 +93,7 @@ public class VersionDocumentoService {
             versionDocumento.setArchivo(versionDocumentoDto.getArchivo().getBytes());
             versionDocumento.setUser_version_documento(user);
             versionDocumento.setDocumento_version_documento(documento);
+            versionDocumento.setVisible(versionDocumentoDto.getVisible() != null ? versionDocumentoDto.getVisible() : true);
             versionDocumento = versionDocumentoRepository.save(versionDocumento);
 
             if (documentoRepository.requiere_aprobacion(documento.getId())) {
@@ -112,98 +111,20 @@ public class VersionDocumentoService {
         return versionDocumentosDto;
     }
 
-    public Resource loadResource(Integer id, boolean download) {
+    public Resource loadResource(Integer id) {
         VersionDocumento data = versionDocumentoRepository.findById(id).orElse(null);
         if (data == null) {
             throw new RuntimeException("documento no encontrado");
         }
 
         Documento documento = data.getDocumento_version_documento();
-
-        // REGLA 1: Si el documento es PÚBLICO, se autoriza la descarga de inmediato
-        // para cualquier usuario
-        if (documento != null && Boolean.TRUE.equals(documento.getPublico())) {
-            return new ByteArrayResource(data.getArchivo());
-        }
-
-        // --- A PARTIR DE AQUÍ EL DOCUMENTO ES PRIVADO ---
-
-        // Obtener el usuario autenticado actual
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String currentUsername = null;
-        boolean isAdmin = false;
-        boolean isAdminRed = false;
-
-        if (principal instanceof UserDetails) {
-            UserDetails userDetails = (UserDetails) principal;
-            currentUsername = userDetails.getUsername();
-
-            isAdmin = userDetails.getAuthorities().stream()
-                    .anyMatch(auth -> "ADMIN".equals(auth.getAuthority()));
-            isAdminRed = userDetails.getAuthorities().stream()
-                    .anyMatch(auth -> "ADMIN_RED".equals(auth.getAuthority()));
-        } else if (principal != null) {
-            currentUsername = principal.toString();
-        }
-
-        if (currentUsername == null) {
-            throw new AccessDeniedException("No se pudo identificar al usuario autenticado.");
-        }
-
-        boolean isAuthorized = false;
-
-        // REGLA 2: Si es el Creador/Dueño del documento/versión -> AUTORIZADO
-        if (data.getUser_version_documento() != null
-                && currentUsername.equals(data.getUser_version_documento().getUsername())) {
-            isAuthorized = true;
-        }
-        // REGLA 3: Si es Administrador general o Administrador de Red -> AUTORIZADO
-        else if (isAdmin || isAdminRed) {
-            isAuthorized = true;
-        }
-        // REGLA 4: Si es el Aprobador asignado en el flujo de aprobación -> AUTORIZADO
-        // (Revisión técnica)
-        else if (data.getFlujo_aprobaciones() != null) {
-            for (FlujoAprobacionDocumento flujo : data.getFlujo_aprobaciones()) {
-                if (flujo.getUser_flujo_aprobacion() != null
-                        && currentUsername.equals(flujo.getUser_flujo_aprobacion().getUsername())) {
-                    isAuthorized = true;
-                    break;
-                }
-            }
-        }
-
-        // Si es privado y se solicita descargar, solo permitimos si es usuario con
-        // privilegios (isAuthorized)
-        // Para visualización (download = false), los documentos privados también
-        // requieren que el usuario esté autorizado
-        if (!isAuthorized) {
-            throw new AccessDeniedException(
-                    "Acceso Denegado: Este documento es privado y usted no tiene permisos para visualizarlo o descargarlo.");
+        if (documento == null) {
+            throw new RuntimeException("documento no encontrado");
         }
 
         return new ByteArrayResource(data.getArchivo());
     }
 
-    private boolean isApproved(VersionDocumento version) {
-        if (version.getDocumento_version_documento() == null
-                || version.getDocumento_version_documento().getTipo_documento() == null) {
-            return true;
-        }
-        Boolean requiere = version.getDocumento_version_documento().getTipo_documento().getRequiere_aprobacion();
-        if (requiere == null || !requiere) {
-            return true;
-        }
-        if (version.getFlujo_aprobaciones() == null || version.getFlujo_aprobaciones().isEmpty()) {
-            return false;
-        }
-        for (FlujoAprobacionDocumento flujo : version.getFlujo_aprobaciones()) {
-            if ("Aprobado".equalsIgnoreCase(flujo.getStatus())) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     public VersionDocumentoDto getVersionDocumento(Integer id) {
         return versionDocumentoDto(versionDocumentoRepository.getVersion(id));
@@ -218,20 +139,74 @@ public class VersionDocumentoService {
         return versionDocumentosDto;
     }
 
-    public void updateVersionDocumento(VersionDocumentoDto versionDocumentoDto) {
+    public void updateVersionDocumento(VersionDocumentoDto versionDocumentoDto) throws IOException {
         VersionDocumento versionDocumento = versionDocumentoRepository.findById(versionDocumentoDto.getId())
                 .orElse(null);
         if (versionDocumento != null) {
+            String currentUsername = getCurrentUsername();
+            if (currentUsername == null || versionDocumento.getUser_version_documento() == null 
+                || !currentUsername.equals(versionDocumento.getUser_version_documento().getUsername())) {
+                throw new org.springframework.security.access.AccessDeniedException("No tiene permisos para modificar esta versión.");
+            }
             versionDocumento.setNombre(versionDocumentoDto.getNombre());
             versionDocumento.setDescripcion(versionDocumentoDto.getDescripcion());
             versionDocumento.setVersion(versionDocumentoDto.getVersion());
             if (versionDocumentoDto.getArchivo() != null && versionDocumentoDto.getArchivo().getSize() > 0) {
+                Documento documento = versionDocumento.getDocumento_version_documento();
+                if (documento != null) {
+                    TipoDocumento tipo = documento.getTipo_documento();
+                    if (tipo != null) {
+                        double fileSizeMb = (double) versionDocumentoDto.getArchivo().getSize() / (1024.0 * 1024.0);
+                        if (tipo.getMax_size_mb() != null && fileSizeMb > tipo.getMax_size_mb()) {
+                            throw new IllegalArgumentException(
+                                    "El archivo excede el tamaño máximo permitido de " + tipo.getMax_size_mb() + " MB.");
+                        }
+                        String fileName = versionDocumentoDto.getArchivo().getOriginalFilename();
+                        if (fileName != null && tipo.getExtensiones_permitidas() != null) {
+                            String ext = "";
+                            int dotIndex = fileName.lastIndexOf('.');
+                            if (dotIndex > 0) {
+                                ext = fileName.substring(dotIndex).toLowerCase();
+                            }
+                            boolean extAllowed = false;
+                            String[] allowedExts = tipo.getExtensiones_permitidas().split(",");
+                            for (String allowed : allowedExts) {
+                                if (allowed.trim().toLowerCase().equals(ext)) {
+                                    extAllowed = true;
+                                    break;
+                                }
+                            }
+                            if (!extAllowed) {
+                                throw new IllegalArgumentException(
+                                        "La extensión del archivo " + ext + " no está permitida para este tipo de documento ("
+                                                + tipo.getExtensiones_permitidas() + ").");
+                            }
+                        }
+                    }
+                }
                 try {
                     versionDocumento.setExtencion(versionDocumentoDto.getArchivo().getContentType());
-                    versionDocumento.setSize((double) (versionDocumentoDto.getArchivo().getSize() / (1024.0 * 1024.0)));
+                    versionDocumento.setSize(versionDocumentoDto.getArchivo().getSize() / (1024.0 * 1024.0));
                     versionDocumento.setArchivo(versionDocumentoDto.getArchivo().getBytes());
                 } catch (IOException e) {
                     throw new RuntimeException("Error al leer bytes de archivo de la versión", e);
+                }
+            }
+            if (versionDocumentoDto.getVisible() != null) {
+                versionDocumento.setVisible(versionDocumentoDto.getVisible());
+            }
+            if (documentoRepository.requiere_aprobacion(versionDocumento.getDocumento_version_documento().getId())) {
+                Integer aprobadorId = versionDocumentoDto.getId_user_aprobador();
+                if (aprobadorId == null) {
+                    if (versionDocumento.getFlujo_aprobaciones() != null && !versionDocumento.getFlujo_aprobaciones().isEmpty()) {
+                        FlujoAprobacionDocumento flujo = versionDocumento.getFlujo_aprobaciones().get(0);
+                        if (flujo.getUser_flujo_aprobacion() != null) {
+                            aprobadorId = flujo.getUser_flujo_aprobacion().getId();
+                        }
+                    }
+                }
+                if (aprobadorId != null) {
+                    this.fads.resetFlujoAprobacion(versionDocumento, aprobadorId);
                 }
             }
             versionDocumento.setDate_update(LocalDateTime.now());
@@ -243,6 +218,9 @@ public class VersionDocumentoService {
         VersionDocumento version = versionDocumentoRepository.findById(id).orElse(null);
         Users user = usersRepository.findById(userId).orElse(null);
         if (version != null && user != null) {
+            if (!version.getUser_version_documento().getId().equals(userId)) {
+                throw new org.springframework.security.access.AccessDeniedException("No tiene permisos para eliminar esta versión.");
+            }
             version.setDeletedAt(LocalDateTime.now());
             version.setDeletedBy(user);
             versionDocumentoRepository.save(version);
@@ -288,7 +266,28 @@ public class VersionDocumentoService {
         dto.setDate_update(versionDocumento.getDate_update());
         dto.setId_documento(versionDocumento.getDocumento_version_documento().getId());
         dto.setId_user_creation(versionDocumento.getUser_version_documento().getId());
+        dto.setVisible(versionDocumento.getVisible());
+        if (versionDocumento.getFlujo_aprobaciones() != null && !versionDocumento.getFlujo_aprobaciones().isEmpty()) {
+            FlujoAprobacionDocumento flujo = versionDocumento.getFlujo_aprobaciones().getFirst();
+            if (flujo.getUser_flujo_aprobacion() != null) {
+                dto.setId_user_aprobador(flujo.getUser_flujo_aprobacion().getId());
+            }
+        }
         return dto;
     }
+
+    private String getCurrentUsername() {
+        Object principal = Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getPrincipal();
+        if (principal instanceof UserDetails) {
+            return ((UserDetails) principal).getUsername();
+        } else if (principal != null) {
+            return principal.toString();
+        }
+        return null;
+    }
+
+
+
+
 
 }

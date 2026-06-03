@@ -38,6 +38,9 @@ public class Documento {
     @Column(name="publico", nullable = false)
     private Boolean publico;
 
+    @Column(name = "solo_mi_red", nullable = false)
+    private Boolean soloMiRed = false;
+
     @Column(name = "date_creation", nullable = false)
     private LocalDateTime date_creation;
 

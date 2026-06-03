@@ -25,7 +25,8 @@ public interface VersionDocumentoRepository extends JpaRepository<VersionDocumen
             vd.deleted_at,
             vd.deleted_by_user_id,
             vd.file_key,
-            vd.storage_provider
+            vd.storage_provider,
+            vd.visible
             FROM version_documento vd
             WHERE vd.id = :id""", nativeQuery = true)
     VersionDocumento getVersion(@Param("id") Integer id);
@@ -46,7 +47,8 @@ public interface VersionDocumentoRepository extends JpaRepository<VersionDocumen
             vd.deleted_at,
             vd.deleted_by_user_id,
             vd.file_key,
-            vd.storage_provider
+            vd.storage_provider,
+            vd.visible
             FROM version_documento vd
             WHERE vd.id_documento =:idDocumento AND vd.deleted_at IS NULL""", nativeQuery = true)
     List<VersionDocumento> getVersionByDocumento(@Param("idDocumento") Integer idDocumento);
@@ -67,7 +69,8 @@ public interface VersionDocumentoRepository extends JpaRepository<VersionDocumen
             vd.deleted_at,
             vd.deleted_by_user_id,
             vd.file_key,
-            vd.storage_provider
+            vd.storage_provider,
+            vd.visible
             FROM version_documento vd
             WHERE vd.id_user_creation = :idUser AND vd.deleted_at IS NULL""", nativeQuery = true)
     List<VersionDocumento> getVersionByUser(@Param("idUser") Integer idUser);
@@ -88,7 +91,8 @@ public interface VersionDocumentoRepository extends JpaRepository<VersionDocumen
             vd.deleted_at,
             vd.deleted_by_user_id,
             vd.file_key,
-            vd.storage_provider
+            vd.storage_provider,
+            vd.visible
             FROM version_documento vd
             JOIN documento doc ON doc.id=vd.id_documento
             WHERE doc.codcas=:codcas AND vd.deleted_at IS NULL""", nativeQuery = true)
@@ -110,10 +114,13 @@ public interface VersionDocumentoRepository extends JpaRepository<VersionDocumen
             vd.deleted_at,
             vd.deleted_by_user_id,
             vd.file_key,
-            vd.storage_provider
+            vd.storage_provider,
+            vd.visible
             FROM version_documento vd
             JOIN documento doc ON doc.id=vd.id_documento
             WHERE doc.codred=:codred AND vd.deleted_at IS NULL""", nativeQuery = true)
     List<VersionDocumento> getVersionDocumentoByCodred(@Param("codred")  String codred);
+
+
 
 }

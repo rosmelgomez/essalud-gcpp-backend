@@ -94,11 +94,23 @@ public class UserController {
         return usersService.getUsersByCod_red(code_red);
     }
 
+    @GetMapping("/getUsersByCodcas/{codcas}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
+    public List<UsersDto> getUsersByCodcas(@PathVariable String codcas) {
+        return usersService.getUsersByCodcas(codcas);
+    }
+
+
+    @GetMapping("/getUsersById/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
+    public UsersDto getUsersById(@PathVariable Integer id) {
+        return usersService.getUserById(id);
+    }
+
     @GetMapping("/getRoles")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public List<RolDto> getRoles() {
         return rolService.getRols();
     }
-
 
 }
