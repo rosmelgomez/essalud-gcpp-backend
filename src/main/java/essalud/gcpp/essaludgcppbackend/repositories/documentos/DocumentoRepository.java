@@ -18,21 +18,6 @@ public interface DocumentoRepository extends JpaRepository<Documento, Integer> {
             WHERE d.id=:id""", nativeQuery = true )
     Boolean requiere_aprobacion(@Param("id") Integer id);
 
-    @Query(value = "SELECT d FROM Documento d WHERE d.flag = true AND d.deletedAt IS NULL")
-    List<Documento> findAllActive();
-
-    @Query(value = "SELECT d FROM Documento d WHERE d.codcas = :codcas AND d.flag = true AND d.deletedAt IS NULL")
-    List<Documento> getDocumentosByCodcas(@Param("codcas") String codcas);
-
-    @Query(value = "SELECT d FROM Documento d WHERE d.codred = :codred AND d.flag = true AND d.deletedAt IS NULL")
-    List<Documento> getDocumentosByCodred(@Param("codred") String codred);
-
-    @Query(value = """
-            SELECT d.*
-            FROM documento d
-            WHERE d.id_user_creation=:iduser AND d.flag = true AND d.deleted_at IS NULL""", nativeQuery = true)
-    List<Documento> getDocumentoByUser (@Param("iduser") Integer iduser);
-
     @Query(value = """
             SELECT doc.*
             FROM documento doc
@@ -41,7 +26,7 @@ public interface DocumentoRepository extends JpaRepository<Documento, Integer> {
     Documento getDocumentoByIdVersion( @Param("idversion") Integer idversion);
 
     @Query(value = """
-            SELECT 
+            SELECT
                 d.id AS id,
                 d.codigo AS codigo,
                 d.titulo AS titulo,
@@ -58,11 +43,11 @@ public interface DocumentoRepository extends JpaRepository<Documento, Integer> {
                 d.id_tipo_documento AS id_tipo_documento
             FROM documento d
             LEFT JOIN users u ON d.id_user_creation = u.id
-            WHERE d.flag = true AND d.deleted_at IS NULL""", nativeQuery = true)
+            WHERE d.flag = true AND d.date_delete IS NULL""", nativeQuery = true)
     List<Map<String, Object>> getDocumentosConDetalles();
 
     @Query(value = """
-            SELECT 
+            SELECT
                 d.id AS id,
                 d.codigo AS codigo,
                 d.titulo AS titulo,
@@ -79,11 +64,11 @@ public interface DocumentoRepository extends JpaRepository<Documento, Integer> {
                 d.id_tipo_documento AS id_tipo_documento
             FROM documento d
             LEFT JOIN users u ON d.id_user_creation = u.id
-            WHERE d.codred = :codred AND d.flag = true AND d.deleted_at IS NULL""", nativeQuery = true)
+            WHERE d.codred = :codred AND d.flag = true AND d.date_delete IS NULL""", nativeQuery = true)
     List<Map<String, Object>> getDocumentosConDetallesByCodred(@Param("codred") String codred);
 
     @Query(value = """
-            SELECT 
+            SELECT
                 d.id AS id,
                 d.codigo AS codigo,
                 d.titulo AS titulo,
@@ -100,11 +85,11 @@ public interface DocumentoRepository extends JpaRepository<Documento, Integer> {
                 d.id_tipo_documento AS id_tipo_documento
             FROM documento d
             LEFT JOIN users u ON d.id_user_creation = u.id
-            WHERE d.codcas = :codcas AND d.flag = true AND d.deleted_at IS NULL""", nativeQuery = true)
+            WHERE d.codcas = :codcas AND d.flag = true AND d.date_delete IS NULL""", nativeQuery = true)
     List<Map<String, Object>> getDocumentosConDetallesByCodcas(@Param("codcas") String codcas);
 
     @Query(value = """
-            SELECT 
+            SELECT
                 d.id AS id,
                 d.codigo AS codigo,
                 d.titulo AS titulo,
@@ -121,6 +106,6 @@ public interface DocumentoRepository extends JpaRepository<Documento, Integer> {
                 d.id_tipo_documento AS id_tipo_documento
             FROM documento d
             LEFT JOIN users u ON d.id_user_creation = u.id
-            WHERE d.id_user_creation = :iduser AND d.flag = true AND d.deleted_at IS NULL""", nativeQuery = true)
+            WHERE d.id_user_creation = :iduser AND d.flag = true AND d.date_delete IS NULL""", nativeQuery = true)
     List<Map<String, Object>> getDocumentosConDetallesByUser(@Param("iduser") Integer iduser);
 }

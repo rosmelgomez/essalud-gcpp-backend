@@ -19,10 +19,6 @@ public class HistorialAprobacionDocumento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_flujo_aprobacion", nullable = false)
-    private FlujoAprobacionDocumento flujo_aprobacion;
-
     @Column(name = "estado_anterior")
     private String estado_anterior;
 
@@ -38,4 +34,8 @@ public class HistorialAprobacionDocumento {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario_accion")
     private Users user_accion;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_flujo_aprobacion", nullable = false)
+    private FlujoAprobacionDocumento flujo_aprobacion;
 }

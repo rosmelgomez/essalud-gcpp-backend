@@ -49,7 +49,7 @@ public class VersionDocumento {
     private byte[] archivo;
 
     @Column(name = "visible", nullable = false)
-    private Boolean visible = true;
+    private Boolean visible;
 
     /// relacion con usuario creador
     @ManyToOne(fetch = FetchType.LAZY)

@@ -14,6 +14,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import essalud.gcpp.essaludgcppbackend.repositories.documentos.AuditoriaDocumentariaRepository;
+import essalud.gcpp.essaludgcppbackend.model.documentos.AuditoriaDocumentaria;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -30,15 +32,17 @@ public class VersionDocumentoService {
     private final DocumentoRepository documentoRepository;
     private final VersionDocumentoRepository versionDocumentoRepository;
     private final FlujoAprobacionDocumentoService fads;
+    private final AuditoriaDocumentariaRepository auditoriaDocumentariaRepository;
 
 
     public VersionDocumentoService(UsersRepository usersRepository, DocumentoRepository documentoRepository,
-            VersionDocumentoRepository versionDocumentoRepository, FlujoAprobacionDocumentoService fads
-         ) {
+            VersionDocumentoRepository versionDocumentoRepository, FlujoAprobacionDocumentoService fads,
+            AuditoriaDocumentariaRepository auditoriaDocumentariaRepository) {
         this.usersRepository = usersRepository;
         this.documentoRepository = documentoRepository;
         this.versionDocumentoRepository = versionDocumentoRepository;
         this.fads = fads;
+        this.auditoriaDocumentariaRepository = auditoriaDocumentariaRepository;
     }
 
     private boolean validarRequerimientos(TipoDocumento tipo,VersionDocumentoDto versionDocumentoDto){
@@ -102,7 +106,12 @@ public class VersionDocumentoService {
                 versionDocumento = versionDocumentoRepository.save(versionDocumento);
 
                 if (documentoRepository.requiere_aprobacion(documento.getId())) {
-                    this.fads.saveFlujoAprobacionDocumento(versionDocumentoDto.getId_user_aprobador(), versionDocumento);
+                    this.fads.saveFlujoAprobacionDocumento(
+                        versionDocumentoDto.getId_user_aprobador(), 
+                        versionDocumento, 
+                        versionDocumentoDto.getPrioridad(), 
+                        versionDocumentoDto.getComentario_solicitud()
+                    );
                 }
             }
         }
@@ -126,6 +135,85 @@ public class VersionDocumentoService {
         Documento documento = data.getDocumento_version_documento();
         if (documento == null) {
             throw new RuntimeException("documento no encontrado");
+        }
+
+        // Enforce Security Check
+        boolean requiresApproval = documentoRepository.requiere_aprobacion(documento.getId());
+        if (requiresApproval) {
+            List<FlujoAprobacionDocumento> flujos = data.getFlujo_aprobaciones_Version();
+            boolean isApproved = false;
+            Integer idUserAprobador = null;
+            if (flujos != null && !flujos.isEmpty()) {
+                FlujoAprobacionDocumento flujo = flujos.getFirst();
+                if ("Aprobado".equalsIgnoreCase(flujo.getStatus())) {
+                    isApproved = true;
+                }
+                if (flujo.getUser_flujo_aprobacion() != null) {
+                    idUserAprobador = flujo.getUser_flujo_aprobacion().getId();
+                }
+            }
+
+            if (!isApproved) {
+                String currentUsername = getCurrentUsername();
+                if (currentUsername == null) {
+                    throw new org.springframework.security.access.AccessDeniedException("Acceso Denegado: La versión del documento no está aprobada.");
+                }
+
+                Users currentUser = usersRepository.findByUsername(currentUsername);
+                if (currentUser == null) {
+                    throw new org.springframework.security.access.AccessDeniedException("Acceso Denegado: La versión del documento no está aprobada.");
+                }
+
+                boolean isCreator = Objects.equals(data.getUser_version_documento().getId(), currentUser.getId())
+                        || (documento.getUser_documento() != null && Objects.equals(documento.getUser_documento().getId(), currentUser.getId()));
+                boolean isAssignedApprover = Objects.equals(idUserAprobador, currentUser.getId());
+                
+                org.springframework.security.core.Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+                boolean hasAdminPrivilege = false;
+                if (auth != null) {
+                    hasAdminPrivilege = auth.getAuthorities().stream()
+                            .anyMatch(a -> "ADMIN".equalsIgnoreCase(a.getAuthority()) || "ADMIN_RED".equalsIgnoreCase(a.getAuthority()));
+                }
+
+                if (!isCreator && !isAssignedApprover && !hasAdminPrivilege) {
+                    throw new org.springframework.security.access.AccessDeniedException("Acceso Denegado: La versión del documento no está aprobada.");
+                }
+            }
+        }
+
+        // Log Auditing
+        String currentUsername = getCurrentUsername();
+        Users currentUser = currentUsername != null ? usersRepository.findByUsername(currentUsername) : null;
+        String action = "VISUALIZAR";
+        try {
+            jakarta.servlet.http.HttpServletRequest request = 
+                ((org.springframework.web.context.request.ServletRequestAttributes) 
+                 org.springframework.web.context.request.RequestContextHolder.currentRequestAttributes())
+                .getRequest();
+            
+            if ("true".equalsIgnoreCase(request.getParameter("download"))) {
+                action = "DESCARGAR";
+            }
+            
+            String ipAddress = request.getHeader("X-Forwarded-For");
+            if (ipAddress == null || ipAddress.isEmpty() || "unknown".equalsIgnoreCase(ipAddress)) {
+                ipAddress = request.getRemoteAddr();
+            }
+            String userAgent = request.getHeader("User-Agent");
+
+            AuditoriaDocumentaria audit = AuditoriaDocumentaria.builder()
+                    .documento(documento)
+                    .versionDocumento(data)
+                    .user(currentUser)
+                    .accion(action)
+                    .ip_address(ipAddress != null ? ipAddress : "unknown")
+                    .user_agent(userAgent)
+                    .fecha_accion(LocalDateTime.now())
+                    .build();
+            
+            auditoriaDocumentariaRepository.save(audit);
+        } catch (Exception e) {
+            System.err.println("Error al guardar auditoría documental: " + e.getMessage());
         }
 
         return new ByteArrayResource(data.getArchivo());
@@ -167,8 +255,14 @@ public class VersionDocumentoService {
             if (versionDocumentoDto.getVisible() != null) {
                 versionDocumento.setVisible(versionDocumentoDto.getVisible());
             }
-            if (documentoRepository.requiere_aprobacion(versionDocumentoDto.getId())) {
-                this.fads.saveFlujoAprobacionDocumento(versionDocumentoDto.getId_user_aprobador(), versionDocumento);
+            Documento documento = versionDocumento.getDocumento_version_documento();
+            if (documento != null && documentoRepository.requiere_aprobacion(documento.getId())) {
+                this.fads.resetFlujoAprobacion(
+                    versionDocumento, 
+                    versionDocumentoDto.getId_user_aprobador(), 
+                    versionDocumentoDto.getPrioridad(), 
+                    versionDocumentoDto.getComentario_solicitud()
+                );
             }
             versionDocumento.setDate_update(LocalDateTime.now());
             versionDocumentoRepository.save(versionDocumento);
@@ -230,9 +324,5 @@ public class VersionDocumentoService {
         }
         return null;
     }
-
-
-
-
 
 }

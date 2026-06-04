@@ -39,13 +39,16 @@ public class Documento {
     private Boolean publico;
 
     @Column(name = "solo_mi_red", nullable = false)
-    private Boolean solo_mi_red = false;
+    private Boolean solo_mi_red;
 
     @Column(name = "date_creation", nullable = false)
     private LocalDateTime date_creation;
 
     @Column(name = "date_update", nullable = false)
     private LocalDateTime date_update;
+
+    @Column(name = "date_delete")
+    private LocalDateTime date_delete;
 
     @Column(name = "flag", nullable = false)
     private Boolean flag;
@@ -64,10 +67,4 @@ public class Documento {
     @OneToMany(mappedBy = "documento_version_documento", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<VersionDocumento> version_documentos;
 
-    @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "deleted_by_user_id")
-    private Users deletedBy;
 }

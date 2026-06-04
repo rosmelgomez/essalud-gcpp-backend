@@ -37,20 +37,38 @@ public class FlujoAprobacionDocumentoService {
         this.historialAprobacionDocumentoRepository = historialAprobacionDocumentoRepository;
     }
 
-    public void saveFlujoAprobacionDocumento(Integer id_user_aprobador, VersionDocumento versionDocumento)
+    private LocalDateTime calcularFechaLimite(LocalDateTime fechaInicio) {
+        LocalDateTime limite = fechaInicio;
+        int diasHabilitados = 0;
+        while (diasHabilitados < 3) {
+            limite = limite.plusDays(1);
+            if (limite.getDayOfWeek() != java.time.DayOfWeek.SATURDAY
+                    && limite.getDayOfWeek() != java.time.DayOfWeek.SUNDAY) {
+                diasHabilitados++;
+            }
+        }
+        return limite;
+    }
+
+
+    public void saveFlujoAprobacionDocumento(Integer id_user_aprobador, VersionDocumento versionDocumento, String prioridad, String comentarioSolicitud)
             throws IOException {
         Users user = usersRepository.findById(id_user_aprobador).orElse(null);
 
         if (versionDocumento != null && user != null) {
             FlujoAprobacionDocumento fad = new FlujoAprobacionDocumento();
-            fad.setComentario_solicitante("");
+            fad.setComentario_solicitante(comentarioSolicitud != null ? comentarioSolicitud : "");
             fad.setStatus("Pendiente");
+            fad.setPrioridad(prioridad != null ? prioridad : "MEDIA");
             fad.setDate_creation(LocalDateTime.now());
             fad.setDate_update(LocalDateTime.now());
+            fad.setFecha_limite(calcularFechaLimite(LocalDateTime.now()));
+            fad.setFecha_resolucion(null);
             fad.setUser_flujo_aprobacion(user);
             fad.setVersion_documento_aprobacion(versionDocumento);
             fad = fadr.save(fad);
-            saveHistorialAprobacion(fad, "Creado", "Pendiente", "Inicio del flujo de aprobación", versionDocumento.getUser_version_documento());
+            saveHistorialAprobacion(fad, "Creado", "Pendiente", "Inicio del flujo de aprobación" + (comentarioSolicitud != null && !comentarioSolicitud.isEmpty() ? ": " + comentarioSolicitud : ""),
+                    versionDocumento.getUser_version_documento());
         }
     }
 
@@ -71,13 +89,16 @@ public class FlujoAprobacionDocumentoService {
         FlujoAprobacionDocumento fad = fadr.findById(fadDto.getId()).orElse(null);
         if (fad != null) {
             String estadoAnterior = fad.getStatus();
-            fad.setComentario_solicitante(fadDto.getComentario());
+            fad.setComentario_aprobador(fadDto.getComentario());
             fad.setStatus(fadDto.getStatus());
             fad.setDate_update(LocalDateTime.now());
+            if ("Aprobado".equalsIgnoreCase(fadDto.getStatus()) || "Rechazado".equalsIgnoreCase(fadDto.getStatus())) {
+                fad.setFecha_resolucion(LocalDateTime.now());
+            }
             fadr.save(fad);
 
             // Registrar en el historial
-            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            Object principal = Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getPrincipal();
             String currentUsername = null;
             if (principal instanceof UserDetails) {
                 currentUsername = ((UserDetails) principal).getUsername();
@@ -86,7 +107,6 @@ public class FlujoAprobacionDocumentoService {
             }
             Users userAccion = currentUsername != null ? usersRepository.findByUsername(currentUsername) : null;
             saveHistorialAprobacion(fad, estadoAnterior, fadDto.getStatus(), fadDto.getComentario(), userAccion);
-
         }
     }
 
@@ -134,9 +154,11 @@ public class FlujoAprobacionDocumentoService {
         return dtoList;
     }
 
-    public void resetFlujoAprobacion(VersionDocumento versionDocumento, Integer idUserAprobador) {
+
+    public void resetFlujoAprobacion(VersionDocumento versionDocumento, Integer idUserAprobador, String prioridad, String comentarioSolicitud) {
         Users aprobador = usersRepository.findById(idUserAprobador).orElse(null);
-        if (aprobador == null) return;
+        if (aprobador == null)
+            return;
 
         List<FlujoAprobacionDocumento> flujos = fadr.findByVersionId(versionDocumento.getId());
         if (flujos != null && !flujos.isEmpty()) {
@@ -144,7 +166,11 @@ public class FlujoAprobacionDocumentoService {
             String estadoAnterior = fad.getStatus();
             fad.setUser_flujo_aprobacion(aprobador);
             fad.setStatus("Pendiente");
-            fad.setComentario_solicitante("Versión modificada por el creador");
+            fad.setPrioridad(prioridad != null ? prioridad : "MEDIA");
+            fad.setComentario_solicitante(
+                    comentarioSolicitud != null ? comentarioSolicitud : "Versión modificada por el creador");
+            fad.setFecha_limite(calcularFechaLimite(LocalDateTime.now()));
+            fad.setFecha_resolucion(null);
             fad.setDate_update(LocalDateTime.now());
             fadr.save(fad);
 
@@ -158,10 +184,15 @@ public class FlujoAprobacionDocumentoService {
             }
             Users userAccion = currentUsername != null ? usersRepository.findByUsername(currentUsername) : null;
 
-            saveHistorialAprobacion(fad, estadoAnterior, "Pendiente", "Versión modificada por el creador - Solicitud de aprobación regenerada", userAccion);
+            saveHistorialAprobacion(fad, estadoAnterior, "Pendiente",
+                    "Versión modificada por el creador - Solicitud de aprobación regenerada"
+                            + (comentarioSolicitud != null && !comentarioSolicitud.isEmpty()
+                                    ? ": " + comentarioSolicitud
+                                    : ""),
+                    userAccion);
         } else {
             try {
-                saveFlujoAprobacionDocumento(idUserAprobador, versionDocumento);
+                saveFlujoAprobacionDocumento(idUserAprobador, versionDocumento, prioridad, comentarioSolicitud);
             } catch (IOException e) {
                 throw new RuntimeException("Error al crear flujo de aprobación en actualización", e);
             }
@@ -172,11 +203,18 @@ public class FlujoAprobacionDocumentoService {
         FlujoAprobacionDocumentoDto dto = new FlujoAprobacionDocumentoDto();
         dto.setId(f.getId());
         dto.setComentario(f.getComentario_solicitante());
+        dto.setComentarioSolicitud(f.getComentario_solicitante());
+        dto.setComentarioAprobador(f.getComentario_aprobador());
         dto.setStatus(f.getStatus());
+        dto.setPrioridad(f.getPrioridad());
         dto.setDate_creation(f.getDate_creation());
         dto.setDate_update(f.getDate_update());
+        dto.setFechaLimite(f.getFecha_limite());
+        dto.setFechaResolucion(f.getFecha_resolucion());
         dto.setId_version_documento(f.getVersion_documento_aprobacion().getId());
-        dto.setId_user_aprobador(f.getUser_flujo_aprobacion().getId());
+        if (f.getUser_flujo_aprobacion() != null) {
+            dto.setId_user_aprobador(f.getUser_flujo_aprobacion().getId());
+        }
         return dto;
     }
 }

@@ -26,4 +26,6 @@ public class VersionDocumentoDto {
     private Integer id_documento;
     ///flujo de aprobacion
    private Integer id_user_aprobador;
+    private String prioridad;
+    private String comentario_solicitud;
 }

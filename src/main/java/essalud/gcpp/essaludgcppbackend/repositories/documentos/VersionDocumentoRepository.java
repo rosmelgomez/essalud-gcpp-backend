@@ -25,9 +25,11 @@ public interface VersionDocumentoRepository extends JpaRepository<VersionDocumen
             vd.visible,
             vd.id_user_creation,
             vd.id_documento,
-            fad.id_user_aprobador
+            fad.id_user_aprobador,
+            fad.prioridad,
+            fad.comentario_solicitante as comentario_solicitud
             FROM version_documento vd
-            JOIN flujo_aprobacion_documento fad ON vd.id = fad.id_version_documento
+            LEFT JOIN flujo_aprobacion_documento fad ON vd.id = fad.id_version_documento
             WHERE vd.id = :id""", nativeQuery = true)
     VersionDocumentoDto getVersion(@Param("id") Integer id);
 
@@ -46,9 +48,11 @@ public interface VersionDocumentoRepository extends JpaRepository<VersionDocumen
             vd.visible,
             vd.id_user_creation,
             vd.id_documento,
-            fad.id_user_aprobador
+            fad.id_user_aprobador,
+            fad.prioridad,
+            fad.comentario_solicitante as comentario_solicitud
             FROM version_documento vd
-            JOIN flujo_aprobacion_documento fad ON vd.id = fad.id_version_documento
+            LEFT JOIN flujo_aprobacion_documento fad ON vd.id = fad.id_version_documento
             JOIN documento doc ON doc.id=vd.id_documento
             WHERE vd.id_documento =:idDocumento AND vd.date_delete IS NULL""", nativeQuery = true)
     List<VersionDocumentoDto> getVersionByDocumento(@Param("idDocumento") Integer idDocumento);
@@ -68,9 +72,11 @@ public interface VersionDocumentoRepository extends JpaRepository<VersionDocumen
             vd.visible,
             vd.id_user_creation,
             vd.id_documento,
-            fad.id_user_aprobador
+            fad.id_user_aprobador,
+            fad.prioridad,
+            fad.comentario_solicitante as comentario_solicitud
             FROM version_documento vd
-            JOIN flujo_aprobacion_documento fad ON vd.id = fad.id_version_documento
+            LEFT JOIN flujo_aprobacion_documento fad ON vd.id = fad.id_version_documento
             WHERE vd.id_user_creation = :idUser AND vd.date_delete IS NULL""", nativeQuery = true)
     List<VersionDocumentoDto> getVersionByUser(@Param("idUser") Integer idUser);
 
@@ -89,9 +95,11 @@ public interface VersionDocumentoRepository extends JpaRepository<VersionDocumen
             vd.visible,
             vd.id_user_creation,
             vd.id_documento,
-            fad.id_user_aprobador
+            fad.id_user_aprobador,
+            fad.prioridad,
+            fad.comentario_solicitante as comentario_solicitud
             FROM version_documento vd
-            JOIN flujo_aprobacion_documento fad ON vd.id = fad.id_version_documento
+            LEFT JOIN flujo_aprobacion_documento fad ON vd.id = fad.id_version_documento
             JOIN documento doc ON doc.id=vd.id_documento
             WHERE doc.codcas=:codcas AND vd.date_delete IS NULL""", nativeQuery = true)
     List<VersionDocumentoDto> getVersionDocumentoByCodcas(@Param("codcas")  String codcas);
@@ -111,9 +119,11 @@ public interface VersionDocumentoRepository extends JpaRepository<VersionDocumen
             vd.visible,
             vd.id_user_creation,
             vd.id_documento,
-            fad.id_user_aprobador
+            fad.id_user_aprobador,
+            fad.prioridad,
+            fad.comentario_solicitante as comentario_solicitud
             FROM version_documento vd
-            JOIN flujo_aprobacion_documento fad ON vd.id = fad.id_version_documento
+            LEFT JOIN flujo_aprobacion_documento fad ON vd.id = fad.id_version_documento
             JOIN documento doc ON doc.id=vd.id_documento
             WHERE doc.codred=:codred AND vd.date_delete IS NULL""", nativeQuery = true)
     List<VersionDocumentoDto> getVersionDocumentoByCodred(@Param("codred")  String codred);

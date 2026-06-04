@@ -19,18 +19,6 @@ public class AuditoriaDocumentaria {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_documento")
-    private Documento documento;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_version_documento")
-    private VersionDocumento versionDocumento;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_usuario")
-    private Users user;
-
     @Column(name = "accion", nullable = false)
     private String accion;
 
@@ -42,4 +30,16 @@ public class AuditoriaDocumentaria {
 
     @Column(name = "fecha_accion", nullable = false)
     private LocalDateTime fecha_accion;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_documento")
+    private Documento documento;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_version_documento")
+    private VersionDocumento versionDocumento;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario")
+    private Users user;
 }

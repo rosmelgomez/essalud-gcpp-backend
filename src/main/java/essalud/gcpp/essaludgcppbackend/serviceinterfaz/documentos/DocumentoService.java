@@ -137,8 +137,7 @@ public class DocumentoService {
                 throw new org.springframework.security.access.AccessDeniedException("No tiene permisos para eliminar este documento.");
             }
             doc.setFlag(false);
-            doc.setDeletedAt(LocalDateTime.now());
-            doc.setDeletedBy(user);
+            doc.setDate_delete(LocalDateTime.now());
             documentoRepository.save(doc);
         }
     }
