@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface HistorialAprobacionDocumentoRepository extends JpaRepository<HistorialAprobacionDocumento, Integer> {
     
-    @Query("SELECT h FROM HistorialAprobacionDocumento h WHERE h.flujo_aprobacion.id = :flujoId ORDER BY h.fecha_accion DESC")
+    @Query("SELECT h FROM HistorialAprobacionDocumento h WHERE h.solicitud_aprobacion.id = :flujoId ORDER BY h.fecha_accion DESC")
     List<HistorialAprobacionDocumento> findByFlujoIdOrderByFechaDesc(@Param("flujoId") Integer flujoId);
 }

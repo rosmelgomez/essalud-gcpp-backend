@@ -44,9 +44,8 @@ public class VersionDocumento {
     @Column(name = "date_delete")
     private LocalDateTime date_delete;
 
-    @Lob
-    @Column(name = "archivo")
-    private byte[] archivo;
+    @OneToOne(mappedBy = "versionDocumento", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private VersionDocumentoArchivo archivoVersion;
 
     @Column(name = "visible", nullable = false)
     private Boolean visible;
@@ -61,7 +60,7 @@ public class VersionDocumento {
     @JoinColumn(name = "id_documento")
     private Documento documento_version_documento;
 
-    /// relacion con flujo Aprobacion
-    @OneToMany(mappedBy = "version_documento_aprobacion", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<FlujoAprobacionDocumento> flujo_aprobaciones_Version;
+    /// relacion con solicitud Aprobacion
+    @OneToMany(mappedBy = "versionDocumento", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<SolicitudAprobacionDocumento> solicitudesAprobacion;
 }

@@ -36,6 +36,6 @@ public class HistorialAprobacionDocumento {
     private Users user_accion;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_flujo_aprobacion", nullable = false)
-    private FlujoAprobacionDocumento flujo_aprobacion;
+    @JoinColumn(name = "id_solicitud_aprobacion", nullable = false)
+    private SolicitudAprobacionDocumento solicitud_aprobacion;
 }

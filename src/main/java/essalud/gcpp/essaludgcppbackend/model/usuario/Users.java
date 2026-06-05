@@ -4,19 +4,9 @@ import java.util.List;
 
 import essalud.gcpp.essaludgcppbackend.model.Log;
 import essalud.gcpp.essaludgcppbackend.model.SolicitudAcceso;
-import essalud.gcpp.essaludgcppbackend.model.documentos.Documento;
-import essalud.gcpp.essaludgcppbackend.model.documentos.FlujoAprobacionDocumento;
-import essalud.gcpp.essaludgcppbackend.model.documentos.VersionDocumento;
+import essalud.gcpp.essaludgcppbackend.model.documentos.*;
 import essalud.gcpp.essaludgcppbackend.model.encuesta.Encuesta;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -82,7 +72,6 @@ public class Users {
     @OneToMany(mappedBy = "user_solicitud", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<SolicitudAcceso> solicitudes;
 
-
     ///relacion con documento
     @OneToMany(mappedBy = "user_documento", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Documento> documentos ;
@@ -91,7 +80,15 @@ public class Users {
     @OneToMany(mappedBy = "user_version_documento", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<VersionDocumento> version_documentos;
 
-    ///relacion con flujo de aprobacion
-    @OneToMany(mappedBy = "user_flujo_aprobacion", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<FlujoAprobacionDocumento> flujo_aprobaciones;
+    ///relacion con solicitud de aprobacion
+    @OneToMany(mappedBy = "userAprobador", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<SolicitudAprobacionDocumento> flujo_aprobaciones;
+
+    /// relacion con solitudes enviadas
+    @OneToMany(mappedBy = "userSolicitante", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<SolicitudAprobacionDocumento> solicitudesEnviadas;
+
+    ///relacion con aprobacionDocumento
+    @OneToMany(mappedBy = "userRevisor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ResolucionAprobacionDocumento> resolucionesRealizadas;
 }

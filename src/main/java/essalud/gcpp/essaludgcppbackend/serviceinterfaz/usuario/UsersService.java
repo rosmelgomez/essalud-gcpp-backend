@@ -120,6 +120,7 @@ public class UsersService {
 
         updateRolesUserByName(user, usersDto.getRoles());
     }
+
     @Transactional
     public void updateRolesUserByName(Users user, List<String> rolesNames) {
         // 1. Obtener roles actuales del usuario (registros de la tabla intermedia UserRol)

@@ -32,14 +32,11 @@ public class DashboardEmeRepository {
         }
     }
 
-
     ///Dashboard Emergencias
     /// Prioridad
-    public List<Map<String, Object>> queryDEP(int anio, int periodo, String codcas, int codasegu, String prioridad) {
+    public List<Map<String, Object>> queryDEP(int anio, int periodo, String codcas, int codasegu) {
         String tabla = "dwsge.dwe_emergencia_atenciones_homologacion_" + anio;
-        //String periodo_sql=anio+periodo;
         String periodo_sql = String.format("%d%02d", anio, periodo);
-        System.out.println(periodo_sql);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -124,10 +121,9 @@ public class DashboardEmeRepository {
                 d.SECUENCIA = 1
                 AND d.cod_centro = ?
                 AND d.periodo = ?
-                AND d.cod_prioridad_n= ?
             """.formatted(tabla, code_asegurado);
 
-        return secondJdbcTemplate.queryForList(sql, codcas,periodo_sql, prioridad);
+        return secondJdbcTemplate.queryForList(sql, codcas,periodo_sql);
     }
 
     /// defunciones

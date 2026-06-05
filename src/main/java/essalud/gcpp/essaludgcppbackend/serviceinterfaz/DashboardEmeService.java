@@ -17,7 +17,19 @@ public class DashboardEmeService {
     ///Dashboard Emergencias
     /// Prioridad
     public List<Map<String, Object>> queryDEP(int anio, int periodo, String codcas, int codasegu,  String prioridad ) {
-        return DER.queryDEP(anio, periodo, codcas, codasegu, prioridad);
+        return DER.queryDEP(anio, periodo, codcas, codasegu).stream()
+                .filter(map -> {
+                    Object value = map.get("cod_prioridad_n");
+
+                    // Caso 1: quieres los NULL
+                    if (prioridad == null || "null".equalsIgnoreCase(prioridad)) {
+                        return value == null;
+                    }
+
+                    // Caso 2: quieres valores específicos
+                    return value != null && value.toString().equals(prioridad);
+                })
+                .toList();
     }
 
     /// defunciones

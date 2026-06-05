@@ -1,0 +1,10 @@
+INSERT INTO catalogo_extension (id, nombre, mime_type) VALUES (1, '.pdf', 'application/pdf') ON CONFLICT (id) DO NOTHING;
+INSERT INTO catalogo_extension (id, nombre, mime_type) VALUES (2, '.doc', 'application/msword') ON CONFLICT (id) DO NOTHING;
+INSERT INTO catalogo_extension (id, nombre, mime_type) VALUES (3, '.docx', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') ON CONFLICT (id) DO NOTHING;
+INSERT INTO catalogo_extension (id, nombre, mime_type) VALUES (4, '.xls', 'application/vnd.ms-excel') ON CONFLICT (id) DO NOTHING;
+INSERT INTO catalogo_extension (id, nombre, mime_type) VALUES (5, '.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') ON CONFLICT (id) DO NOTHING;
+INSERT INTO catalogo_extension (id, nombre, mime_type) VALUES (6, '.png', 'image/png') ON CONFLICT (id) DO NOTHING;
+INSERT INTO catalogo_extension (id, nombre, mime_type) VALUES (7, '.jpg', 'image/jpeg') ON CONFLICT (id) DO NOTHING;
+INSERT INTO catalogo_extension (id, nombre, mime_type) VALUES (8, '.jpeg', 'image/jpeg') ON CONFLICT (id) DO NOTHING;
+INSERT INTO catalogo_extension (id, nombre, mime_type) VALUES (9, '.txt', 'text/plain') ON CONFLICT (id) DO NOTHING;
+SELECT setval(pg_get_serial_sequence('catalogo_extension','id'), (SELECT MAX(id) FROM catalogo_extension));

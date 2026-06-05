@@ -3,6 +3,7 @@ package essalud.gcpp.essaludgcppbackend.dtos.documento;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -14,6 +15,7 @@ public class TipoDocumentoDto {
     private String nombre;
     private String descripcion;
     private String extensiones_permitidas;
+    private List<Integer> id_extensiones;
     private Boolean requiere_aprobacion;
     private Integer max_size_mb;
     private Boolean flag;

@@ -25,9 +25,6 @@ public class TipoDocumento {
     @Column(name = "descripcion", nullable = false)
     private String descripcion;
 
-    @Column(name = "extensiones_permitidas", nullable = false)
-    private String extensiones_permitidas;
-
     @Column(name = "requiere_aprobacion", nullable = false)
     private Boolean requiere_aprobacion;
 
@@ -44,7 +41,12 @@ public class TipoDocumento {
     private LocalDateTime date_update;
 
     /// relacion con documento
-    @OneToMany(mappedBy = "tipo_documento" , fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "tipo_documento", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Documento> documentos;
+
+    /// Relacion de mucho a mucho con catalogo extension
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "tipo_documento_extension_rel", joinColumns = @JoinColumn(name = "id_tipo_documento"), inverseJoinColumns = @JoinColumn(name = "id_catalogo_extension"))
+    private List<CatalogoExtension> extensionesPermitidas;
 
 }

@@ -27,13 +27,14 @@ public class ExecuteQuery implements ApplicationRunner {
 	@Override
 	public void run(@NonNull ApplicationArguments args) {
 		ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-		populator.addScript(new ClassPathResource("insert_users.sql"));
-		populator.addScript(new ClassPathResource("insert_rol.sql"));
-		populator.addScript(new ClassPathResource("insert_user_rol.sql"));
-		populator.addScript(new ClassPathResource("insert_modulo.sql"));
-		populator.addScript(new ClassPathResource("insert_categoria.sql"));
-		populator.addScript(new ClassPathResource("insert_subcategoria.sql"));
-		populator.addScript(new ClassPathResource("insert_variable.sql"));
+		populator.addScript(new ClassPathResource("core/insert_users.sql"));
+		populator.addScript(new ClassPathResource("core/insert_rol.sql"));
+		populator.addScript(new ClassPathResource("core/insert_user_rol.sql"));
+		populator.addScript(new ClassPathResource("encuesta/insert_modulo.sql"));
+		populator.addScript(new ClassPathResource("encuesta/insert_categoria.sql"));
+		populator.addScript(new ClassPathResource("encuesta/insert_subcategoria.sql"));
+		populator.addScript(new ClassPathResource("encuesta/insert_variable.sql"));
+		populator.addScript(new ClassPathResource("documento/insert_catalogo_extencion.sql"));
 
 		try {
 			populator.execute(firstDataSource);

@@ -1,18 +1,20 @@
 package essalud.gcpp.essaludgcppbackend.repositories.documentos;
 
-import essalud.gcpp.essaludgcppbackend.model.documentos.FlujoAprobacionDocumento;
+import essalud.gcpp.essaludgcppbackend.model.documentos.SolicitudAprobacionDocumento;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
 
-public interface FlujoAprobacionDocumentoRepository extends JpaRepository<FlujoAprobacionDocumento, Integer> {
+@Repository
+public interface SolicitudAprobacionDocumentoRepository extends JpaRepository<SolicitudAprobacionDocumento, Integer> {
 
     @Query(value = """
             SELECT
-            fad.id as id_flujo,
+            sad.id as id_flujo,
             vd.nombre as nombre_version,
             vd.descripcion as descripcion_version,
             vd.version,
@@ -21,21 +23,21 @@ public interface FlujoAprobacionDocumentoRepository extends JpaRepository<FlujoA
             vd.id_documento,
             us.name as name_creation_version,
             us.lastname as lastname_creation_version,
-            fad.comentario,
-            fad.status,
+            sad.comentario_solicitante as comentario,
+            sad.estado as status,
             usa.name as name_aprobador,
             usa.lastname as lastanme_aprobador
             FROM version_documento vd
             LEFT JOIN documento doc ON vd.id_documento=doc.id
             LEFT JOIN users us ON vd.id_user_creation = us.id
-            LEFT JOIN flujo_aprobacion_documento fad ON vd.id = fad.id_version_documento
-            LEFT JOIN users usa ON fad.id_user_aprobador = usa.id
-            WHERE fad.id_user_aprobador=:id""", nativeQuery = true)
+            LEFT JOIN solicitud_aprobacion_documento sad ON vd.id = sad.id_version_documento
+            LEFT JOIN users usa ON sad.id_usuario_aprobador = usa.id
+            WHERE sad.id_usuario_aprobador=:id""", nativeQuery = true)
     List<Map<String, Object>> findByUser(@Param("id") Integer id);
 
     @Query(value = """
-            SELECT f.*
-            FROM FlujoAprobacionDocumento f
-            WHERE f.id_version_documento = :versionId""", nativeQuery = true)
-    List<FlujoAprobacionDocumento> findByVersionId(@Param("versionId") Integer versionId);
+            SELECT s.*
+            FROM solicitud_aprobacion_documento s
+            WHERE s.id_version_documento = :versionId""", nativeQuery = true)
+    List<SolicitudAprobacionDocumento> findByVersionId(@Param("versionId") Integer versionId);
 }
