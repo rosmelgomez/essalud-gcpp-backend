@@ -94,14 +94,13 @@ public class VersionDocumentoService {
                 versionDocumento.setDocumento_version_documento(documento);
                 versionDocumento.setVisible(versionDocumentoDto.getVisible() != null ? versionDocumentoDto.getVisible() : true);
 
-                versionDocumento = versionDocumentoRepository.save(versionDocumento);
-
-                /// se guarda el archivo de manera correlacional
+                /// se guarda el archivo de manera correlacional usando cascada
                 VersionDocumentoArchivo vda = new VersionDocumentoArchivo();
-                vda.setIdVersionDocumento(versionDocumento.getId());
                 vda.setArchivo(versionDocumentoDto.getArchivo().getBytes());
                 vda.setVersionDocumento(versionDocumento);
-                versionDocumentoArchivoRepository.save(vda);
+                versionDocumento.setArchivoVersion(vda);
+
+                versionDocumento = versionDocumentoRepository.save(versionDocumento);
 
                 if (documentoRepository.requiere_aprobacion(documento.getId())) {
                     this.sads.saveFlujoAprobacionDocumento(
@@ -259,15 +258,13 @@ public class VersionDocumentoService {
                         versionDocumento.setExtencion(versionDocumentoDto.getArchivo().getContentType());
                         versionDocumento.setSize((double) versionDocumentoDto.getArchivo().getSize() / 1048576);
 
-                        VersionDocumentoArchivo vda = versionDocumentoArchivoRepository
-                                .findById(versionDocumento.getId()).orElse(null);
+                        VersionDocumentoArchivo vda = versionDocumento.getArchivoVersion();
                         if (vda == null) {
                             vda = new VersionDocumentoArchivo();
-                            vda.setIdVersionDocumento(versionDocumento.getId());
                             vda.setVersionDocumento(versionDocumento);
+                            versionDocumento.setArchivoVersion(vda);
                         }
                         vda.setArchivo(versionDocumentoDto.getArchivo().getBytes());
-                        versionDocumentoArchivoRepository.save(vda);
                     }
                 }
             }

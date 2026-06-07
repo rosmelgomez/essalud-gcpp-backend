@@ -25,6 +25,7 @@ public class SolicitudAccesoDto {
     private LocalDateTime date_creation;
     private LocalDateTime date_update;
     private String status;
+    private String comentario_revisor;
 
 
 }

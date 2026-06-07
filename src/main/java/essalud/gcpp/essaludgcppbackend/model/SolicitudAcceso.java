@@ -46,4 +46,7 @@ public class SolicitudAcceso {
     @JoinColumn(name = "id_user")
     private Users user_solicitud;
 
+    @OneToOne(mappedBy = "solicitudAcceso", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private ResolucionSolicitudAcceso resolucion;
+
 }
