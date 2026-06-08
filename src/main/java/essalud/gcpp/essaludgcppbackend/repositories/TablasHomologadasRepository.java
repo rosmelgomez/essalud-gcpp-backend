@@ -77,4 +77,20 @@ public class TablasHomologadasRepository {
 		""".formatted(tabla);
         return secondJdbcTemplate.queryForList(sql);
     }
+
+
+	///Tabla homologada camas
+	public List<Map<String, Object>> queryTHCAMA(String codcas) {
+		String tabla ="dssge.dw_homologacion_camas";
+		String sql = """
+			SELECT
+			cam.*,
+			cas.cenasides,
+			serv.servhosdes
+			FROM dwsge.sgss_hmcam10 cam
+			JOIN dwsge.sgss_cmcas10 cas ON cam.cenasicod = cas.cenasicod
+			JOIN dwsge.sgss_cmsho10 serv ON cam.servhoscod = serv.servhoscod
+			WHERE  cam.cenasicod = ?""";
+		return secondJdbcTemplate.queryForList(sql, codcas);
+	}
 }

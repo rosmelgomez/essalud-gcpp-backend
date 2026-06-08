@@ -25,4 +25,9 @@ public class TablasHomolagadasService {
         return THR.queryTHCE();
     }
 
+    ///Tabla homologada camas
+    public List<Map<String, Object>> queryTHCAMA(String codcas) {
+        return THR.queryTHCAMA(codcas);
+    }
+
 }

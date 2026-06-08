@@ -34,6 +34,14 @@ public class TablasHomologadasController {
         return THS.queryTHCE();
     }
 
+    ///Tabla homologada camas
+    @GetMapping("/queryTHCAMA/{codcas}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
+    public List<Map<String, Object>> queryTHCAMA(@PathVariable String codcas) {
+        return THS.queryTHCAMA(codcas);
+    }
+
+
 
 
 }
