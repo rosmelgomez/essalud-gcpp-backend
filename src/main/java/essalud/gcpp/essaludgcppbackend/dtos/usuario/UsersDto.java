@@ -34,6 +34,8 @@ public class UsersDto {
 
     private Boolean flag;
 
+    private Boolean firstLogin;
+
     private List<String> roles;
 }
 

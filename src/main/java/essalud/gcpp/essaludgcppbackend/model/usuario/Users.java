@@ -56,6 +56,9 @@ public class Users {
     @Column(name = "flag", nullable = false)
     private Boolean flag;
 
+    @Column(name = "first_login", nullable = false)
+    private Boolean firstLogin = true;
+
     /// relacion con usuario_rol
     @OneToMany(mappedBy = "usuario_rol" , fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<UserRol> usuarios_roles;

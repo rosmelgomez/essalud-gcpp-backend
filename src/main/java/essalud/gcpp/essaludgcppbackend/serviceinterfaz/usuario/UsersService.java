@@ -45,6 +45,7 @@ public class UsersService {
             newUser.setUsername(usersDto.getUsername());
             newUser.setPassword(encodedPassword);
             newUser.setFlag(usersDto.getFlag());
+            newUser.setFirstLogin(true);
             newUser.setDate_creation(LocalDateTime.now());
             newUser.setDate_update(LocalDateTime.now());
             newUser = usersRepository.save(newUser);
@@ -93,6 +94,7 @@ public class UsersService {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(userLoginDto.getPassword());
         user.setPassword(encodedPassword);
+        user.setFirstLogin(false);
         user.setDate_update(LocalDateTime.now());
         usersRepository.save(user);
     }
@@ -221,6 +223,7 @@ public class UsersService {
         }
         usersDto.setRoles(roleNames);
         usersDto.setFlag(user.getFlag());
+        usersDto.setFirstLogin(user.getFirstLogin());
         usersDto.setDate_creation(user.getDate_creation());
         usersDto.setDate_update(user.getDate_update());
         return usersDto;

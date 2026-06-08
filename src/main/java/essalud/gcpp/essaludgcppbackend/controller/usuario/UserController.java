@@ -11,6 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,6 +34,12 @@ public class UserController {
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public UsersDto getUserByUsername(@PathVariable String username) {
         return  usersService.getUserByUsernameOrEmail(username);
+    }
+
+    @GetMapping("/me")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
+    public UsersDto getCurrentUser() {
+        return usersService.getUserByUsernameOrEmail(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 
     @GetMapping("/getUserByDni/{dni}")
