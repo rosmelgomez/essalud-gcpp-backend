@@ -41,6 +41,12 @@ public class TablasHomologadasController {
         return THS.queryTHCAMA(codcas);
     }
 
+    /// servicio
+    @GetMapping("/queryTHCAMASERV")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
+    public List<Map<String, Object>> queryTHCAMASERV() {
+        return THS.queryTHCAMASERV();
+    }
 
 
 

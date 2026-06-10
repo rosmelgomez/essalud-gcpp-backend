@@ -22,10 +22,11 @@ public class DashboardReporRespository {
         String tabla = "dwsge.sgss_cmras10" ;
         String sql = """
             SELECT redasiscod, redasisdes, redasismeddes
-            FROM %s ORDER BY redasisdes
+            FROM %s ORDER BY redasisdes ASC
             """.formatted(tabla);
         return secondJdbcTemplate.queryForList(sql );
     }
+
     /// Dashboard Reporteador centro
     public List<Map<String, Object>> queryDRC() {
         String tabla = "dwsge.sgss_cmcas10" ;
@@ -35,6 +36,7 @@ public class DashboardReporRespository {
             """.formatted(tabla);
         return secondJdbcTemplate.queryForList(sql );
     }
+
     /// Dashboard Reporteador servicio
     public List<Map<String, Object>> queryDRS() {
         String tabla = "dwsge.sgss_cmsho10" ;
@@ -44,6 +46,7 @@ public class DashboardReporRespository {
             """.formatted(tabla);
         return secondJdbcTemplate.queryForList(sql );
     }
+
     /// Dashboard Reporteador actividad
     public List<Map<String, Object>> queryDRAC() {
         String tabla = "dwsge.sgss_cmact10" ;
@@ -53,6 +56,7 @@ public class DashboardReporRespository {
             """.formatted(tabla);
         return secondJdbcTemplate.queryForList(sql );
     }
+
     /// Dashboard Reporteador  subactividad
     public List<Map<String, Object>> queryDRSUBAC() {
         String tabla = "dwsge.sgss_cmace10" ;
@@ -62,6 +66,7 @@ public class DashboardReporRespository {
             """.formatted(tabla);
         return secondJdbcTemplate.queryForList(sql );
     }
+
     /// Dashboard Reporteador capitulo
     public List<Map<String, Object>> queryDRCAP() {
         String tabla = "dwsge.sgss_cmdia10_chapter" ;

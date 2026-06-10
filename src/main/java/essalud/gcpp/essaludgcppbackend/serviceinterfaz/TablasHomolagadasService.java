@@ -30,4 +30,9 @@ public class TablasHomolagadasService {
         return THR.queryTHCAMA(codcas);
     }
 
+    /// servicio
+    public List<Map<String, Object>> queryTHCAMASERV() {
+        return THR.queryTHCAMASERV();
+    }
+
 }

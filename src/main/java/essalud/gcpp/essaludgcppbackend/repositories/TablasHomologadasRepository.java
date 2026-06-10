@@ -78,7 +78,6 @@ public class TablasHomologadasRepository {
         return secondJdbcTemplate.queryForList(sql);
     }
 
-
 	///Tabla homologada camas
 	public List<Map<String, Object>> queryTHCAMA(String codcas) {
 		String tabla ="dssge.dw_homologacion_camas";
@@ -93,4 +92,15 @@ public class TablasHomologadasRepository {
 			WHERE  cam.cenasicod = ?""";
 		return secondJdbcTemplate.queryForList(sql, codcas);
 	}
+
+	/// servicio
+	public List<Map<String, Object>> queryTHCAMASERV() {
+		String tabla = "dwsge.sgss_cmsho10" ;
+		String sql = """
+            SELECT servhoscod, servhosdes
+            FROM %s ORDER BY servhosdes
+            """.formatted(tabla);
+		return secondJdbcTemplate.queryForList(sql );
+	}
+
 }
