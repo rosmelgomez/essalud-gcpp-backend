@@ -688,7 +688,7 @@ public class DashboardNMRepository {
     /// psicologia total consultantes
     public List<Map<String, Object>> queryDNMPSTCS(int anio, int periodo, String codcas, int codasegu) {
         String tabla = "dwsge.dwe_consulta_externa_no_medicas_" + anio ;
-        String periodo_sql= String.valueOf(anio+periodo);
+        String periodo_sql = String.format("%d%02d", anio, periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -703,7 +703,7 @@ public class DashboardNMRepository {
                     AND p.cod_subactividad ='005'
                     AND p.cod_centro= ?
                     AND (
-                            CASE 
+                            CASE
                                 WHEN cod_tipo_paciente = '4' THEN '2'
                                 ELSE '1'
                             END
@@ -927,9 +927,9 @@ public class DashboardNMRepository {
         String sql = """
                     SELECT ce.cod_oricentro, ce.cod_centro,ca.cenasides,a.actespnom,c.servhosdes,ce.cod_servicio, ce.cod_actividad, ce.cod_subactividad,ce.acto_med, ce.doc_paciente, ce.diagcod, dg.diagdes
                     FROM %s ce
-                    LEFT OUTER JOIN dwsge.sgss_cmdia10 dg 
+                    LEFT OUTER JOIN dwsge.sgss_cmdia10 dg
                         ON dg.diagcod=ce.diagcod
-                    LEFT JOIN dwsge.sgss_cmsho10 AS c 
+                    LEFT JOIN dwsge.sgss_cmsho10 AS c
                         ON ce.cod_servicio = c.servhoscod
                     LEFT JOIN dwsge.sgss_cmace10 AS a
                         ON ce.cod_actividad = a.actcod
@@ -1016,6 +1016,7 @@ public class DashboardNMRepository {
 
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
+
 
     /// Indicadores de obstetricia
     /// total atenciones - servicio - subactividad
@@ -1339,7 +1340,6 @@ public class DashboardNMRepository {
     }
 
 
-
     /// Indicadores de enfermeria
     /// total atenciones - servicio - subactividad
     public List<Map<String, Object>> queryDNMENTASS(int anio, int periodo, String codcas, int codasegu) {
@@ -1567,13 +1567,13 @@ public class DashboardNMRepository {
         String code_asegurado = code_asegurado(codasegu);
 
         String sql = """
-        SELECT 
+        SELECT
             c.servhosdes AS descripcion_servicio,
             a.actespnom AS descripcion_subactividad
         FROM %s ce
-        LEFT OUTER JOIN dwsge.sgss_cmdia10 dg 
+        LEFT OUTER JOIN dwsge.sgss_cmdia10 dg
             ON dg.diagcod=ce.diagcod
-        LEFT JOIN dwsge.sgss_cmsho10 AS c 
+        LEFT JOIN dwsge.sgss_cmsho10 AS c
             ON ce.cod_servicio = c.servhoscod
         LEFT JOIN dwsge.sgss_cmace10 AS a
             ON ce.cod_actividad = a.actcod
@@ -1588,12 +1588,11 @@ public class DashboardNMRepository {
             AND cod_actividad ='B1'
             AND ce.cod_subactividad ='055'
             AND (
-                    CASE 
+                    CASE
                         WHEN ce.cod_tipo_paciente = '4' THEN '2'
                         ELSE '1'
                     END
-                    ) IN %s
-                """.formatted(tabla, code_asegurado);
+                    ) IN %s""".formatted(tabla, code_asegurado);
 
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
@@ -1604,11 +1603,22 @@ public class DashboardNMRepository {
         String code_asegurado = code_asegurado(codasegu);
 
         String sql = """
-                    SELECT ce.cod_oricentro, ce.cod_centro,a.actespnom,c.servhosdes,ce.cod_servicio, ce.cod_actividad, ce.cod_subactividad,ce.acto_med, ce.doc_paciente, ce.diagcod, dg.diagdes
+                    SELECT
+                    ce.cod_oricentro,
+                    ce.cod_centro,
+                    a.actespnom,
+                    c.servhosdes,
+                    ce.cod_servicio,
+                    ce.cod_actividad,
+                    ce.cod_subactividad,
+                    ce.acto_med,
+                    ce.doc_paciente,
+                    ce.diagcod,
+                    dg.diagdes
                     FROM %s ce
-                    LEFT OUTER JOIN dwsge.sgss_cmdia10 dg 
+                    LEFT OUTER JOIN dwsge.sgss_cmdia10 dg
                         ON dg.diagcod=ce.diagcod
-                    LEFT JOIN dwsge.sgss_cmsho10 AS c 
+                    LEFT JOIN dwsge.sgss_cmsho10 AS c
                         ON ce.cod_servicio = c.servhoscod
                     LEFT JOIN dwsge.sgss_cmace10 AS a
                         ON ce.cod_actividad = a.actcod
@@ -1623,7 +1633,7 @@ public class DashboardNMRepository {
                         AND cod_actividad ='B1'
                         AND ce.cod_subactividad ='055'
                         AND (
-                                CASE 
+                                CASE
                                     WHEN ce.cod_tipo_paciente = '4' THEN '2'
                                     ELSE '1'
                                 END
