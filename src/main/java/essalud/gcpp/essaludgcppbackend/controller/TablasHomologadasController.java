@@ -1,11 +1,9 @@
 package essalud.gcpp.essaludgcppbackend.controller;
 
+import essalud.gcpp.essaludgcppbackend.dtos.ClasificacionCamasDto;
 import essalud.gcpp.essaludgcppbackend.serviceinterfaz.TablasHomolagadasService;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -39,6 +37,19 @@ public class TablasHomologadasController {
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public List<Map<String, Object>> queryTHCAMA(@PathVariable String codcas) {
         return THS.queryTHCAMA(codcas);
+    }
+
+    ///clasificar camas
+    @PostMapping("/clasificar-cama")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ADMIN_RED', 'USER')")
+    public void clasificarCama(@RequestBody ClasificacionCamasDto clasificacion) {
+        THS.insertClasificacionCamas(clasificacion);
+    }
+
+    @PutMapping("update-clasificacion-camas")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'ADMIN_RED', 'USER')")
+    public  void updateClasificacionCamas(@RequestBody ClasificacionCamasDto clasificacion) {
+        THS.updateClasificacionCamas(clasificacion);
     }
 
     /// servicio

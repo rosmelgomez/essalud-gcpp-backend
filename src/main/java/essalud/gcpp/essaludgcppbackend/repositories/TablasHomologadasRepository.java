@@ -82,14 +82,19 @@ public class TablasHomologadasRepository {
 	public List<Map<String, Object>> queryTHCAMA(String codcas) {
 		// String tabla ="dssge.dw_homologacion_camas";
 		String sql = """
-				SELECT
-				cam.*,
-				cas.cenasides,
-				serv.servhosdes
-				FROM dwsge.sgss_hmcam10 cam
-				JOIN dwsge.sgss_cmcas10 cas ON cam.cenasicod = cas.cenasicod
-				JOIN dwsge.sgss_cmsho10 serv ON cam.servhoscod = serv.servhoscod
-				WHERE  cam.cenasicod = ?""";
+			SELECT
+			cam.*,
+			cas.cenasides,
+			cma.arehosdes,
+			serv.servhosdes
+			FROM dwsge.sgss_hmcam10 cam
+			LEFT JOIN dwsge.sgss_cmcas10 cas ON cam.cenasicod = cas.cenasicod
+			LEFT JOIN dwsge.sgss_cmaho10 cma ON cam.arehoscod = cma.arehoscod
+			LEFT JOIN dwsge.sgss_cmsho10 serv ON cam.servhoscod = serv.servhoscod
+			WHERE cam.tipcamcod IN ('1','2','4')
+			AND cam.camestregcod = '1'
+			AND cam.camflgfun = '0'
+			AND cam.cenasicod = ?""";
 		return secondJdbcTemplate.queryForList(sql, codcas);
 	}
 
