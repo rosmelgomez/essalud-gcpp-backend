@@ -8,7 +8,7 @@ import lombok.*;
 @Data
 public class ClasificacionCamasDto {
     private Integer id;
-    private String codcas;
+    private String cenasicod;
     private String camcod;
     private String arehoscod;
     private String habcod;

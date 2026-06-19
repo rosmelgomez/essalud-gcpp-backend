@@ -19,7 +19,7 @@ public class TablasHomologadasController {
     }
 
     ///Tabla Homologada Emergencia
-    @GetMapping("queryTHE/{codcas}")
+    @GetMapping("/queryTHE/{codcas}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public List<Map<String, Object>> queryTHE(@PathVariable String codcas) {
         return THS.queryTHE(codcas);
@@ -46,7 +46,7 @@ public class TablasHomologadasController {
         THS.insertClasificacionCamas(clasificacion);
     }
 
-    @PutMapping("update-clasificacion-camas")
+    @PutMapping("/update-clasificacion-cama")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'ADMIN_RED', 'USER')")
     public  void updateClasificacionCamas(@RequestBody ClasificacionCamasDto clasificacion) {
         THS.updateClasificacionCamas(clasificacion);

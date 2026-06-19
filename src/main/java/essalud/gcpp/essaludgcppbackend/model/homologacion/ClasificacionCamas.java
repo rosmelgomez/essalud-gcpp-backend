@@ -16,8 +16,8 @@ public class ClasificacionCamas {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "codcas", nullable = false)
-    private String codcas;
+    @Column(name = "cenasicod", nullable = false)
+    private String cenasicod;
 
         @Column(name = "camcod", nullable = false)
     private String camcod;

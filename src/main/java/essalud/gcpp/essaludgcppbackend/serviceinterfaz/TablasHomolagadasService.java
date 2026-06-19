@@ -50,7 +50,6 @@ public class TablasHomolagadasService {
             } else {
                 cam.put("id_clasificacion", null);
                 cam.put("descripcion_clasificacion", null);
-
             }
             new_cams.add(cam);
         }
@@ -61,28 +60,24 @@ public class TablasHomolagadasService {
     ///clasificar camas
     public void insertClasificacionCamas(ClasificacionCamasDto clasificacion) {
         ClasificacionCamas clasificacionCamas = new ClasificacionCamas();
+        insertUpdateClasificacionCamas(clasificacionCamas, clasificacion);
+    }
+
+    ///modificar clasificaciones por camas
+    public void updateClasificacionCamas(ClasificacionCamasDto clasificacion) {
+        CCR.findById(clasificacion.getId()).ifPresent(clasificacionCamas -> insertUpdateClasificacionCamas(clasificacionCamas, clasificacion));
+    }
+
+    /// agregar o modificar
+    private void insertUpdateClasificacionCamas(ClasificacionCamas clasificacionCamas, ClasificacionCamasDto clasificacion){
         clasificacionCamas.setCamcod(clasificacion.getCamcod());
         clasificacionCamas.setArehoscod(clasificacion.getArehoscod());
         clasificacionCamas.setHabcod(clasificacion.getHabcod());
         clasificacionCamas.setServhoscod(clasificacion.getServhoscod());
-        clasificacionCamas.setCodcas(clasificacion.getCodcas());
+        clasificacionCamas.setCenasicod(clasificacion.getCenasicod());
         clasificacionCamas.setDescripcion(clasificacion.getDescripcion());
         CCR.save(clasificacionCamas);
     }
-
-    public void updateClasificacionCamas(ClasificacionCamasDto clasificacion) {
-        ClasificacionCamas clasificacionCamas = CCR.findById(clasificacion.getId()).orElse(null);
-        if(clasificacionCamas!=null){
-            clasificacionCamas.setCamcod(clasificacion.getCamcod());
-            clasificacionCamas.setArehoscod(clasificacion.getArehoscod());
-            clasificacionCamas.setHabcod(clasificacion.getHabcod());
-            clasificacionCamas.setServhoscod(clasificacion.getServhoscod());
-            clasificacionCamas.setCodcas(clasificacion.getCodcas());
-            clasificacionCamas.setDescripcion(clasificacion.getDescripcion());
-            CCR.save(clasificacionCamas);
-        }
-    }
-
 
     /// servicio
     public List<Map<String, Object>> queryTHCAMASERV() {

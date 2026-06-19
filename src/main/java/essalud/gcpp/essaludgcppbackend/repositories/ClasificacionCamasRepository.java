@@ -11,10 +11,10 @@ public interface ClasificacionCamasRepository extends CrudRepository<Clasificaci
     @Query(value = """
         SELECT *
         FROM public.clasificacion_camas
-        WHERE codcas =:codcas
+        WHERE cenasicod =:cenasicod
         AND camcod =:camcod
         AND arehoscod =:arehoscod
         AND habcod =:habcod
         AND servhoscod =:servhoscod""", nativeQuery = true)
-    ClasificacionCamas getClasificacion(@Param("codcas") String codcas, @Param("camcod") String camcod, @Param("arehoscod") String arehoscod, @Param("habcod") String habcod, @Param("servhoscod") String servhoscod );
+    ClasificacionCamas getClasificacion(@Param("cenasicod") String cenasicod, @Param("camcod") String camcod, @Param("arehoscod") String arehoscod, @Param("habcod") String habcod, @Param("servhoscod") String servhoscod );
 }
