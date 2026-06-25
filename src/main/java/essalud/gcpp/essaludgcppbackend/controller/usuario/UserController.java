@@ -73,9 +73,8 @@ public class UserController {
 
     @PostMapping("/verifyPassword")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
-    public ResponseEntity<?> verifyPassword(@RequestBody UserLoginDto user) throws Exception {
+    public void verifyPassword(@RequestBody UserLoginDto user) throws Exception {
         authenticateUser(user.getUsername(), user.getPassword());
-        return  ResponseEntity.ok().body("password verified");
     }
 
     @PutMapping("/changePassword")

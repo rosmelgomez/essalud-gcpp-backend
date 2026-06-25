@@ -8,6 +8,7 @@ public class EssaludGcppBackendApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(EssaludGcppBackendApplication.class, args);
+
     }
 
 }
