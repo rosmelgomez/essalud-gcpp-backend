@@ -1,7 +1,7 @@
 package essalud.gcpp.essaludgcppbackend.controller.documentos;
 
 import essalud.gcpp.essaludgcppbackend.dtos.documento.VersionDocumentoDto;
-import essalud.gcpp.essaludgcppbackend.serviceinterfaz.documentos.VersionDocumentoService;
+import essalud.gcpp.essaludgcppbackend.service.documentos.VersionDocumentoService;
 import lombok.SneakyThrows;
 import org.apache.tika.Tika;
 import org.springframework.core.io.Resource;

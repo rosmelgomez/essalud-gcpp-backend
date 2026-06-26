@@ -1,6 +1,6 @@
 package essalud.gcpp.essaludgcppbackend.controller;
 
-import essalud.gcpp.essaludgcppbackend.serviceinterfaz.DashboardIQuirurgicasService;
+import essalud.gcpp.essaludgcppbackend.service.DashboardIQuirurgicasService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;

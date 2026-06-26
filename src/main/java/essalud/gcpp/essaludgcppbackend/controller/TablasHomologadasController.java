@@ -1,7 +1,7 @@
 package essalud.gcpp.essaludgcppbackend.controller;
 
 import essalud.gcpp.essaludgcppbackend.dtos.ClasificacionCamasDto;
-import essalud.gcpp.essaludgcppbackend.serviceinterfaz.TablasHomolagadasService;
+import essalud.gcpp.essaludgcppbackend.service.TablasHomolagadasService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,6 +46,7 @@ public class TablasHomologadasController {
         THS.insertClasificacionCamas(clasificacion);
     }
 
+    ///modificacion de la clasificacion de camas
     @PutMapping("/update-clasificacion-cama")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'ADMIN_RED', 'USER')")
     public  void updateClasificacionCamas(@RequestBody ClasificacionCamasDto clasificacion) {

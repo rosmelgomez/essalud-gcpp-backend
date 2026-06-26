@@ -1,6 +1,6 @@
 package essalud.gcpp.essaludgcppbackend.controller;
 
-import essalud.gcpp.essaludgcppbackend.serviceinterfaz.EstablecimientosAsistencialesService;
+import essalud.gcpp.essaludgcppbackend.service.EstablecimientosAsistencialesService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

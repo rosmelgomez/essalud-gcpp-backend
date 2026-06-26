@@ -38,12 +38,12 @@ public class WebSecurityConfig {
 
     private final JwtRequestFilter jwtRequestFilter;
 
-    public WebSecurityConfig(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, UserDetailsService jwtUserDetailsService, JwtRequestFilter jwtRequestFilter) {
+    public WebSecurityConfig(JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
+            UserDetailsService jwtUserDetailsService, JwtRequestFilter jwtRequestFilter) {
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
         this.jwtUserDetailsService = jwtUserDetailsService;
         this.jwtRequestFilter = jwtRequestFilter;
     }
-
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) {
@@ -60,29 +60,28 @@ public class WebSecurityConfig {
         auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
     }
 
+    @SuppressWarnings("null")
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) {
         httpSecurity
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
-            .authorizeHttpRequests(authorizeRequests ->
-                authorizeRequests
-                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                                .requestMatchers("/login").permitAll()
-                                .requestMatchers("/solicitud/register").permitAll()
-                                .requestMatchers("/user/getUserByDni/**").permitAll()
-                                .requestMatchers("/establecimiento/getRedes", "/establecimiento/getRedesWithCentros").permitAll()
-                                .anyRequest().authenticated()
-                ).exceptionHandling(authentication ->
-                        authentication.authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                )
-                .formLogin(AbstractHttpConfigurer::disable
-                )
-                //.logout(AbstractHttpConfigurer::disable
-                //)
-                .sessionManagement(sessionManagement ->
-                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                ).addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+                .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/solicitud/register").permitAll()
+                        .requestMatchers("/user/getUserByDni/**").permitAll()
+                        .requestMatchers("/establecimiento/getRedes", "/establecimiento/getRedesWithCentros")
+                        .permitAll()
+                        .anyRequest().authenticated())
+                .exceptionHandling(
+                        authentication -> authentication.authenticationEntryPoint(jwtAuthenticationEntryPoint))
+                .formLogin(AbstractHttpConfigurer::disable)
+                // .logout(AbstractHttpConfigurer::disable
+                // )
+                .sessionManagement(
+                        sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }
@@ -92,7 +91,8 @@ public class WebSecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(allowedOrigins);
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With", "Accept", "Origin"));
+        configuration
+                .setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With", "Accept", "Origin"));
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

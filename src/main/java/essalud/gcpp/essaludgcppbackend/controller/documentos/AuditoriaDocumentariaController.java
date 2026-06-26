@@ -1,6 +1,6 @@
 package essalud.gcpp.essaludgcppbackend.controller.documentos;
 
-import essalud.gcpp.essaludgcppbackend.serviceinterfaz.documentos.AuditoriaDocumentariaService;
+import essalud.gcpp.essaludgcppbackend.service.documentos.AuditoriaDocumentariaService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

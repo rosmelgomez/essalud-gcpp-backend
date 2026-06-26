@@ -1,7 +1,7 @@
 package essalud.gcpp.essaludgcppbackend.controller.documentos;
 
 import essalud.gcpp.essaludgcppbackend.dtos.documento.SolicitudAprobacionDocumentoDto;
-import essalud.gcpp.essaludgcppbackend.serviceinterfaz.documentos.SolicitudAprobacionDocumentoService;
+import essalud.gcpp.essaludgcppbackend.service.documentos.SolicitudAprobacionDocumentoService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 

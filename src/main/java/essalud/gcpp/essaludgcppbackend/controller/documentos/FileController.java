@@ -4,7 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import essalud.gcpp.essaludgcppbackend.serviceinterfaz.documentos.FileService;
+import essalud.gcpp.essaludgcppbackend.service.documentos.FileService;
 
 @RestController
 @RequestMapping("/file")

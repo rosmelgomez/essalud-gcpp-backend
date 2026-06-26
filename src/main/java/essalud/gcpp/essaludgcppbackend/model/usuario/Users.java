@@ -50,7 +50,7 @@ public class Users {
     @Column(name = "date_creation", nullable = false)
     private LocalDateTime date_creation;
 
-    @Column(name = "date_update", nullable = false)
+    @Column(name = "date_update")
     private LocalDateTime date_update;
 
     @Column(name = "flag", nullable = false)

@@ -19,7 +19,7 @@ public class ClasificacionCamas {
     @Column(name = "cenasicod", nullable = false)
     private String cenasicod;
 
-        @Column(name = "camcod", nullable = false)
+    @Column(name = "camcod", nullable = false)
     private String camcod;
 
     @Column(name = "arehoscod", nullable = false)

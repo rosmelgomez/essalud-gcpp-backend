@@ -4,7 +4,7 @@ import essalud.gcpp.essaludgcppbackend.dtos.LogFilterDto;
 import essalud.gcpp.essaludgcppbackend.dtos.LogUsersDto;
 import essalud.gcpp.essaludgcppbackend.model.usuario.Users;
 import essalud.gcpp.essaludgcppbackend.repositories.usuario.UsersRepository;
-import essalud.gcpp.essaludgcppbackend.serviceinterfaz.LogService;
+import essalud.gcpp.essaludgcppbackend.service.LogService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,6 @@
 package essalud.gcpp.essaludgcppbackend.controller;
 
-import essalud.gcpp.essaludgcppbackend.serviceinterfaz.TramasService;
+import essalud.gcpp.essaludgcppbackend.service.TramasService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

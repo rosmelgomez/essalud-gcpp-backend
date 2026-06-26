@@ -80,7 +80,7 @@ public class TablasHomologadasRepository {
 
 	/// Tabla homologada camas
 	public List<Map<String, Object>> queryTHCAMA(String codcas) {
-		// String tabla ="dssge.dw_homologacion_camas";
+
 		String sql = """
 			SELECT
 			cam.*,

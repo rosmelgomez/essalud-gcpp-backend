@@ -24,6 +24,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.annotation.PostConstruct;
+
 @Component
 public class JwtTokenUtil implements Serializable {
 
@@ -71,23 +72,25 @@ public class JwtTokenUtil implements Serializable {
         }
     }
 
-    /**
-     * Genera una clave secreta aleatoria en formato Base64
-     */
+
+    //Genera una clave secreta aleatoria en formato Base64
     private String generateRandomSecretInBase64() {
         byte[] key = new byte[SECRET_KEY_SIZE];
         new SecureRandom().nextBytes(key);
         return Base64.getEncoder().encodeToString(key);
     }
 
-    //recuperar el nombre de usuario del token jwt
+    // recuperar el nombre de usuario del token jwt
+    @SuppressWarnings("null")
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
     }
 
-    //recuperar la fecha de caducidad del token jwt
+    // recuperar la fecha de caducidad del token jwt
+    @SuppressWarnings("null")
     public Date getExpirationDateFromToken(String token) {
-        return getClaimFromToken(token, Claims::getExpiration);}
+        return getClaimFromToken(token, Claims::getExpiration);
+    }
 
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = getAllClaimsFromToken(token);
@@ -107,12 +110,13 @@ public class JwtTokenUtil implements Serializable {
         }
     }
 
-    //comprobar si el token ha caducado
+    // comprobar si el token ha caducado
     private Boolean isTokenExpired(String token) {
         final Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
     }
-    //generear token
+
+    // generear token
     public String generateApiToken(UserDetails userDetails) {
         return generateToken(userDetails, apiTokenValidity, API_TOKEN_TYPE);
     }
@@ -121,10 +125,12 @@ public class JwtTokenUtil implements Serializable {
         return generateToken(userDetails, accessTokenValidity, ACCESS_TOKEN_TYPE);
     }
 
+    @SuppressWarnings("null")
     private String generateToken(UserDetails userDetails, long validityMs, String tokenType) {
         Map<String, Object> claims = new HashMap<>();
         claims.put(AUTHORITIES_CLAIM,
-            userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(",")));
+                userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority)
+                        .collect(Collectors.joining(",")));
         claims.put(TOKEN_TYPE_CLAIM, tokenType);
         claims.put(Claims.ID, UUID.randomUUID().toString());
         return doGenerateToken(claims, userDetails.getUsername(), validityMs);
@@ -145,10 +151,11 @@ public class JwtTokenUtil implements Serializable {
         byte[] signingKey = resolveSigningKey(tokenType);
 
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-            .setIssuer(issuer)
+                .setIssuer(issuer)
                 .setExpiration(new Date(System.currentTimeMillis() + validityMs))
-            .signWith(SignatureAlgorithm.HS512, signingKey).compact();
+                .signWith(SignatureAlgorithm.HS512, signingKey).compact();
     }
+
     public Boolean validateAccessToken(String token, UserDetails userDetails) {
         return validateToken(token, userDetails, ACCESS_TOKEN_TYPE);
     }
@@ -157,7 +164,7 @@ public class JwtTokenUtil implements Serializable {
         return validateToken(token, userDetails, API_TOKEN_TYPE);
     }
 
-    //validar token
+    // validar token
     private Boolean validateToken(String token, UserDetails userDetails, String expectedType) {
         final Claims claims;
         try {
@@ -171,10 +178,10 @@ public class JwtTokenUtil implements Serializable {
         final String tokenIssuer = claims.getIssuer();
 
         return username != null
-            && username.equals(userDetails.getUsername())
-            && !isTokenExpired(token)
-            && expectedType.equals(tokenType)
-            && issuer.equals(tokenIssuer);
+                && username.equals(userDetails.getUsername())
+                && !isTokenExpired(token)
+                && expectedType.equals(tokenType)
+                && issuer.equals(tokenIssuer);
     }
 
     private Claims parseClaimsWithKey(String token, byte[] signingKey) {

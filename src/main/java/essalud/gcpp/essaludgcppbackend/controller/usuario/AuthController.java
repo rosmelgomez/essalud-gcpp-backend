@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import essalud.gcpp.essaludgcppbackend.dtos.usuario.UserLoginDto;
 import essalud.gcpp.essaludgcppbackend.security.JwtTokenUtil;
-import essalud.gcpp.essaludgcppbackend.serviceimplements.JwtUserDetailsService;
+import essalud.gcpp.essaludgcppbackend.service_implements.JwtUserDetailsService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 

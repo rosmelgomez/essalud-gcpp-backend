@@ -3,9 +3,8 @@ package essalud.gcpp.essaludgcppbackend.controller.usuario;
 import essalud.gcpp.essaludgcppbackend.dtos.usuario.RolDto;
 import essalud.gcpp.essaludgcppbackend.dtos.usuario.UserLoginDto;
 import essalud.gcpp.essaludgcppbackend.dtos.usuario.UsersDto;
-import essalud.gcpp.essaludgcppbackend.serviceinterfaz.usuario.RolService;
-import essalud.gcpp.essaludgcppbackend.serviceinterfaz.usuario.UsersService;
-import org.springframework.http.ResponseEntity;
+import essalud.gcpp.essaludgcppbackend.service.usuario.RolService;
+import essalud.gcpp.essaludgcppbackend.service.usuario.UsersService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -24,7 +23,8 @@ public class UserController {
     private final UsersService usersService;
     private final RolService rolService;
 
-    public UserController(AuthenticationManager authenticationManager, UsersService usersService,  RolService rolService) {
+    public UserController(AuthenticationManager authenticationManager, UsersService usersService,
+            RolService rolService) {
         this.authenticationManager = authenticationManager;
         this.usersService = usersService;
         this.rolService = rolService;
@@ -33,7 +33,7 @@ public class UserController {
     @GetMapping("/getUser/{username}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public UsersDto getUserByUsername(@PathVariable String username) {
-        return  usersService.getUserByUsernameOrEmail(username);
+        return usersService.getUserByUsernameOrEmail(username);
     }
 
     @GetMapping("/me")
@@ -44,7 +44,7 @@ public class UserController {
 
     @GetMapping("/getUserByDni/{dni}")
     public UsersDto getUser(@PathVariable String dni) {
-        return  usersService.getUserByDni(dni);
+        return usersService.getUserByDni(dni);
     }
 
     @PostMapping("/register")
@@ -67,7 +67,7 @@ public class UserController {
 
     @DeleteMapping("/deleteUser/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public void deleteUser(@PathVariable Integer id ) {
+    public void deleteUser(@PathVariable Integer id) {
         usersService.deleteUser(id);
     }
 
@@ -86,9 +86,9 @@ public class UserController {
     private void authenticateUser(String username, String password) throws Exception {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        }catch(DisabledException e) {
+        } catch (DisabledException e) {
             throw new Exception("USER_DISABLED", e);
-        }catch(BadCredentialsException e) {
+        } catch (BadCredentialsException e) {
             throw new Exception("INVALID_CREDENTIALS", e);
         }
 
@@ -105,7 +105,6 @@ public class UserController {
     public List<UsersDto> getUsersByCodcas(@PathVariable String codcas) {
         return usersService.getUsersByCodcas(codcas);
     }
-
 
     @GetMapping("/getUsersById/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
