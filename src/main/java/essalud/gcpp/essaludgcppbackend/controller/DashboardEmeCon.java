@@ -13,10 +13,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/emergencia")
-public class DashboardEmeController {
+public class DashboardEmeCon {
 
     private final DashboardEmeServ DES;
-    public DashboardEmeController(DashboardEmeServ DES) {
+    public DashboardEmeCon(DashboardEmeServ DES) {
         this.DES = DES;
     }
 

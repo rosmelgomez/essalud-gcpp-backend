@@ -11,11 +11,11 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/auditoria-documental")
-public class AuditoriaDocumentariaController {
+public class AuditoriaDocumentariaCon {
 
     private final AuditoriaDocumentariaServ auditoriaDocumentariaServ;
 
-    public AuditoriaDocumentariaController(AuditoriaDocumentariaServ auditoriaDocumentariaServ) {
+    public AuditoriaDocumentariaCon(AuditoriaDocumentariaServ auditoriaDocumentariaServ) {
         this.auditoriaDocumentariaServ = auditoriaDocumentariaServ;
     }
 

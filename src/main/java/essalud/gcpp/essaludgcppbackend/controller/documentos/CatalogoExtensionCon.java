@@ -9,11 +9,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("catalogo-extension")
-public class CatalogoExtensionController {
+public class CatalogoExtensionCon {
 
     private final CatalogoExtensionServ ces;
 
-    public CatalogoExtensionController(CatalogoExtensionServ ces) {
+    public CatalogoExtensionCon(CatalogoExtensionServ ces) {
         this.ces = ces;
     }
 

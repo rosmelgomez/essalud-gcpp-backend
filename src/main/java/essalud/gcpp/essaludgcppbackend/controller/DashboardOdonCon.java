@@ -13,11 +13,11 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/odon")
-public class DashboardOdonController {
+public class DashboardOdonCon {
 
     private final DashboardOdonServ DOS;
 
-    public DashboardOdonController(DashboardOdonServ DOS) {
+    public DashboardOdonCon(DashboardOdonServ DOS) {
         this.DOS = DOS;
     }
 

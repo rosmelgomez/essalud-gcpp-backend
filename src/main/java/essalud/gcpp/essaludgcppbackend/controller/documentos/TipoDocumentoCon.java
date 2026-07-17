@@ -10,10 +10,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("tipo-documento")
-public class TipoDocumentoController {
+public class TipoDocumentoCon {
 
     private final TipoDocumentoServ tds;
-    public TipoDocumentoController(TipoDocumentoServ tds) {
+    public TipoDocumentoCon(TipoDocumentoServ tds) {
         this.tds = tds;
     }
 

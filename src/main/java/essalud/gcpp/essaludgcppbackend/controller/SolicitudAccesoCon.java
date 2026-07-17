@@ -11,11 +11,11 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/solicitud")
-public class SolicitudAccesoController {
+public class SolicitudAccesoCon {
 
     private final SolicitudAccesoServ solicitudAccesoServ;
 
-    public SolicitudAccesoController(SolicitudAccesoServ solicitudAccesoServ) {
+    public SolicitudAccesoCon(SolicitudAccesoServ solicitudAccesoServ) {
         this.solicitudAccesoServ = solicitudAccesoServ;
     }
 

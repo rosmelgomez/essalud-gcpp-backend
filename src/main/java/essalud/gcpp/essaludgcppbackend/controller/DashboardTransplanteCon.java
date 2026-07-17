@@ -13,10 +13,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/transplante")
-public class DashboardTransplanteController {
+public class DashboardTransplanteCon {
 
     private final DashboardTransplanteServ service;
-    public DashboardTransplanteController(DashboardTransplanteServ service) {
+    public DashboardTransplanteCon(DashboardTransplanteServ service) {
         this.service = service;
     }
 

@@ -13,10 +13,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/intervenciones-q")
-public class DashboardIQuirurgicasController {
+public class DashboardIQuirurgicasCon {
     private final DashboardIQuirurgicasServ diqs;
 
-    public DashboardIQuirurgicasController(DashboardIQuirurgicasServ diqs) {
+    public DashboardIQuirurgicasCon(DashboardIQuirurgicasServ diqs) {
         this.diqs = diqs;
     }
 

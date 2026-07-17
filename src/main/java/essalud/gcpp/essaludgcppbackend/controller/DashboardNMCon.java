@@ -14,9 +14,9 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/no-medica")
-public class DashboardNMController {
+public class DashboardNMCon {
     private final DashboardNMServ DNMR;
-    public DashboardNMController(DashboardNMServ DNMR) {
+    public DashboardNMCon(DashboardNMServ DNMR) {
         this.DNMR = DNMR;
     }
 

@@ -16,10 +16,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("version-documento")
-public class VersionDocumentoController {
+public class VersionDocumentoCon {
 
     private final VersionDocumentoServ versionDocumentoServ;
-    public VersionDocumentoController(VersionDocumentoServ versionDocumentoServ) {
+    public VersionDocumentoCon(VersionDocumentoServ versionDocumentoServ) {
         this.versionDocumentoServ = versionDocumentoServ;
     }
 

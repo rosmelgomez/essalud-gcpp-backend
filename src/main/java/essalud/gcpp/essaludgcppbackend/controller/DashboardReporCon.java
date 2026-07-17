@@ -11,10 +11,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/reporteador")
-public class DashboardReporController {
+public class DashboardReporCon {
 
     private final DashboardReporServ DRS;
-    public DashboardReporController(DashboardReporServ DRS) {
+    public DashboardReporCon(DashboardReporServ DRS) {
         this.DRS = DRS;
     }
 

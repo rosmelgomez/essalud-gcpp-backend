@@ -12,10 +12,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/tramas")
-public class TramasController {
+public class TramasCon {
 
     private final TramasServ tramasServ;
-    public TramasController(TramasServ tramasServ) {
+    public TramasCon(TramasServ tramasServ) {
         this.tramasServ = tramasServ;
     }
 

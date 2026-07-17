@@ -8,10 +8,10 @@ import essalud.gcpp.essaludgcppbackend.service.documentos.FileServ;
 
 @RestController
 @RequestMapping("/file")
-public class FileController {
+public class FileCon {
     private final FileServ fileServ;
 
-    public FileController(FileServ fileServ) {
+    public FileCon(FileServ fileServ) {
         this.fileServ = fileServ;
     }
 

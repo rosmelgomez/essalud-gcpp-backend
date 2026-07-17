@@ -13,11 +13,11 @@ import essalud.gcpp.essaludgcppbackend.service.DashboardHospServ;
 
 @RestController
 @RequestMapping("/hospitalizacion")
-public class DashboardHospController {
+public class DashboardHospCon {
 
     private final DashboardHospServ dhs;
 
-    public DashboardHospController(DashboardHospServ dhs) {
+    public DashboardHospCon(DashboardHospServ dhs) {
         this.dhs = dhs;
     }
 

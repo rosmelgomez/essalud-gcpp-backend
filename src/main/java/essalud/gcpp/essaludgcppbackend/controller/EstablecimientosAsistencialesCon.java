@@ -14,11 +14,11 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/establecimiento")
-public class EstablecimientosAsistencialesController {
+public class EstablecimientosAsistencialesCon {
 
     private final EstablecimientosAsistencialesServ EAS;
 
-    public EstablecimientosAsistencialesController(EstablecimientosAsistencialesServ EAS) {
+    public EstablecimientosAsistencialesCon(EstablecimientosAsistencialesServ EAS) {
         this.EAS = EAS;
     }
 

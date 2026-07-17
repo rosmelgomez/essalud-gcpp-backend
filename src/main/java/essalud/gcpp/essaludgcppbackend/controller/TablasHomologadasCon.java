@@ -11,10 +11,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/tablas-homologadas")
-public class TablasHomologadasController {
+public class TablasHomologadasCon {
 
     private final TablasHomolagadasServ THS;
-    public TablasHomologadasController(TablasHomolagadasServ THS) {
+    public TablasHomologadasCon(TablasHomolagadasServ THS) {
         this.THS = THS;
     }
 

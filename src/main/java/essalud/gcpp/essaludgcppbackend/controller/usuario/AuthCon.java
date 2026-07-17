@@ -23,7 +23,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
-public class AuthController {
+public class AuthCon {
 
     @Value("${app.security.cookie.access.name}")
     private String accessCookieName;
@@ -44,8 +44,8 @@ public class AuthController {
     private final JwtTokenUtil jwtTokenUtil;
     private final JwtUserDetailsServ jwtUserDetailsServ;
 
-    public AuthController(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil,
-            JwtUserDetailsServ jwtUserDetailsServ) {
+    public AuthCon(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil,
+                   JwtUserDetailsServ jwtUserDetailsServ) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
         this.jwtUserDetailsServ = jwtUserDetailsServ;

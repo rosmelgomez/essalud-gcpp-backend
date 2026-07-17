@@ -10,10 +10,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/solicitud-aprobacion-documento")
-public class SolicitudAprobacionDocumentoController {
+public class SolicitudAprobacionDocumentoCon {
 
     private final SolicitudAprobacionDocumentoServ sads;
-    public SolicitudAprobacionDocumentoController(SolicitudAprobacionDocumentoServ sads) {
+    public SolicitudAprobacionDocumentoCon(SolicitudAprobacionDocumentoServ sads) {
         this.sads = sads;
     }
 

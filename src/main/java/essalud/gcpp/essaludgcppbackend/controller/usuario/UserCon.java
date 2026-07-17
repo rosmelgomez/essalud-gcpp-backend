@@ -18,14 +18,14 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/user")
-public class UserController {
+public class UserCon {
 
     private final AuthenticationManager authenticationManager;
     private final UsersServ usersServ;
     private final RolServ rolServ;
 
-    public UserController(AuthenticationManager authenticationManager, UsersServ usersServ,
-            RolServ rolServ) {
+    public UserCon(AuthenticationManager authenticationManager, UsersServ usersServ,
+                   RolServ rolServ) {
         this.authenticationManager = authenticationManager;
         this.usersServ = usersServ;
         this.rolServ = rolServ;

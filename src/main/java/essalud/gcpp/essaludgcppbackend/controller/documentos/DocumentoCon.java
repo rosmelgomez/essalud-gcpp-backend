@@ -10,10 +10,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/documento")
-public class DocumentoController {
+public class DocumentoCon {
 
     private final DocumentoServ documentoServ;
-    public DocumentoController(DocumentoServ documentoServ) {
+    public DocumentoCon(DocumentoServ documentoServ) {
         this.documentoServ = documentoServ;
     }
 

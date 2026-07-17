@@ -13,10 +13,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/medica")
-public class DashboardMController {
+public class DashboardMCon {
 
     private final DashboardMServ DMS;
-    public DashboardMController(DashboardMServ DMS) {
+    public DashboardMCon(DashboardMServ DMS) {
         this.DMS = DMS;
     }
 

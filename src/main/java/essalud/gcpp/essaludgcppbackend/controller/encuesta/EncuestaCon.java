@@ -9,14 +9,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/encuesta")
-public class EncuestaController {
+public class EncuestaCon {
     private final ModuloServ MS;
     private final CategoriaServ CS;
     private final SubCategoriaServ SCS;
     private final VariableServ VARS;
     private final EncuestaServ ES;
 
-    public EncuestaController(ModuloServ MS, CategoriaServ CS, SubCategoriaServ SCS, VariableServ VARS, EncuestaServ ES) {
+    public EncuestaCon(ModuloServ MS, CategoriaServ CS, SubCategoriaServ SCS, VariableServ VARS, EncuestaServ ES) {
         this.MS = MS;
         this.CS = CS;
         this.SCS = SCS;

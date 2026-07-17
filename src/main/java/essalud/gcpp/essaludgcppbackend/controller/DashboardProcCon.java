@@ -12,11 +12,11 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/procedimiento")
-public class DashboardProcController {
+public class DashboardProcCon {
 
     private final DashboardProcServ dps;
 
-    public DashboardProcController(DashboardProcServ dps) {
+    public DashboardProcCon(DashboardProcServ dps) {
         this.dps = dps;
     }
 
