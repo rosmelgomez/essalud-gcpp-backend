@@ -1,7 +1,7 @@
 package essalud.gcpp.essaludgcppbackend.controller.documentos;
 
 import essalud.gcpp.essaludgcppbackend.dtos.documento.DocumentoDto;
-import essalud.gcpp.essaludgcppbackend.service.documentos.DocumentoService;
+import essalud.gcpp.essaludgcppbackend.service.documentos.DocumentoServ;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,56 +12,56 @@ import java.util.Map;
 @RequestMapping("/documento")
 public class DocumentoController {
 
-    private final DocumentoService documentoService;
-    public DocumentoController(DocumentoService documentoService) {
-        this.documentoService = documentoService;
+    private final DocumentoServ documentoServ;
+    public DocumentoController(DocumentoServ documentoServ) {
+        this.documentoServ = documentoServ;
     }
 
     @PostMapping("/save")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
     public void saveDocumento(@RequestBody DocumentoDto documentoDto){
-        documentoService.saveDocumento(documentoDto);
+        documentoServ.saveDocumento(documentoDto);
     }
 
     @GetMapping("/getall")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
     public List<Map<String, Object>> getDocumentos(){
-        return documentoService.getDocumentos();
+        return documentoServ.getDocumentos();
     }
 
     @GetMapping("/getdocbycodred/{codred}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
     public List<Map<String, Object>> getDocumentosByCodred(@PathVariable String codred){
-        return documentoService.getDocumentosByCodred(codred);
+        return documentoServ.getDocumentosByCodred(codred);
     }
 
     @GetMapping("/getdocbycodcas/{codcas}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
     public List<Map<String, Object>> getDocumentosByCodcas(@PathVariable String codcas){
-        return documentoService.getDocumentosByCodcas(codcas);
+        return documentoServ.getDocumentosByCodcas(codcas);
     }
 
     @GetMapping("/getdocbyuser/{iduser}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
     public List<Map<String, Object>> getDocumentosUser(@PathVariable Integer iduser){
-        return documentoService.getDocumentosByUser(iduser);
+        return documentoServ.getDocumentosByUser(iduser);
     }
 
     @GetMapping("/getdocbyiddoc/{iddoc}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
     public DocumentoDto  getDocumentosByIdDoc(@PathVariable Integer iddoc){
-        return documentoService.getDocumentoById(iddoc);
+        return documentoServ.getDocumentoById(iddoc);
     }
 
     @GetMapping("/getdocbyidversion/{idversion}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
     public DocumentoDto getDocumentosByIdVersion(@PathVariable Integer idversion){
-        return documentoService.getDocumentoByIdVersion(idversion);
+        return documentoServ.getDocumentoByIdVersion(idversion);
     }
 
     @DeleteMapping("/delete/{id}/{userid}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
     public void deleteDocumento(@PathVariable Integer id, @PathVariable Integer userid){
-        documentoService.deleteDocumento(id, userid);
+        documentoServ.deleteDocumento(id, userid);
     }
 }

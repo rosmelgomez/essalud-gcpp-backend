@@ -1,7 +1,7 @@
 package essalud.gcpp.essaludgcppbackend.controller;
 
 import essalud.gcpp.essaludgcppbackend.dtos.ReporteadorDto;
-import essalud.gcpp.essaludgcppbackend.service.DashboardReporService;
+import essalud.gcpp.essaludgcppbackend.service.DashboardReporServ;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +13,8 @@ import java.util.Map;
 @RequestMapping("/reporteador")
 public class DashboardReporController {
 
-    private final DashboardReporService DRS;
-    public DashboardReporController(DashboardReporService DRS) {
+    private final DashboardReporServ DRS;
+    public DashboardReporController(DashboardReporServ DRS) {
         this.DRS = DRS;
     }
 

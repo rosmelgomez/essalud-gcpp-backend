@@ -1,6 +1,6 @@
 package essalud.gcpp.essaludgcppbackend.controller;
 
-import essalud.gcpp.essaludgcppbackend.service.EstablecimientosAsistencialesService;
+import essalud.gcpp.essaludgcppbackend.service.EstablecimientosAsistencialesServ;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,9 +16,9 @@ import java.util.Map;
 @RequestMapping("/establecimiento")
 public class EstablecimientosAsistencialesController {
 
-    private final EstablecimientosAsistencialesService EAS;
+    private final EstablecimientosAsistencialesServ EAS;
 
-    public EstablecimientosAsistencialesController(EstablecimientosAsistencialesService EAS) {
+    public EstablecimientosAsistencialesController(EstablecimientosAsistencialesServ EAS) {
         this.EAS = EAS;
     }
 

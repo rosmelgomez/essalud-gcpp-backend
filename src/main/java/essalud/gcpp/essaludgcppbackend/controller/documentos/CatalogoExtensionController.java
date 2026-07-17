@@ -1,7 +1,7 @@
 package essalud.gcpp.essaludgcppbackend.controller.documentos;
 
 import essalud.gcpp.essaludgcppbackend.dtos.documento.CatalogoExtensionDto;
-import essalud.gcpp.essaludgcppbackend.service.documentos.CatalogoExtensionService;
+import essalud.gcpp.essaludgcppbackend.service.documentos.CatalogoExtensionServ;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,9 +11,9 @@ import java.util.List;
 @RequestMapping("catalogo-extension")
 public class CatalogoExtensionController {
 
-    private final CatalogoExtensionService ces;
+    private final CatalogoExtensionServ ces;
 
-    public CatalogoExtensionController(CatalogoExtensionService ces) {
+    public CatalogoExtensionController(CatalogoExtensionServ ces) {
         this.ces = ces;
     }
 

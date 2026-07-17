@@ -1,6 +1,6 @@
 package essalud.gcpp.essaludgcppbackend.controller;
 
-import essalud.gcpp.essaludgcppbackend.service.DashboardIQuirurgicasService;
+import essalud.gcpp.essaludgcppbackend.service.DashboardIQuirurgicasServ;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,9 +14,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/intervenciones-q")
 public class DashboardIQuirurgicasController {
-    private final DashboardIQuirurgicasService diqs;
+    private final DashboardIQuirurgicasServ diqs;
 
-    public DashboardIQuirurgicasController(DashboardIQuirurgicasService diqs) {
+    public DashboardIQuirurgicasController(DashboardIQuirurgicasServ diqs) {
         this.diqs = diqs;
     }
 

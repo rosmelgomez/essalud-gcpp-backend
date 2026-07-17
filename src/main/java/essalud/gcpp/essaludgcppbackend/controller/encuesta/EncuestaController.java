@@ -10,13 +10,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/encuesta")
 public class EncuestaController {
-    private final ModuloService MS;
-    private final CategoriaService CS;
-    private final SubCategoriaService SCS;
-    private final VariableService VARS;
-    private final EncuestaService ES;
+    private final ModuloServ MS;
+    private final CategoriaServ CS;
+    private final SubCategoriaServ SCS;
+    private final VariableServ VARS;
+    private final EncuestaServ ES;
 
-    public EncuestaController(ModuloService MS, CategoriaService CS, SubCategoriaService SCS, VariableService VARS, EncuestaService ES) {
+    public EncuestaController(ModuloServ MS, CategoriaServ CS, SubCategoriaServ SCS, VariableServ VARS, EncuestaServ ES) {
         this.MS = MS;
         this.CS = CS;
         this.SCS = SCS;

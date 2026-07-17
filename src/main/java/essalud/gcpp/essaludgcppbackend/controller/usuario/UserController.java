@@ -3,8 +3,8 @@ package essalud.gcpp.essaludgcppbackend.controller.usuario;
 import essalud.gcpp.essaludgcppbackend.dtos.usuario.RolDto;
 import essalud.gcpp.essaludgcppbackend.dtos.usuario.UserLoginDto;
 import essalud.gcpp.essaludgcppbackend.dtos.usuario.UsersDto;
-import essalud.gcpp.essaludgcppbackend.service.usuario.RolService;
-import essalud.gcpp.essaludgcppbackend.service.usuario.UsersService;
+import essalud.gcpp.essaludgcppbackend.service.usuario.RolServ;
+import essalud.gcpp.essaludgcppbackend.service.usuario.UsersServ;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -14,61 +14,62 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
 
     private final AuthenticationManager authenticationManager;
-    private final UsersService usersService;
-    private final RolService rolService;
+    private final UsersServ usersServ;
+    private final RolServ rolServ;
 
-    public UserController(AuthenticationManager authenticationManager, UsersService usersService,
-            RolService rolService) {
+    public UserController(AuthenticationManager authenticationManager, UsersServ usersServ,
+            RolServ rolServ) {
         this.authenticationManager = authenticationManager;
-        this.usersService = usersService;
-        this.rolService = rolService;
+        this.usersServ = usersServ;
+        this.rolServ = rolServ;
     }
 
     @GetMapping("/getUser/{username}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public UsersDto getUserByUsername(@PathVariable String username) {
-        return usersService.getUserByUsernameOrEmail(username);
+        return usersServ.getUserByUsernameOrEmail(username);
     }
 
     @GetMapping("/me")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public UsersDto getCurrentUser() {
-        return usersService.getUserByUsernameOrEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        return usersServ.getUserByUsernameOrEmail(Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getName());
     }
 
     @GetMapping("/getUserByDni/{dni}")
     public UsersDto getUser(@PathVariable String dni) {
-        return usersService.getUserByDni(dni);
+        return usersServ.getUserByDni(dni);
     }
 
     @PostMapping("/register")
     @PreAuthorize("hasAuthority('ADMIN')")
     public void saveUser(@RequestBody UsersDto user) {
-        usersService.saveUser(user);
+        usersServ.saveUser(user);
     }
 
     @GetMapping("/getUsers")
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<UsersDto> getUsers() {
-        return usersService.getAllUsers();
+        return usersServ.getAllUsers();
     }
 
     @PutMapping("/updateUser")
     @PreAuthorize("hasAuthority('ADMIN')")
     public void updateUser(@RequestBody UsersDto user) {
-        usersService.updateUser(user);
+        usersServ.updateUser(user);
     }
 
     @DeleteMapping("/deleteUser/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteUser(@PathVariable Integer id) {
-        usersService.deleteUser(id);
+        usersServ.deleteUser(id);
     }
 
     @PostMapping("/verifyPassword")
@@ -80,7 +81,7 @@ public class UserController {
     @PutMapping("/changePassword")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public void changePassword(@RequestBody UserLoginDto user) {
-        usersService.changePassword(user);
+        usersServ.changePassword(user);
     }
 
     private void authenticateUser(String username, String password) throws Exception {
@@ -97,25 +98,25 @@ public class UserController {
     @GetMapping("/getUsersByCodred/{code_red}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public List<UsersDto> getUserByCodred(@PathVariable String code_red) {
-        return usersService.getUsersByCod_red(code_red);
+        return usersServ.getUsersByCod_red(code_red);
     }
 
     @GetMapping("/getUsersByCodcas/{codcas}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public List<UsersDto> getUsersByCodcas(@PathVariable String codcas) {
-        return usersService.getUsersByCodcas(codcas);
+        return usersServ.getUsersByCodcas(codcas);
     }
 
     @GetMapping("/getUsersById/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public UsersDto getUsersById(@PathVariable Integer id) {
-        return usersService.getUserById(id);
+        return usersServ.getUserById(id);
     }
 
     @GetMapping("/getRoles")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public List<RolDto> getRoles() {
-        return rolService.getRols();
+        return rolServ.getRols();
     }
 
 }

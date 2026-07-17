@@ -1,6 +1,6 @@
 package essalud.gcpp.essaludgcppbackend.controller;
 
-import essalud.gcpp.essaludgcppbackend.service.DashboardTransplanteService;
+import essalud.gcpp.essaludgcppbackend.service.DashboardTransplanteServ;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +15,8 @@ import java.util.Map;
 @RequestMapping("/transplante")
 public class DashboardTransplanteController {
 
-    private final DashboardTransplanteService service;
-    public DashboardTransplanteController(DashboardTransplanteService service) {
+    private final DashboardTransplanteServ service;
+    public DashboardTransplanteController(DashboardTransplanteServ service) {
         this.service = service;
     }
 

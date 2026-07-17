@@ -1,7 +1,7 @@
 package essalud.gcpp.essaludgcppbackend.controller;
 
 import essalud.gcpp.essaludgcppbackend.dtos.ClasificacionCamasDto;
-import essalud.gcpp.essaludgcppbackend.service.TablasHomolagadasService;
+import essalud.gcpp.essaludgcppbackend.service.TablasHomolagadasServ;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,8 +13,8 @@ import java.util.Map;
 @RequestMapping("/tablas-homologadas")
 public class TablasHomologadasController {
 
-    private final TablasHomolagadasService THS;
-    public TablasHomologadasController(TablasHomolagadasService THS) {
+    private final TablasHomolagadasServ THS;
+    public TablasHomologadasController(TablasHomolagadasServ THS) {
         this.THS = THS;
     }
 

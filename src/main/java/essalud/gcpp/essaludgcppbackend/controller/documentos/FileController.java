@@ -4,21 +4,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import essalud.gcpp.essaludgcppbackend.service.documentos.FileService;
+import essalud.gcpp.essaludgcppbackend.service.documentos.FileServ;
 
 @RestController
 @RequestMapping("/file")
 public class FileController {
-    private final FileService fileService;
+    private final FileServ fileServ;
 
-    public FileController(FileService fileService) {
-        this.fileService = fileService;
+    public FileController(FileServ fileServ) {
+        this.fileServ = fileServ;
     }
 
     @GetMapping("/{name}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<byte[]> queryDMAMA(@PathVariable String name) {
-        return ResponseEntity.ok(fileService.findArchivo(name));
+        return ResponseEntity.ok(fileServ.findArchivo(name));
     }
 
 }

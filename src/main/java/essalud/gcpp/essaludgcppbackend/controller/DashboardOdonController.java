@@ -1,6 +1,6 @@
 package essalud.gcpp.essaludgcppbackend.controller;
 
-import essalud.gcpp.essaludgcppbackend.service.DashboardOdonService;
+import essalud.gcpp.essaludgcppbackend.service.DashboardOdonServ;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,9 +15,9 @@ import java.util.Map;
 @RequestMapping("/odon")
 public class DashboardOdonController {
 
-    private final DashboardOdonService DOS;
+    private final DashboardOdonServ DOS;
 
-    public DashboardOdonController(DashboardOdonService DOS) {
+    public DashboardOdonController(DashboardOdonServ DOS) {
         this.DOS = DOS;
     }
 

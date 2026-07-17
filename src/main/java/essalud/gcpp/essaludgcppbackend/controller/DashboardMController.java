@@ -1,6 +1,6 @@
 package essalud.gcpp.essaludgcppbackend.controller;
 
-import essalud.gcpp.essaludgcppbackend.service.DashboardMService;
+import essalud.gcpp.essaludgcppbackend.service.DashboardMServ;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +15,8 @@ import java.util.Map;
 @RequestMapping("/medica")
 public class DashboardMController {
 
-    private final DashboardMService DMS;
-    public DashboardMController(DashboardMService DMS) {
+    private final DashboardMServ DMS;
+    public DashboardMController(DashboardMServ DMS) {
         this.DMS = DMS;
     }
 

@@ -14,7 +14,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import essalud.gcpp.essaludgcppbackend.service_implements.JwtUserDetailsService;
+import essalud.gcpp.essaludgcppbackend.serviceQA.JwtUserDetailsServ;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -25,7 +25,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
     private final JwtTokenUtil jwtTokenUtil;
-    private final JwtUserDetailsService jwtUserDetailsService;
+    private final JwtUserDetailsServ jwtUserDetailsServ;
 
     @Value(value = "${app.security.cookie.access.name}")
     private String accessCookieName;
@@ -39,9 +39,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Value(value = "${app.security.cookie.same-site}")
     private String sameSite;
 
-    public JwtRequestFilter(JwtTokenUtil jwtTokenUtil, JwtUserDetailsService jwtUserDetailsService) {
+    public JwtRequestFilter(JwtTokenUtil jwtTokenUtil, JwtUserDetailsServ jwtUserDetailsServ) {
         this.jwtTokenUtil = jwtTokenUtil;
-        this.jwtUserDetailsService = jwtUserDetailsService;
+        this.jwtUserDetailsServ = jwtUserDetailsServ;
     }
 
     @Override
@@ -73,7 +73,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 try {
                     String refreshUsername = jwtTokenUtil.getUsernameFromToken(apiToken);
                     if (refreshUsername != null) {
-                        UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(refreshUsername);
+                        UserDetails userDetails = jwtUserDetailsServ.loadUserByUsername(refreshUsername);
                         if (jwtTokenUtil.validateApiToken(apiToken, userDetails)) {
                             // Generamos un nuevo access_token
                             String newAccessToken = jwtTokenUtil.generateAccessToken(userDetails);
@@ -103,7 +103,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(username);
+            UserDetails userDetails = jwtUserDetailsServ.loadUserByUsername(username);
             //// verificando
             boolean validToken = useApiToken
                     ? jwtTokenUtil.validateApiToken(jwtToken, userDetails)

@@ -1,7 +1,7 @@
 package essalud.gcpp.essaludgcppbackend.controller.documentos;
 
 import essalud.gcpp.essaludgcppbackend.dtos.documento.SolicitudAprobacionDocumentoDto;
-import essalud.gcpp.essaludgcppbackend.service.documentos.SolicitudAprobacionDocumentoService;
+import essalud.gcpp.essaludgcppbackend.service.documentos.SolicitudAprobacionDocumentoServ;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,8 +12,8 @@ import java.util.Map;
 @RequestMapping("/solicitud-aprobacion-documento")
 public class SolicitudAprobacionDocumentoController {
 
-    private final SolicitudAprobacionDocumentoService sads;
-    public SolicitudAprobacionDocumentoController(SolicitudAprobacionDocumentoService sads) {
+    private final SolicitudAprobacionDocumentoServ sads;
+    public SolicitudAprobacionDocumentoController(SolicitudAprobacionDocumentoServ sads) {
         this.sads = sads;
     }
 

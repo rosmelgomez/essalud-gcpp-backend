@@ -9,15 +9,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import essalud.gcpp.essaludgcppbackend.service.DashboardHospService;
+import essalud.gcpp.essaludgcppbackend.service.DashboardHospServ;
 
 @RestController
 @RequestMapping("/hospitalizacion")
 public class DashboardHospController {
 
-    private final DashboardHospService dhs;
+    private final DashboardHospServ dhs;
 
-    public DashboardHospController(DashboardHospService dhs) {
+    public DashboardHospController(DashboardHospServ dhs) {
         this.dhs = dhs;
     }
 

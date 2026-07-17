@@ -3,8 +3,8 @@ package essalud.gcpp.essaludgcppbackend.controller;
 import essalud.gcpp.essaludgcppbackend.dtos.LogFilterDto;
 import essalud.gcpp.essaludgcppbackend.dtos.LogUsersDto;
 import essalud.gcpp.essaludgcppbackend.model.usuario.Users;
-import essalud.gcpp.essaludgcppbackend.repositories.usuario.UsersRepository;
-import essalud.gcpp.essaludgcppbackend.service.LogService;
+import essalud.gcpp.essaludgcppbackend.repositories.usuario.UsersRep;
+import essalud.gcpp.essaludgcppbackend.service.LogServ;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +20,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class LogController {
 
-    private final UsersRepository userRepository;
-    private final LogService logService;
+    private final UsersRep userRepository;
+    private final LogServ logServ;
 
     @PostMapping("/register")
     @PreAuthorize("hasAnyAuthority('ADMIN','USER','ADMIN_RED')")
@@ -34,7 +34,7 @@ public class LogController {
         Users user = userRepository.findByUsername(authentication.getName());
         String rol =authentication.getAuthorities().iterator().next().getAuthority();
 
-        logService.registerLogs(dto, user, request, rol);
+        logServ.registerLogs(dto, user, request, rol);
 
         return ResponseEntity.ok().build();
     }
@@ -42,7 +42,7 @@ public class LogController {
     @GetMapping("/getlogusers")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<LogFilterDto>> getLogUsers(){
-        return ResponseEntity.ok(logService.getLogFilters());
+        return ResponseEntity.ok(logServ.getLogFilters());
     }
 
     @GetMapping("/debug-ip")

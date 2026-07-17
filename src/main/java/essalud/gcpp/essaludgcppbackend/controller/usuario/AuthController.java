@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import essalud.gcpp.essaludgcppbackend.dtos.usuario.UserLoginDto;
 import essalud.gcpp.essaludgcppbackend.security.JwtTokenUtil;
-import essalud.gcpp.essaludgcppbackend.service_implements.JwtUserDetailsService;
+import essalud.gcpp.essaludgcppbackend.serviceQA.JwtUserDetailsServ;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -42,19 +42,19 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
-    private final JwtUserDetailsService jwtUserDetailsService;
+    private final JwtUserDetailsServ jwtUserDetailsServ;
 
     public AuthController(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil,
-            JwtUserDetailsService jwtUserDetailsService) {
+            JwtUserDetailsServ jwtUserDetailsServ) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
-        this.jwtUserDetailsService = jwtUserDetailsService;
+        this.jwtUserDetailsServ = jwtUserDetailsServ;
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> createAuthenticateUser(@RequestBody UserLoginDto user) throws Exception {
         authenticateUser(user.getUsername(), user.getPassword());
-        final UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(user.getUsername());
+        final UserDetails userDetails = jwtUserDetailsServ.loadUserByUsername(user.getUsername());
         final String accessToken = jwtTokenUtil.generateAccessToken(userDetails);
         final String apiToken = jwtTokenUtil.generateApiToken(userDetails);
 
@@ -95,7 +95,7 @@ public class AuthController {
             return ResponseEntity.status(401).body("Api token invalido");
         }
 
-        UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(username);
+        UserDetails userDetails = jwtUserDetailsServ.loadUserByUsername(username);
         if (!jwtTokenUtil.validateApiToken(apiToken, userDetails)) {
             return ResponseEntity.status(401).body("Api token invalido");
         }
@@ -118,7 +118,7 @@ public class AuthController {
             return ResponseEntity.status(401).body("Refresh token invalido");
         }
 
-        UserDetails userDetails = jwtUserDetailsService.loadUserByUsername(username);
+        UserDetails userDetails = jwtUserDetailsServ.loadUserByUsername(username);
         if (!jwtTokenUtil.validateApiToken(refreshToken, userDetails)) {
             return ResponseEntity.status(401).body("Refresh token invalido");
         }

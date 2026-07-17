@@ -1,7 +1,7 @@
 package essalud.gcpp.essaludgcppbackend.controller;
 
 import essalud.gcpp.essaludgcppbackend.dtos.SolicitudAccesoDto;
-import essalud.gcpp.essaludgcppbackend.service.SolicitudAccesoService;
+import essalud.gcpp.essaludgcppbackend.service.SolicitudAccesoServ;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -13,27 +13,27 @@ import java.util.Map;
 @RequestMapping("/solicitud")
 public class SolicitudAccesoController {
 
-    private final SolicitudAccesoService solicitudAccesoService;
+    private final SolicitudAccesoServ solicitudAccesoServ;
 
-    public SolicitudAccesoController(SolicitudAccesoService solicitudAccesoService) {
-        this.solicitudAccesoService = solicitudAccesoService;
+    public SolicitudAccesoController(SolicitudAccesoServ solicitudAccesoServ) {
+        this.solicitudAccesoServ = solicitudAccesoServ;
     }
 
     @PostMapping("/register")
     public void saveSolicitudAcceso(@RequestBody SolicitudAccesoDto  solicitudAccesoDto) {
-        solicitudAccesoService.saveSolicitudAcceso(solicitudAccesoDto);
+        solicitudAccesoServ.saveSolicitudAcceso(solicitudAccesoDto);
     }
 
     @GetMapping("/getSolicitudes")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<Map<String, Object>>> getSolicitudes(){
-        return ResponseEntity.ok(solicitudAccesoService.getSolicitudAcceso());
+        return ResponseEntity.ok(solicitudAccesoServ.getSolicitudAcceso());
     }
 
     @PutMapping("/updateSolicitud")
     @PreAuthorize("hasAuthority('ADMIN')")
     public void updateSolicitud(@RequestBody SolicitudAccesoDto solicitudAccesoDto){
-       solicitudAccesoService.updateSolicitudAcceso(solicitudAccesoDto);
+       solicitudAccesoServ.updateSolicitudAcceso(solicitudAccesoDto);
     }
 
 }

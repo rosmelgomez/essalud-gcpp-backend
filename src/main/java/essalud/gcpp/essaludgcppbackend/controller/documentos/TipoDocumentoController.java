@@ -1,7 +1,7 @@
 package essalud.gcpp.essaludgcppbackend.controller.documentos;
 
 import essalud.gcpp.essaludgcppbackend.dtos.documento.TipoDocumentoDto;
-import essalud.gcpp.essaludgcppbackend.service.documentos.TipoDocumentoService;
+import essalud.gcpp.essaludgcppbackend.service.documentos.TipoDocumentoServ;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,8 +12,8 @@ import java.util.List;
 @RequestMapping("tipo-documento")
 public class TipoDocumentoController {
 
-    private final TipoDocumentoService tds;
-    public TipoDocumentoController(TipoDocumentoService tds) {
+    private final TipoDocumentoServ tds;
+    public TipoDocumentoController(TipoDocumentoServ tds) {
         this.tds = tds;
     }
 

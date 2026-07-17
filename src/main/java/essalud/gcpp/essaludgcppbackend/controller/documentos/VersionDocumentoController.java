@@ -1,7 +1,7 @@
 package essalud.gcpp.essaludgcppbackend.controller.documentos;
 
 import essalud.gcpp.essaludgcppbackend.dtos.documento.VersionDocumentoDto;
-import essalud.gcpp.essaludgcppbackend.service.documentos.VersionDocumentoService;
+import essalud.gcpp.essaludgcppbackend.service.documentos.VersionDocumentoServ;
 import lombok.SneakyThrows;
 import org.apache.tika.Tika;
 import org.springframework.core.io.Resource;
@@ -18,26 +18,26 @@ import java.util.List;
 @RequestMapping("version-documento")
 public class VersionDocumentoController {
 
-    private final VersionDocumentoService versionDocumentoService;
-    public VersionDocumentoController(VersionDocumentoService versionDocumentoService) {
-        this.versionDocumentoService = versionDocumentoService;
+    private final VersionDocumentoServ versionDocumentoServ;
+    public VersionDocumentoController(VersionDocumentoServ versionDocumentoServ) {
+        this.versionDocumentoServ = versionDocumentoServ;
     }
 
     @PostMapping(value = "/save" , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
     public void saveVersionDocumento(@ModelAttribute VersionDocumentoDto versionDocumentoDto) throws IOException {
-        versionDocumentoService.saveVersionDocumento(versionDocumentoDto);
+        versionDocumentoServ.saveVersionDocumento(versionDocumentoDto);
     }
 
     @GetMapping("/getall")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
     public List<VersionDocumentoDto> getAllVersionDocumentos() {
-        return versionDocumentoService.getAllVersionDocumentos();
+        return versionDocumentoServ.getAllVersionDocumentos();
     }
     @GetMapping("/getversion/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
     public VersionDocumentoDto getVersionDocumento(@PathVariable Integer id) {
-        return versionDocumentoService.getVersionDocumento(id);
+        return versionDocumentoServ.getVersionDocumento(id);
     }
 
     @SneakyThrows
@@ -46,7 +46,7 @@ public class VersionDocumentoController {
     public ResponseEntity<Resource> getFile(
             @PathVariable Integer id,
             @RequestParam(value = "download", defaultValue = "false") boolean download) {
-        Resource resource = versionDocumentoService.loadResource(id);
+        Resource resource = versionDocumentoServ.loadResource(id);
 
         Tika tika = new Tika();
         String contentType = tika.detect(resource.getInputStream());
@@ -63,37 +63,37 @@ public class VersionDocumentoController {
     @GetMapping("/getbyiddoc/{iddoc}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
     public List<VersionDocumentoDto> getVersionByDoc(@PathVariable Integer iddoc) {
-        return versionDocumentoService.getVersionByDoc(iddoc);
+        return versionDocumentoServ.getVersionByDoc(iddoc);
     }
 
     @GetMapping("/getbyuser/{idUser}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
     public List<VersionDocumentoDto> getByUser(@PathVariable Integer idUser) {
-        return versionDocumentoService.getVersionDocumentosByUser(idUser);
+        return versionDocumentoServ.getVersionDocumentosByUser(idUser);
     }
 
     @PutMapping(value = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED', 'USER')")
     public void updateVersionDocumento(@ModelAttribute VersionDocumentoDto versionDocumentoDto) throws IOException {
-        versionDocumentoService.updateVersionDocumento(versionDocumentoDto);
+        versionDocumentoServ.updateVersionDocumento(versionDocumentoDto);
     }
 
     @DeleteMapping("/delete/{id}/{userid}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
     public void deleteVersionDocumento(@PathVariable Integer id, @PathVariable Integer userid) {
-        versionDocumentoService.deleteVersionDocumento(id, userid);
+        versionDocumentoServ.deleteVersionDocumento(id, userid);
     }
 
     @GetMapping("/getbycodcas/{codcas}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED', 'USER')")
     public List<VersionDocumentoDto> getByCodcas(@PathVariable String codcas) {
-        return versionDocumentoService.getVersionDocumentosByCodcas(codcas);
+        return versionDocumentoServ.getVersionDocumentosByCodcas(codcas);
     }
 
     @GetMapping("/getbycodred/{codred}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED', 'USER')")
     public List<VersionDocumentoDto> getByCodred(@PathVariable String codred) {
-        return versionDocumentoService.getVersionDocumentosByCodred(codred);
+        return versionDocumentoServ.getVersionDocumentosByCodred(codred);
     }
 
 

@@ -1,6 +1,6 @@
 package essalud.gcpp.essaludgcppbackend.controller;
 
-import essalud.gcpp.essaludgcppbackend.service.DashboardProcService;
+import essalud.gcpp.essaludgcppbackend.service.DashboardProcServ;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,9 +14,9 @@ import java.util.Map;
 @RequestMapping("/procedimiento")
 public class DashboardProcController {
 
-    private final DashboardProcService dps;
+    private final DashboardProcServ dps;
 
-    public DashboardProcController(DashboardProcService dps) {
+    public DashboardProcController(DashboardProcServ dps) {
         this.dps = dps;
     }
 

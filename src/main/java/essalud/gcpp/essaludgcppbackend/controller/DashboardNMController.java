@@ -1,7 +1,7 @@
 package essalud.gcpp.essaludgcppbackend.controller;
 
 
-import essalud.gcpp.essaludgcppbackend.service.DashboardNMService;
+import essalud.gcpp.essaludgcppbackend.service.DashboardNMServ;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +15,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/no-medica")
 public class DashboardNMController {
-    private final DashboardNMService DNMR;
-    public DashboardNMController(DashboardNMService DNMR) {
+    private final DashboardNMServ DNMR;
+    public DashboardNMController(DashboardNMServ DNMR) {
         this.DNMR = DNMR;
     }
 

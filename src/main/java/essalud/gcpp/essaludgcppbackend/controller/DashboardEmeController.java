@@ -1,6 +1,6 @@
 package essalud.gcpp.essaludgcppbackend.controller;
 
-import essalud.gcpp.essaludgcppbackend.service.DashboardEmeService;
+import essalud.gcpp.essaludgcppbackend.service.DashboardEmeServ;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +15,8 @@ import java.util.Map;
 @RequestMapping("/emergencia")
 public class DashboardEmeController {
 
-    private final DashboardEmeService DES;
-    public DashboardEmeController(DashboardEmeService DES) {
+    private final DashboardEmeServ DES;
+    public DashboardEmeController(DashboardEmeServ DES) {
         this.DES = DES;
     }
 
