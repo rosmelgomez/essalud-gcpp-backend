@@ -27,10 +27,7 @@ public class SolicitudAccesoServ {
     private final UsersServ usersServ;
     private final ResolucionSolicitudAccesoRep resolucionSolicitudAccesoRep;
 
-    public SolicitudAccesoServ(SolicitudAccesoRep solicitudAccesoRep,
-                               UsersRep usersRep,
-                               UsersServ usersServ,
-                               ResolucionSolicitudAccesoRep resolucionSolicitudAccesoRep) {
+    public SolicitudAccesoServ(SolicitudAccesoRep solicitudAccesoRep, UsersRep usersRep, UsersServ usersServ, ResolucionSolicitudAccesoRep resolucionSolicitudAccesoRep) {
         this.solicitudAccesoRep = solicitudAccesoRep;
         this.usersRep = usersRep;
         this.usersServ = usersServ;
@@ -129,4 +126,6 @@ public class SolicitudAccesoServ {
             }
         }
     }
+
+
 }

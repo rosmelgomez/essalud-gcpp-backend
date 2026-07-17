@@ -19,7 +19,7 @@ public class EstablecimientosAsistencialesRep {
     public List<Map<String, Object>> getCentros() {
 
         String tabla = "dwsge.sgss_cmcas10";
-        //String tabla = "public.sgss_cmcas10";
+        ///String tabla = "public.sgss_cmcas10";
 
 
         String sql = """
@@ -34,8 +34,8 @@ public class EstablecimientosAsistencialesRep {
         String tabla1= "dwsge.sgss_cmcas10";
         String tabla2= "dwsge.sgss_cmras10";
 
-        //String tabla1= "public.sgss_cmcas10";
-        //String tabla2= "public.sgss_cmras10";
+        ///String tabla1= "public.sgss_cmcas10";
+        ///String tabla2= "public.sgss_cmras10";
 
         String sql = """
         SELECT
@@ -58,8 +58,8 @@ public class EstablecimientosAsistencialesRep {
         String tabla1 = "dwsge.sgss_cmcas10";
         String tabla2 = "dwsge.sgss_cmras10";
 
-        //String tabla1 = "public.sgss_cmcas10";
-        //String tabla2 = "public.sgss_cmras10";
+        ///String tabla1 = "public.sgss_cmcas10";
+        ///String tabla2 = "public.sgss_cmras10";
 
         String sql = """
         SELECT DISTINCT
@@ -80,8 +80,8 @@ public class EstablecimientosAsistencialesRep {
         String tabla1= "dwsge.sgss_cmcas10";
         String tabla2= "dwsge.sgss_cmras10";
 
-        //String tabla1= "public.sgss_cmcas10";
-        //String tabla2 = "public.sgss_cmras10";
+        ///String tabla1= "public.sgss_cmcas10";
+        ///String tabla2 = "public.sgss_cmras10";
 
         String sql = """
         SELECT
@@ -102,8 +102,8 @@ public class EstablecimientosAsistencialesRep {
         String tabla1= "dwsge.sgss_cmcas10";
         String tabla2 = "dwsge.sgss_cmras10";
 
-        //String tabla1= "public.sgss_cmcas10";
-        //String tabla2 = "public.sgss_cmras10";
+        ///String tabla1= "public.sgss_cmcas10";
+        ///String tabla2 = "public.sgss_cmras10";
 
         String sql = """
         SELECT

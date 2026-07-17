@@ -95,10 +95,10 @@ public class UsersServ {
 
     @Transactional
     public void updateRolesUserByName(Users user, List<String> rolesNames) {
-        // 1. Obtener roles actuales del usuario (registros de la tabla intermedia UserRol)
+        // Obtener roles actuales del usuario
         List<UserRol> asignacionesActuales = userRolRep.findByUserId(user.getId());
 
-        // 2. Mapear nombres de roles actuales para facilitar la comparación
+        // Mapear nombres de roles actuales para facilitar la comparación
         Set<String> nombresActuales = asignacionesActuales.stream()
                 .map(ur -> ur.getRol_user().getName())
                 .collect(Collectors.toSet());

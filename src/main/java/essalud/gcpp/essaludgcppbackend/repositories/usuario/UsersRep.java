@@ -16,17 +16,21 @@ public interface UsersRep extends JpaRepository<Users,Integer> {
 
     Users findByDni(String dni);
 
-    @Query(value = "SELECT us.*\n" +
-            "FROM users us\n" +
-            "JOIN user_rol ur ON ur.id_user =us.id\n" +
-            "JOIN rol r ON r.id =ur.id_rol\n" +
-            "WHERE us.codred=:codred  and r.id = 2", nativeQuery = true)
+    @Query(value = """
+            SELECT us.*
+            FROM users us
+            JOIN user_rol ur ON ur.id_user =us.id
+            JOIN rol r ON r.id =ur.id_rol
+           WHERE us.codred=:codred  and r.id = 2
+    """, nativeQuery = true)
     List<Users> findByCodred (@Param("codred") String codred);
 
-    @Query(value = "SELECT us.*\n" +
-            "FROM users us\n" +
-            "JOIN user_rol ur ON ur.id_user =us.id\n" +
-            "JOIN rol r ON r.id =ur.id_rol\n" +
-            "WHERE us.codcas=:codcas  and r.id = 3", nativeQuery = true)
+    @Query(value = """
+        SELECT us.*
+        FROM users us
+            JOIN user_rol ur ON ur.id_user =us.id
+            JOIN rol r ON r.id =ur.id_rol
+            WHERE us.codcas=:codcas  and r.id = 3
+    """, nativeQuery = true)
     List<Users> findByCodcas (@Param("codcas") String codcas);
 }

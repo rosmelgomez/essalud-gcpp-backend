@@ -3,7 +3,7 @@ package essalud.gcpp.essaludgcppbackend.security;
 import java.io.Serial;
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
-import java.security.SecureRandom;
+
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,8 +12,7 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,7 +22,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import jakarta.annotation.PostConstruct;
 
 @Component
 public class JwtTokenUtil implements Serializable {
@@ -31,13 +29,13 @@ public class JwtTokenUtil implements Serializable {
     @Serial
     private static final long serialVersionUID = -2550185165626007488L;
 
-    private static final Logger logger = LoggerFactory.getLogger(JwtTokenUtil.class);
+
 
     private static final String TOKEN_TYPE_CLAIM = "token_type";
     private static final String AUTHORITIES_CLAIM = "authorities";
     private static final String ACCESS_TOKEN_TYPE = "access";
     private static final String API_TOKEN_TYPE = "api";
-    private static final int SECRET_KEY_SIZE = 32; // 256 bits
+
 
     @Value(value = "${app.security.jwt.access-token-validity-ms}")
     private long accessTokenValidity;
@@ -57,28 +55,6 @@ public class JwtTokenUtil implements Serializable {
     @Value(value = "${app.security.jwt.issuer}")
     private String issuer;
 
-    @PostConstruct
-    public void initializeSecrets() {
-        // Generar acceso secret si no está configurado
-        if (accessSecretBase64 == null || accessSecretBase64.isBlank()) {
-            accessSecretBase64 = generateRandomSecretInBase64();
-            logger.info("JWT Access Secret generado aleatoriamente");
-        }
-
-        // Generar API secret si no está configurado
-        if (apiSecretBase64 == null || apiSecretBase64.isBlank()) {
-            apiSecretBase64 = generateRandomSecretInBase64();
-            logger.info("JWT API Secret generado aleatoriamente");
-        }
-    }
-
-
-    //Genera una clave secreta aleatoria en formato Base64
-    private String generateRandomSecretInBase64() {
-        byte[] key = new byte[SECRET_KEY_SIZE];
-        new SecureRandom().nextBytes(key);
-        return Base64.getEncoder().encodeToString(key);
-    }
 
     // recuperar el nombre de usuario del token jwt
     @SuppressWarnings("null")
@@ -202,11 +178,6 @@ public class JwtTokenUtil implements Serializable {
         throw new IllegalStateException("No se encontro una clave JWT configurada");
     }
 
-    public static void main(String[] args) {
-        JwtTokenUtil util = new JwtTokenUtil();
-        System.out.println("=== Generador de Claves JWT ===");
-        System.out.println("Access Secret (Base64): " + util.generateRandomSecretInBase64());
-        System.out.println("API Secret (Base64):    " + util.generateRandomSecretInBase64());
-    }
+
 
 }

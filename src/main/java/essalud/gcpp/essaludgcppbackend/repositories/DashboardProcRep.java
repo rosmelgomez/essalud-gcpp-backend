@@ -139,6 +139,7 @@ public class DashboardProcRep {
                         default -> "()";
                 };
         }
+
         private String periodo_str(int periodo) {
                 if (periodo < 10) {
                         return   "0" + periodo;
@@ -149,8 +150,6 @@ public class DashboardProcRep {
 
         /// Query procedimientos
         public List<Map<String, Object>> queryDP(int anio, int periodo, String codcas, int codasegu, int codes) {
-
-                //String tabla = String.format("dwsge.dwe_hosp_egresos_%d_%02d", anio, periodo);
 
                 String tabla1 = "dssge.dwe_centro_quirurgico_" + anio + "_" + periodo_str(periodo);
                 String tabla2 = "dssge.dw_proc_" + anio + "_" + periodo_str(periodo);

@@ -1,0 +1,94 @@
+{
+  "properties": [
+    {
+      "name": "spring.datasource.first.jdbc-url",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.first.jdbc-url."
+    },
+    {
+      "name": "spring.datasource.first.username",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.first.username."
+    },
+    {
+      "name": "spring.datasource.first.password",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.first.password."
+    },
+    {
+      "name": "spring.datasource.first.driver-class-name",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.first.driver-class-name."
+    },
+    {
+      "name": "spring.datasource.first.jpa.hibernate.ddl-auto",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.first.jpa.hibernate.ddl-auto."
+    },
+    {
+      "name": "spring.datasource.first.jpa.show-sql",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.first.jpa.show-sql."
+    },
+    {
+      "name": "spring.datasource.second.jdbc-url",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.second.jdbc-url."
+    },
+    {
+      "name": "spring.datasource.second.username",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.second.username."
+    },
+    {
+      "name": "spring.datasource.second.password",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.second.password."
+    },
+    {
+      "name": "spring.datasource.second.driver-class-name",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.second.driver-class-name."
+    },
+    {
+      "name": "spring.datasource.second.jpa.hibernate.ddl-auto",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.second.jpa.hibernate.ddl-auto."
+    },
+    {
+      "name": "spring.datasource.second.jpa.show-sql",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.second.jpa.show-sql."
+    },
+    {
+      "name": "spring.datasource.firstoracle.jdbc-url",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.firstoracle.jdbc-url."
+    },
+    {
+      "name": "spring.datasource.firstoracle.username",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.firstoracle.username."
+    },
+    {
+      "name": "spring.datasource.firstoracle.password",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.firstoracle.password."
+    },
+    {
+      "name": "spring.datasource.firstoracle.driver-class-name",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.firstoracle.driver-class-name."
+    },
+    {
+      "name": "spring.datasource.firstoracle.jpa.show-sql",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.firstoracle.jpa.show-sql."
+    },
+    {
+      "name": "spring.datasource.firstoracle.jpa.hibernate.ddl-auto",
+      "type": "java.lang.String",
+      "description": "Description for spring.datasource.firstoracle.jpa.hibernate.ddl-auto."
+    }
+  ]
+}

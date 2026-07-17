@@ -1,7 +1,6 @@
 package essalud.gcpp.essaludgcppbackend.service;
 
 import essalud.gcpp.essaludgcppbackend.repositories.DashboardIQuirurgicasRep;
-import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -19,11 +18,8 @@ public class DashboardIQuirurgicasServ {
 
     /// Query Dashboard intervenciones quirurgicas
     /// Grado de complejidad
-    public List<Map<String, Object>> queryDIQGC(int anio, int periodo, String codcas, int codasegu,
-            String complejidad) {
-
+    public List<Map<String, Object>> queryDIQGC(int anio, int periodo, String codcas, int codasegu, String complejidad) {
         List<Map<String, Object>> data = diqr.queryDIQGC(anio, periodo, codcas, codasegu);
-
         return getMaps(complejidad, data);
     }
 
@@ -35,9 +31,22 @@ public class DashboardIQuirurgicasServ {
     /// horas quirurgicas electivas
     public Map<String, Object> queryDIQHQE(int anio, int periodo, String codcas, int codasegu) {
         List<Map<String, Object>> data = diqr.queryDIQH(anio, periodo, codcas, codasegu);
+        return convertMap(data, "1");
+    }
 
-        String programacion = "1";
+    /// horas quirurgicas emergencia
+    public Map<String, Object> queryDIQHQEME(int anio, int periodo, String codcas, int codasegu) {
+        List<Map<String, Object>> data = diqr.queryDIQH(anio, periodo, codcas, codasegu);
+        return convertMap(data,"2");
+    }
 
+    /// Indicadores de grado de complejidad
+    public List<Map<String, Object>> queryDIQIGC(int anio, int periodo, String codcas, int codasegu, String complejidad) {
+        List<Map<String, Object>> data = diqr.queryDIQIGC(anio, periodo, codcas, codasegu);
+        return getMaps(complejidad, data);
+    }
+
+    private Map<String, Object> convertMap(List<Map<String, Object>> data, String programacion) {
         data = data.stream()
                 .filter(map -> map.get("cod_tipo_programacion").equals(programacion))
                 .toList();
@@ -57,47 +66,9 @@ public class DashboardIQuirurgicasServ {
                 .sum();
         Map<String, Object> totalMap = new HashMap<>();
         totalMap.put("totalHorasElectivas", totalHorasElectivas);
-
         return totalMap;
     }
 
-    /// horas quirurgicas emergencia
-    public Map<String, Object> queryDIQHQEME(int anio, int periodo, String codcas, int codasegu) {
-        List<Map<String, Object>> data = diqr.queryDIQH(anio, periodo, codcas, codasegu);
-
-        String programacion = "2";
-
-        data = data.stream()
-                .filter(map -> map.get("cod_tipo_programacion").equals(programacion))
-                .toList();
-
-        data.forEach(map -> {
-            String duracion = (String) map.get("duracion_sala");
-            if (duracion != null) {
-                String[] parts = duracion.split(":");
-                if (parts.length == 2) {
-                    double hours = Integer.parseInt(parts[0]) + Integer.parseInt(parts[1]) / 60.0;
-                    map.put("horas_quirurgicas", hours);
-                }
-            }
-        });
-        Double totalHorasEmergencia = data.stream()
-                .mapToDouble(map -> (Double) map.get("horas_quirurgicas"))
-                .sum();
-        Map<String, Object> totalMap = new HashMap<>();
-        totalMap.put("totalHorasEmergencia", totalHorasEmergencia);
-
-        return totalMap;
-    }
-
-    /// Indicadores de grado de complejidad
-    public List<Map<String, Object>> queryDIQIGC(int anio, int periodo, String codcas, int codasegu,
-            String complejidad) {
-        List<Map<String, Object>> data = diqr.queryDIQIGC(anio, periodo, codcas, codasegu);
-        return getMaps(complejidad, data);
-    }
-
-    @NonNull
     private List<Map<String, Object>> getMaps(String complejidad, List<Map<String, Object>> data) {
         return data.stream()
                 .filter(map -> {
