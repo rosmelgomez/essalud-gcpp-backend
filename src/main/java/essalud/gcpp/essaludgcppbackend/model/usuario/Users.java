@@ -29,7 +29,7 @@ public class Users {
     @Column(name = "lastname", nullable = false)
     private String lastname;
 
-    @Column(name = "dni", nullable = false)
+    @Column(name = "dni")
     private String dni;
 
     @Column(name = "codcas")
@@ -57,7 +57,7 @@ public class Users {
     private Boolean flag;
 
     @Column(name = "first_login", nullable = false)
-    private Boolean firstLogin = true;
+    private Boolean first_Login = true;
 
     /// relacion con usuario_rol
     @OneToMany(mappedBy = "usuario_rol" , fetch = FetchType.LAZY, cascade = CascadeType.ALL)

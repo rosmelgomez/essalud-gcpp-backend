@@ -50,7 +50,7 @@ public class SolicitudAccesoServ {
             user.setPassword(encodedPassword);
             user.setDate_creation(LocalDateTime.now());
             user.setFlag(false);
-            user.setFirstLogin(true);
+            user.setFirst_Login(true);
             user.setDate_creation(LocalDateTime.now());
             user.setDate_update(null);
             user = usersRep.save(user);
