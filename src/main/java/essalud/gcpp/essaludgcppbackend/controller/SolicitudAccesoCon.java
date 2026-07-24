@@ -24,13 +24,13 @@ public class SolicitudAccesoCon {
         solicitudAccesoServ.saveSolicitudAcceso(solicitudAccesoDto);
     }
 
-    @GetMapping("/getSolicitudes")
+    @GetMapping("/getall")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<Map<String, Object>>> getSolicitudes(){
         return ResponseEntity.ok(solicitudAccesoServ.getSolicitudAcceso());
     }
 
-    @PutMapping("/updateSolicitud")
+    @PutMapping("/update")
     @PreAuthorize("hasAuthority('ADMIN')")
     public void updateSolicitud(@RequestBody SolicitudAccesoDto solicitudAccesoDto){
        solicitudAccesoServ.updateSolicitudAcceso(solicitudAccesoDto);

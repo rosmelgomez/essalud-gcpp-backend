@@ -39,7 +39,7 @@ public class LogCon {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/getlogusers")
+    @GetMapping("/getall")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<LogFilterDto>> getLogUsers(){
         return ResponseEntity.ok(logServ.getLogFilters());

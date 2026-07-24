@@ -31,7 +31,7 @@ public class UserCon {
         this.rolServ = rolServ;
     }
 
-    @GetMapping("/getUser/{username}")
+    @GetMapping("/getbyusername/{username}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public UsersDto getUserByUsername(@PathVariable String username) {
         return usersServ.getUserByUsernameOrEmail(username);
@@ -43,7 +43,7 @@ public class UserCon {
         return usersServ.getUserByUsernameOrEmail(Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getName());
     }
 
-    @GetMapping("/getUserByDni/{dni}")
+    @GetMapping("/getbydni/{dni}")
     public UsersDto getUser(@PathVariable String dni) {
         return usersServ.getUserByDni(dni);
     }
@@ -54,31 +54,31 @@ public class UserCon {
         usersServ.saveUser(user);
     }
 
-    @GetMapping("/getUsers")
+    @GetMapping("/getall")
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<UsersDto> getUsers() {
         return usersServ.getAllUsers();
     }
 
-    @PutMapping("/updateUser")
+    @PutMapping("/update")
     @PreAuthorize("hasAuthority('ADMIN')")
     public void updateUser(@RequestBody UsersDto user) {
         usersServ.updateUser(user);
     }
 
-    @DeleteMapping("/deleteUser/{id}")
+    @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteUser(@PathVariable Integer id) {
         usersServ.deleteUser(id);
     }
 
-    @PostMapping("/verifyPassword")
+    @PostMapping("/verifypassword")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public void verifyPassword(@RequestBody UserLoginDto user) throws Exception {
         authenticateUser(user.getUsername(), user.getPassword());
     }
 
-    @PutMapping("/changePassword")
+    @PutMapping("/changepassword")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public void changePassword(@RequestBody UserLoginDto user) {
         usersServ.changePassword(user);
@@ -95,25 +95,25 @@ public class UserCon {
 
     }
 
-    @GetMapping("/getUsersByCodred/{code_red}")
+    @GetMapping("/getallbycodred/{code_red}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public List<UsersDto> getUserByCodred(@PathVariable String code_red) {
         return usersServ.getUsersByCod_red(code_red);
     }
 
-    @GetMapping("/getUsersByCodcas/{codcas}")
+    @GetMapping("/getallbycodcas/{codcas}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public List<UsersDto> getUsersByCodcas(@PathVariable String codcas) {
         return usersServ.getUsersByCodcas(codcas);
     }
 
-    @GetMapping("/getUsersById/{id}")
+    @GetMapping("/getbyid/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public UsersDto getUsersById(@PathVariable Integer id) {
         return usersServ.getUserById(id);
     }
 
-    @GetMapping("/getRoles")
+    @GetMapping("/getroles")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public List<RolDto> getRoles() {
         return rolServ.getRols();

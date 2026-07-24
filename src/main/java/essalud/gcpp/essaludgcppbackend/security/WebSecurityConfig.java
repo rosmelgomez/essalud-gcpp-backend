@@ -70,15 +70,14 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/solicitud/register").permitAll()
-                        .requestMatchers("/user/getUserByDni/**").permitAll()
-                        .requestMatchers("/establecimiento/getRedes", "/establecimiento/getRedesWithCentros")
+                        .requestMatchers("/user/getbydni/**").permitAll()
+                        .requestMatchers("/establecimiento/getredes", "/establecimiento/getredeswithcentros")
                         .permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(
                         authentication -> authentication.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .formLogin(AbstractHttpConfigurer::disable)
-                // .logout(AbstractHttpConfigurer::disable
-                // )
+                // .logout(AbstractHttpConfigurer::disable)
                 .sessionManagement(
                         sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

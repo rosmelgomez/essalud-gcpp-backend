@@ -103,39 +103,6 @@ public class AuthCon {
         return ResponseEntity.ok("Api token valido");
     }
 
-    @PostMapping("/refresh-token")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
-    public ResponseEntity<?> refreshAccessToken(HttpServletRequest request) {
-        String refreshToken = getCookieValue(request, apiCookieName);
-        if (refreshToken == null || refreshToken.isBlank()) {
-            return ResponseEntity.status(401).body("Refresh token requerido");
-        }
-
-        final String username;
-        try {
-            username = jwtTokenUtil.getUsernameFromToken(refreshToken);
-        } catch (Exception e) {
-            return ResponseEntity.status(401).body("Refresh token invalido");
-        }
-
-        UserDetails userDetails = jwtUserDetailsServ.loadUserByUsername(username);
-        if (!jwtTokenUtil.validateApiToken(refreshToken, userDetails)) {
-            return ResponseEntity.status(401).body("Refresh token invalido");
-        }
-
-        String newAccessToken = jwtTokenUtil.generateAccessToken(userDetails);
-        ResponseCookie accessCookie = ResponseCookie.from(accessCookieName, newAccessToken)
-                .httpOnly(true)
-                .secure(secureCookie)
-                .path("/")
-                .sameSite(sameSite)
-                .maxAge(jwtTokenUtil.getAccessTokenValiditySeconds())
-                .build();
-
-        return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, accessCookie.toString())
-                .body("Access token renovado");
-    }
 
     @PostMapping({ "/logout", "/logout-user" })
     public ResponseEntity<?> logoutUser() {

@@ -22,24 +22,24 @@ public class EstablecimientosAsistencialesCon {
         this.EAS = EAS;
     }
 
-    @GetMapping("/getCentros")
+    @GetMapping("/getcentros")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> getCentros() {
         return ResponseEntity.ok(EAS.getCentros());
     }
 
-    @GetMapping("/getCentroAsistencialByRed/{code_red}")
+    @GetMapping("/getcentrobyred/{code_red}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> getCentrosByCodeRed(@PathVariable String code_red) {
         return ResponseEntity.ok(EAS.getCentrosByCodeRed(code_red));
     }
 
-    @GetMapping("/getRedes")
+    @GetMapping("/getredes")
     public ResponseEntity<List<Map<String, Object>>> getRedes() {
         return ResponseEntity.ok(EAS.getRedes());
     }
 
-    @GetMapping("/getRedesWithCentros")
+    @GetMapping("/getredeswithcentros")
     public ResponseEntity<List<Map<String, Object>>> getRedesWithCentros() {
         return ResponseEntity.ok(EAS.getRedesWithCentros());
     }

@@ -4,6 +4,7 @@ import essalud.gcpp.essaludgcppbackend.model.usuario.Users;
 import essalud.gcpp.essaludgcppbackend.repositories.usuario.RolRep;
 import essalud.gcpp.essaludgcppbackend.repositories.usuario.UsersRep;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,19 +26,23 @@ public class JwtUserDetailsServ implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(@NonNull String username) throws UsernameNotFoundException {
+    public @Nullable UserDetails loadUserByUsername(@NonNull String username) throws UsernameNotFoundException {
         Users user = userRepository.findByUsername(username);
         if (user == null) {
             user = userRepository.findByEmail(username);
+            if (user == null) {
+                throw new UsernameNotFoundException("este usuario "+username+" no existe  o no esta habilitado");
+            }
         }
         List<Rol> roles = rolRep.listaRolesByUsername(username);
-        if(user!=null && user.getFlag() && roles!=null) {
+        if(user.getFlag() && roles != null) {
             List<GrantedAuthority> grantedAuthorities=new ArrayList<>();
             for (Rol rol : roles) {
                 grantedAuthorities.add(new SimpleGrantedAuthority(rol.getName()));
             }
             return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(),true,true,true,true,grantedAuthorities);
         }
+
         throw new UsernameNotFoundException("este usuario "+username+" no existe  o no esta habilitado");
     }
 

@@ -24,30 +24,30 @@ public class EncuestaCon {
         this.ES = ES;
     }
 
-    @GetMapping("/getModulos")
+    @GetMapping("/getmodulos")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
     public List<ModuloDto> getModulos() {
         return MS.getModulos();
     }
 
-    @GetMapping("/getCategorias")
+    @GetMapping("/getcategorias")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
     public List<CategoriaDto> getCategorias() {
         return CS.findAll();
     }
-    @GetMapping("/getSubcategorias")
+    @GetMapping("/getsubcategorias")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
     public List<SubCategoriaDto> getSubcategorias() {
         return SCS.getSubCategorias();
     }
 
-    @GetMapping("/getVariables")
+    @GetMapping("/getvariables")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
     public List<VariableDto> getVariables() {
         return VARS.getVariables();
     }
 
-    @GetMapping("/getEncuestas")
+    @GetMapping("/getall")
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<EncuestaDto> getEncuestas() {
         return ES.getEncuestas();
