@@ -1,9 +1,9 @@
-package essalud.gcpp.essaludgcppbackend.service;
+package essalud.gcpp.essaludgcppbackend.service.usuario;
 
 import essalud.gcpp.essaludgcppbackend.dtos.LogFilterDto;
-import essalud.gcpp.essaludgcppbackend.dtos.LogUsersDto;
-import essalud.gcpp.essaludgcppbackend.model.Log;
-import essalud.gcpp.essaludgcppbackend.model.usuario.Users;
+import essalud.gcpp.essaludgcppbackend.dtos.LogUsuarioDto;
+import essalud.gcpp.essaludgcppbackend.model.usuario.Log;
+import essalud.gcpp.essaludgcppbackend.model.usuario.Usuario;
 import essalud.gcpp.essaludgcppbackend.repositories.usuario.LogsRep;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class LogServ {
     }
 
     public List<LogFilterDto>  getLogFilters() {
-        List<Log> logs = logsRep.findAllWithUser();
+        List<Log> logs = logsRep.findAll();
         List<LogFilterDto> logFilterDtos = new ArrayList<>();
         for (Log log : logs) {
             LogFilterDto logFilterDto = new LogFilterDto();
@@ -41,7 +41,7 @@ public class LogServ {
         return logFilterDtos;
     }
 
-    public void registerLogs(LogUsersDto dto, Users user, HttpServletRequest request, String rol) {
+    public void registerLogs(LogUsuarioDto dto, Usuario user, HttpServletRequest request, String rol) {
 
         String ip = IpUtils.extractClientIp(request);
         String browser = BrowserDetector.detectBrowser(request);

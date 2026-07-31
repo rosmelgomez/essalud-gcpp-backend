@@ -13,13 +13,8 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @NoArgsConstructor
-@Table(
-        name = "user_rol",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"id_user", "id_rol"})
-        }
-)
-public class UserRol {
+@Table(name = "usuario_rol")
+public class UsuarioRol {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -33,7 +28,7 @@ public class UserRol {
     /// relacion con Usuario
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_user")
-    private Users usuario_rol;
+    private Usuario usuario_rol;
 
 
     /// relacion con Rol

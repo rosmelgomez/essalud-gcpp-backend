@@ -1,6 +1,6 @@
 package essalud.gcpp.essaludgcppbackend.model.documentos;
 
-import essalud.gcpp.essaludgcppbackend.model.usuario.Users;
+import essalud.gcpp.essaludgcppbackend.model.usuario.Usuario;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,7 +24,7 @@ public class ResolucionAprobacionDocumento {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario_revisor", nullable = false)
-    private Users userRevisor;
+    private Usuario userRevisor;
 
     @Column(name = "status", nullable = false)
     private String status;

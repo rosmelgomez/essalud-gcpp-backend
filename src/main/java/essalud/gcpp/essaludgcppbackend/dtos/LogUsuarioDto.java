@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class LogUsersDto {
+public class LogUsuarioDto {
     String action;
     String status;
     String message;

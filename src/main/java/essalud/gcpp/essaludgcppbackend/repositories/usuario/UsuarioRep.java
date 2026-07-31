@@ -1,6 +1,6 @@
 package essalud.gcpp.essaludgcppbackend.repositories.usuario;
 
-import essalud.gcpp.essaludgcppbackend.model.usuario.Users;
+import essalud.gcpp.essaludgcppbackend.model.usuario.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -9,28 +9,28 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface UsersRep extends JpaRepository<Users,Integer> {
-    Users findByUsername(String username);
+public interface UsuarioRep extends JpaRepository<Usuario,Integer> {
+    Usuario findByUsername(String username);
 
-    Users findByEmail(String email);
+    Usuario findByEmail(String email);
 
-    Users findByDni(String dni);
+    Usuario findByDni(String dni);
 
     @Query(value = """
             SELECT us.*
-            FROM users us
-            JOIN user_rol ur ON ur.id_user =us.id
+            FROM usuario us
+            JOIN usuario_rol ur ON ur.id_user =us.id
             JOIN rol r ON r.id =ur.id_rol
            WHERE us.codred=:codred  and r.id = 2
     """, nativeQuery = true)
-    List<Users> findByCodred (@Param("codred") String codred);
+    List<Usuario> findByCodred (@Param("codred") String codred);
 
     @Query(value = """
         SELECT us.*
-        FROM users us
-            JOIN user_rol ur ON ur.id_user =us.id
+        FROM usuario us
+            JOIN usuario_rol ur ON ur.id_user =us.id
             JOIN rol r ON r.id =ur.id_rol
             WHERE us.codcas=:codcas  and r.id = 3
     """, nativeQuery = true)
-    List<Users> findByCodcas (@Param("codcas") String codcas);
+    List<Usuario> findByCodcas (@Param("codcas") String codcas);
 }

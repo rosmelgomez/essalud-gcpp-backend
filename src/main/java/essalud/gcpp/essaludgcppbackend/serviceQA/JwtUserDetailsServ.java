@@ -1,8 +1,8 @@
 package essalud.gcpp.essaludgcppbackend.serviceQA;
 import essalud.gcpp.essaludgcppbackend.model.usuario.Rol;
-import essalud.gcpp.essaludgcppbackend.model.usuario.Users;
+import essalud.gcpp.essaludgcppbackend.model.usuario.Usuario;
 import essalud.gcpp.essaludgcppbackend.repositories.usuario.RolRep;
-import essalud.gcpp.essaludgcppbackend.repositories.usuario.UsersRep;
+import essalud.gcpp.essaludgcppbackend.repositories.usuario.UsuarioRep;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,17 +17,17 @@ import java.util.List;
 
 @Service
 public class JwtUserDetailsServ implements UserDetailsService {
-    private final UsersRep userRepository;
+    private final UsuarioRep userRepository;
     private final RolRep rolRep;
 
-    public JwtUserDetailsServ(UsersRep userRepository, RolRep rolRep) {
+    public JwtUserDetailsServ(UsuarioRep userRepository, RolRep rolRep) {
         this.userRepository = userRepository;
         this.rolRep = rolRep;
     }
 
     @Override
     public @Nullable UserDetails loadUserByUsername(@NonNull String username) throws UsernameNotFoundException {
-        Users user = userRepository.findByUsername(username);
+        Usuario user = userRepository.findByUsername(username);
         if (user == null) {
             user = userRepository.findByEmail(username);
             if (user == null) {

@@ -5,11 +5,11 @@ import essalud.gcpp.essaludgcppbackend.model.documentos.SolicitudAprobacionDocum
 import essalud.gcpp.essaludgcppbackend.model.documentos.ResolucionAprobacionDocumento;
 import essalud.gcpp.essaludgcppbackend.model.documentos.HistorialAprobacionDocumento;
 import essalud.gcpp.essaludgcppbackend.model.documentos.VersionDocumento;
-import essalud.gcpp.essaludgcppbackend.model.usuario.Users;
+import essalud.gcpp.essaludgcppbackend.model.usuario.Usuario;
 import essalud.gcpp.essaludgcppbackend.repositories.documentos.SolicitudAprobacionDocumentoRep;
 import essalud.gcpp.essaludgcppbackend.repositories.documentos.ResolucionAprobacionDocumentoRep;
 import essalud.gcpp.essaludgcppbackend.repositories.documentos.HistorialAprobacionDocumentoRep;
-import essalud.gcpp.essaludgcppbackend.repositories.usuario.UsersRep;
+import essalud.gcpp.essaludgcppbackend.repositories.usuario.UsuarioRep;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -28,13 +28,13 @@ public class SolicitudAprobacionDocumentoServ {
 
     private final SolicitudAprobacionDocumentoRep sadr;
     private final ResolucionAprobacionDocumentoRep radr;
-    private final UsersRep usersRep;
+    private final UsuarioRep usuarioRep;
     private final HistorialAprobacionDocumentoRep historialAprobacionDocumentoRep;
 
-    public SolicitudAprobacionDocumentoServ(SolicitudAprobacionDocumentoRep sadr, ResolucionAprobacionDocumentoRep radr, UsersRep usersRep, HistorialAprobacionDocumentoRep historialAprobacionDocumentoRep) {
+    public SolicitudAprobacionDocumentoServ(SolicitudAprobacionDocumentoRep sadr, ResolucionAprobacionDocumentoRep radr, UsuarioRep usuarioRep, HistorialAprobacionDocumentoRep historialAprobacionDocumentoRep) {
         this.sadr = sadr;
         this.radr = radr;
-        this.usersRep = usersRep;
+        this.usuarioRep = usuarioRep;
         this.historialAprobacionDocumentoRep = historialAprobacionDocumentoRep;
     }
 
@@ -52,8 +52,8 @@ public class SolicitudAprobacionDocumentoServ {
     }
 
     public void saveFlujoAprobacionDocumento(Integer id_user_aprobador, VersionDocumento versionDocumento, String prioridad, String comentarioSolicitud) throws IOException {
-        Users aprobador = usersRep.findById(id_user_aprobador).orElse(null);
-        Users solicitante = versionDocumento.getUser_version_documento();
+        Usuario aprobador = usuarioRep.findById(id_user_aprobador).orElse(null);
+        Usuario solicitante = versionDocumento.getUser_version_documento();
 
         if (aprobador != null && solicitante != null) {
             SolicitudAprobacionDocumento sad = new SolicitudAprobacionDocumento();
@@ -86,7 +86,7 @@ public class SolicitudAprobacionDocumentoServ {
             } else if (principal != null) {
                 currentUsername = principal.toString();
             }
-            Users userAccion = currentUsername != null ? usersRep.findByUsername(currentUsername) : null;
+            Usuario userAccion = currentUsername != null ? usuarioRep.findByUsername(currentUsername) : null;
 
             // Guardar Resolución Aprobación
             if ("Aprobado".equalsIgnoreCase(dto.getStatus()) || "Rechazado".equalsIgnoreCase(dto.getStatus())) {
@@ -105,7 +105,7 @@ public class SolicitudAprobacionDocumentoServ {
         }
     }
 
-    private void saveHistorialAprobacion(SolicitudAprobacionDocumento sad, String estadoAnterior, String estadoNuevo, String comentario, Users userAccion) {
+    private void saveHistorialAprobacion(SolicitudAprobacionDocumento sad, String estadoAnterior, String estadoNuevo, String comentario, Usuario userAccion) {
         HistorialAprobacionDocumento hist = HistorialAprobacionDocumento.builder()
                 .solicitud_aprobacion(sad)
                 .estado_anterior(estadoAnterior)
@@ -163,7 +163,7 @@ public class SolicitudAprobacionDocumentoServ {
     }
 
     public void resetFlujoAprobacion(VersionDocumento versionDocumento, Integer idUserAprobador, String prioridad, String comentarioSolicitud) {
-        Users aprobador = usersRep.findById(idUserAprobador).orElse(null);
+        Usuario aprobador = usuarioRep.findById(idUserAprobador).orElse(null);
         if (aprobador == null)
             return;
 
@@ -187,7 +187,7 @@ public class SolicitudAprobacionDocumentoServ {
             } else if (principal != null) {
                 currentUsername = principal.toString();
             }
-            Users userAccion = currentUsername != null ? usersRep.findByUsername(currentUsername) : null;
+            Usuario userAccion = currentUsername != null ? usuarioRep.findByUsername(currentUsername) : null;
 
             saveHistorialAprobacion(sad, estadoAnterior, "Pendiente",
                     "Versión modificada por el creador - Solicitud de aprobación regenerada"

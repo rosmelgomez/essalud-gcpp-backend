@@ -9,7 +9,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class UsersDto {
+public class UsuarioDto {
     private Integer id;
 
     private String name;

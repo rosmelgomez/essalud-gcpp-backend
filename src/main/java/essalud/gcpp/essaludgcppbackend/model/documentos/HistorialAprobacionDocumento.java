@@ -1,6 +1,6 @@
 package essalud.gcpp.essaludgcppbackend.model.documentos;
 
-import essalud.gcpp.essaludgcppbackend.model.usuario.Users;
+import essalud.gcpp.essaludgcppbackend.model.usuario.Usuario;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -33,7 +33,7 @@ public class HistorialAprobacionDocumento {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario_accion")
-    private Users user_accion;
+    private Usuario user_accion;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_solicitud_aprobacion", nullable = false)

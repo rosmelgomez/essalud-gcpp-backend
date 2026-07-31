@@ -1,10 +1,10 @@
-package essalud.gcpp.essaludgcppbackend.controller;
+package essalud.gcpp.essaludgcppbackend.controller.usuario;
 
 import essalud.gcpp.essaludgcppbackend.dtos.LogFilterDto;
-import essalud.gcpp.essaludgcppbackend.dtos.LogUsersDto;
-import essalud.gcpp.essaludgcppbackend.model.usuario.Users;
-import essalud.gcpp.essaludgcppbackend.repositories.usuario.UsersRep;
-import essalud.gcpp.essaludgcppbackend.service.LogServ;
+import essalud.gcpp.essaludgcppbackend.dtos.LogUsuarioDto;
+import essalud.gcpp.essaludgcppbackend.model.usuario.Usuario;
+import essalud.gcpp.essaludgcppbackend.repositories.usuario.UsuarioRep;
+import essalud.gcpp.essaludgcppbackend.service.usuario.LogServ;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,18 +20,18 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class LogCon {
 
-    private final UsersRep userRepository;
+    private final UsuarioRep userRepository;
     private final LogServ logServ;
 
     @PostMapping("/register")
     @PreAuthorize("hasAnyAuthority('ADMIN','USER','ADMIN_RED')")
     public ResponseEntity<Void> registerLog(
-            @RequestBody LogUsersDto dto,
+            @RequestBody LogUsuarioDto dto,
             HttpServletRequest request,
             Authentication authentication
     ) {
 
-        Users user = userRepository.findByUsername(authentication.getName());
+        Usuario user = userRepository.findByUsername(authentication.getName());
         String rol =authentication.getAuthorities().iterator().next().getAuthority();
 
         logServ.registerLogs(dto, user, request, rol);

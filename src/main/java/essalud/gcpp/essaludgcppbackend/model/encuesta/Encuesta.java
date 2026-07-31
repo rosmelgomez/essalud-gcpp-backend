@@ -1,6 +1,6 @@
 package essalud.gcpp.essaludgcppbackend.model.encuesta;
 
-import essalud.gcpp.essaludgcppbackend.model.usuario.Users;
+import essalud.gcpp.essaludgcppbackend.model.usuario.Usuario;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -33,7 +33,7 @@ public class Encuesta {
     /// relation user.
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_user")
-    private Users user_encuesta;
+    private Usuario user_encuesta;
 
     /// relation modulo
     @ManyToOne(fetch = FetchType.LAZY)

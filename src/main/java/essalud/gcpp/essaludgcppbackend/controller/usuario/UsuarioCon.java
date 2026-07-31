@@ -1,10 +1,10 @@
 package essalud.gcpp.essaludgcppbackend.controller.usuario;
 
 import essalud.gcpp.essaludgcppbackend.dtos.usuario.RolDto;
-import essalud.gcpp.essaludgcppbackend.dtos.usuario.UserLoginDto;
-import essalud.gcpp.essaludgcppbackend.dtos.usuario.UsersDto;
+import essalud.gcpp.essaludgcppbackend.dtos.usuario.UsuarioLoginDto;
+import essalud.gcpp.essaludgcppbackend.dtos.usuario.UsuarioDto;
 import essalud.gcpp.essaludgcppbackend.service.usuario.RolServ;
-import essalud.gcpp.essaludgcppbackend.service.usuario.UsersServ;
+import essalud.gcpp.essaludgcppbackend.service.usuario.UsuarioServ;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -18,70 +18,70 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/user")
-public class UserCon {
+public class UsuarioCon {
 
     private final AuthenticationManager authenticationManager;
-    private final UsersServ usersServ;
+    private final UsuarioServ usuarioServ;
     private final RolServ rolServ;
 
-    public UserCon(AuthenticationManager authenticationManager, UsersServ usersServ,
-                   RolServ rolServ) {
+    public UsuarioCon(AuthenticationManager authenticationManager, UsuarioServ usuarioServ,
+                      RolServ rolServ) {
         this.authenticationManager = authenticationManager;
-        this.usersServ = usersServ;
+        this.usuarioServ = usuarioServ;
         this.rolServ = rolServ;
     }
 
     @GetMapping("/getbyusername/{username}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
-    public UsersDto getUserByUsername(@PathVariable String username) {
-        return usersServ.getUserByUsernameOrEmail(username);
+    public UsuarioDto getUserByUsername(@PathVariable String username) {
+        return usuarioServ.getUserByUsernameOrEmail(username);
     }
 
     @GetMapping("/me")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
-    public UsersDto getCurrentUser() {
-        return usersServ.getUserByUsernameOrEmail(Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getName());
+    public UsuarioDto getCurrentUser() {
+        return usuarioServ.getUserByUsernameOrEmail(Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getName());
     }
 
     @GetMapping("/getbydni/{dni}")
-    public UsersDto getUser(@PathVariable String dni) {
-        return usersServ.getUserByDni(dni);
+    public UsuarioDto getUser(@PathVariable String dni) {
+        return usuarioServ.getUserByDni(dni);
     }
 
     @PostMapping("/register")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public void saveUser(@RequestBody UsersDto user) {
-        usersServ.saveUser(user);
+    public void saveUser(@RequestBody UsuarioDto user) {
+        usuarioServ.saveUser(user);
     }
 
     @GetMapping("/getall")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<UsersDto> getUsers() {
-        return usersServ.getAllUsers();
+    public List<UsuarioDto> getUsers() {
+        return usuarioServ.getAllUsers();
     }
 
     @PutMapping("/update")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public void updateUser(@RequestBody UsersDto user) {
-        usersServ.updateUser(user);
+    public void updateUser(@RequestBody UsuarioDto user) {
+        usuarioServ.updateUser(user);
     }
 
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteUser(@PathVariable Integer id) {
-        usersServ.deleteUser(id);
+        usuarioServ.deleteUser(id);
     }
 
     @PostMapping("/verifypassword")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
-    public void verifyPassword(@RequestBody UserLoginDto user) throws Exception {
+    public void verifyPassword(@RequestBody UsuarioLoginDto user) throws Exception {
         authenticateUser(user.getUsername(), user.getPassword());
     }
 
     @PutMapping("/changepassword")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
-    public void changePassword(@RequestBody UserLoginDto user) {
-        usersServ.changePassword(user);
+    public void changePassword(@RequestBody UsuarioLoginDto user) {
+        usuarioServ.changePassword(user);
     }
 
     private void authenticateUser(String username, String password) throws Exception {
@@ -97,20 +97,20 @@ public class UserCon {
 
     @GetMapping("/getallbycodred/{code_red}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
-    public List<UsersDto> getUserByCodred(@PathVariable String code_red) {
-        return usersServ.getUsersByCod_red(code_red);
+    public List<UsuarioDto> getUserByCodred(@PathVariable String code_red) {
+        return usuarioServ.getUsersByCod_red(code_red);
     }
 
     @GetMapping("/getallbycodcas/{codcas}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
-    public List<UsersDto> getUsersByCodcas(@PathVariable String codcas) {
-        return usersServ.getUsersByCodcas(codcas);
+    public List<UsuarioDto> getUsersByCodcas(@PathVariable String codcas) {
+        return usuarioServ.getUsersByCodcas(codcas);
     }
 
     @GetMapping("/getbyid/{id}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
-    public UsersDto getUsersById(@PathVariable Integer id) {
-        return usersServ.getUserById(id);
+    public UsuarioDto getUsersById(@PathVariable Integer id) {
+        return usuarioServ.getUserById(id);
     }
 
     @GetMapping("/getroles")

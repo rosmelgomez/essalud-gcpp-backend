@@ -755,8 +755,9 @@ public class DashboardMRep {
                 OR p.cod_mot_suspension NOT IN ('04','09','10','99','13','16','11')
             )
         AND p.cod_centro = ?
-        AND p.cod_actividad = '91'
-        AND p.cod_subactividad = '003'
+        AND p.cod_actividad IN ('B8', '91')
+        AND p.cod_subactividad = '070'
+        AND p.cod_servicio IN ('AB1', 'AM6')
         """.formatted(tabla);
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
@@ -788,8 +789,9 @@ public class DashboardMRep {
                         LEFT JOIN dwsge.dim_agrupador ag
                         ON a.cod_agrupador = ag.cod_agrupador
                         WHERE a.cod_centro= ?
-                        AND a.cod_actividad = '91'
-                        AND a.cod_subactividad = '003'
+                        AND a.cod_actividad IN ('B8', '91')
+                        AND a.cod_subactividad = '070'
+                          AND a.cod_servicio IN ('AB1', 'AM6')
                         AND a.clasificacion in (2,4,6)
                         GROUP BY a.cod_centro, a.dni_medico, ag.agrupador, a.periodo, CASE WHEN cod_tipo_paciente = '4' THEN '2' ELSE '1' END
                         ORDER BY a.dni_medico, a.periodo, (count(*))) b) c
@@ -813,8 +815,9 @@ public class DashboardMRep {
            CASE WHEN cod_tipo_paciente = '4' THEN '2' ELSE '1' END AS cod_tipo_paciente,
                to_char(MIN(to_date(fecha_atencion,'DD/MM/YYYY')),'YYYYMM') periodo
            FROM %s
-           WHERE cod_actividad = '91'
-           AND cod_subactividad = '003'
+           WHERE cod_actividad IN ('B8', '91')
+           AND cod_subactividad = '070'
+           AND cod_servicio IN ('AB1', 'AM6')
            AND (
                    CASE
                        WHEN cod_tipo_paciente = '4' THEN '2'
@@ -847,9 +850,10 @@ public class DashboardMRep {
             FROM %s p
             LEFT JOIN dwsge.dim_agrupador ag ON p.cod_agrupador = ag.cod_agrupador
             WHERE p.clasificacion IN (2,4,6)
-            AND p.cod_centro= ?
-            AND p.cod_actividad = '91'
-            AND p.cod_subactividad = '003'
+            AND p.cod_centro=:codcas
+            AND p.cod_actividad IN ('B8', '91')
+            AND p.cod_subactividad = '070'
+            AND p.cod_servicio IN ('AB1', 'AM6')
             AND (
                     CASE
                         WHEN p.cod_tipo_paciente = '4' THEN '2'

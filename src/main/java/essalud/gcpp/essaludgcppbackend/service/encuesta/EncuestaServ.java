@@ -2,9 +2,9 @@ package essalud.gcpp.essaludgcppbackend.service.encuesta;
 
 import essalud.gcpp.essaludgcppbackend.dtos.encuesta.EncuestaDto;
 import essalud.gcpp.essaludgcppbackend.model.encuesta.*;
-import essalud.gcpp.essaludgcppbackend.model.usuario.Users;
+import essalud.gcpp.essaludgcppbackend.model.usuario.Usuario;
 import essalud.gcpp.essaludgcppbackend.repositories.encuesta.*;
-import essalud.gcpp.essaludgcppbackend.repositories.usuario.UsersRep;
+import essalud.gcpp.essaludgcppbackend.repositories.usuario.UsuarioRep;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ import java.util.List;
 @Service
 public class EncuestaServ {
 
-    private final UsersRep UR;
+    private final UsuarioRep UR;
 
     private final ModuloRep MR;
 
@@ -26,7 +26,7 @@ public class EncuestaServ {
     private final VariableRep VAR;
 
     private final EncuestaRep ER;
-    public EncuestaServ(UsersRep UR, ModuloRep MR, CategoriaRep CR, SubCategoriaRep SCR, VariableRep VAR, EncuestaRep ER) {
+    public EncuestaServ(UsuarioRep UR, ModuloRep MR, CategoriaRep CR, SubCategoriaRep SCR, VariableRep VAR, EncuestaRep ER) {
         this.UR = UR;
         this.MR = MR;
         this.CR = CR;
@@ -36,7 +36,7 @@ public class EncuestaServ {
     }
 
     public void registrarEncuesta(EncuestaDto encuestaDto) {
-        Users user = UR.findById(encuestaDto.getId_user()).orElse(null);
+        Usuario user = UR.findById(encuestaDto.getId_user()).orElse(null);
         Modulo modulo = MR.findById(encuestaDto.getId_modulo()).orElse(null);
         Categoria categoria = CR.findById(encuestaDto.getId_categoria()).orElse(null);
         SubCategoria subCategoria = SCR.findById(encuestaDto.getId_subcategoria()).orElse(null);

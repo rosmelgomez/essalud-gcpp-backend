@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import essalud.gcpp.essaludgcppbackend.dtos.usuario.UserLoginDto;
+import essalud.gcpp.essaludgcppbackend.dtos.usuario.UsuarioLoginDto;
 import essalud.gcpp.essaludgcppbackend.security.JwtTokenUtil;
 import essalud.gcpp.essaludgcppbackend.serviceQA.JwtUserDetailsServ;
 import jakarta.servlet.http.Cookie;
@@ -52,7 +52,7 @@ public class AuthCon {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> createAuthenticateUser(@RequestBody UserLoginDto user) throws Exception {
+    public ResponseEntity<?> createAuthenticateUser(@RequestBody UsuarioLoginDto user) throws Exception {
         authenticateUser(user.getUsername(), user.getPassword());
         final UserDetails userDetails = jwtUserDetailsServ.loadUserByUsername(user.getUsername());
         final String accessToken = jwtTokenUtil.generateAccessToken(userDetails);

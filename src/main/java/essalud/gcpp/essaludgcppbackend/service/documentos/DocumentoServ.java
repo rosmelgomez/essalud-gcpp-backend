@@ -3,10 +3,10 @@ package essalud.gcpp.essaludgcppbackend.service.documentos;
 import essalud.gcpp.essaludgcppbackend.dtos.documento.DocumentoDto;
 import essalud.gcpp.essaludgcppbackend.model.documentos.Documento;
 import essalud.gcpp.essaludgcppbackend.model.documentos.TipoDocumento;
-import essalud.gcpp.essaludgcppbackend.model.usuario.Users;
+import essalud.gcpp.essaludgcppbackend.model.usuario.Usuario;
 import essalud.gcpp.essaludgcppbackend.repositories.documentos.DocumentoRep;
 import essalud.gcpp.essaludgcppbackend.repositories.documentos.TipoDocumentoRep;
-import essalud.gcpp.essaludgcppbackend.repositories.usuario.UsersRep;
+import essalud.gcpp.essaludgcppbackend.repositories.usuario.UsuarioRep;
 import org.modelmapper.ModelMapper;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
@@ -21,21 +21,21 @@ import essalud.gcpp.essaludgcppbackend.service.EstablecimientosAsistencialesServ
 @Transactional
 public class DocumentoServ {
     private final DocumentoRep documentoRep;
-    private final UsersRep usersRep;
+    private final UsuarioRep usuarioRep;
     private final TipoDocumentoRep tipoDocumentoRep;
     private final EstablecimientosAsistencialesServ establecimientosAsistencialesServ;
 
-    public DocumentoServ(DocumentoRep documentoRep, UsersRep usersRep,
+    public DocumentoServ(DocumentoRep documentoRep, UsuarioRep usuarioRep,
                          TipoDocumentoRep tipoDocumentoRep,
                          EstablecimientosAsistencialesServ establecimientosAsistencialesServ) {
         this.documentoRep = documentoRep;
-        this.usersRep = usersRep;
+        this.usuarioRep = usuarioRep;
         this.tipoDocumentoRep = tipoDocumentoRep;
         this.establecimientosAsistencialesServ = establecimientosAsistencialesServ;
     }
 
     public void saveDocumento(DocumentoDto documento)  {
-        Users user= usersRep.findById(documento.getId_user_creation()).orElse(null);
+        Usuario user= usuarioRep.findById(documento.getId_user_creation()).orElse(null);
         TipoDocumento tipoDocumento = tipoDocumentoRep.findById(documento.getId_tipo_documento()).orElse(null);
 
         if (user != null && tipoDocumento != null) {
@@ -131,7 +131,7 @@ public class DocumentoServ {
 
     public void deleteDocumento(Integer id, Integer userId) {
         Documento doc = documentoRep.findById(id).orElse(null);
-        Users user = usersRep.findById(userId).orElse(null);
+        Usuario user = usuarioRep.findById(userId).orElse(null);
         if (doc != null && user != null) {
             if (!doc.getUser_documento().getId().equals(userId)) {
                 throw new org.springframework.security.access.AccessDeniedException("No tiene permisos para eliminar este documento.");

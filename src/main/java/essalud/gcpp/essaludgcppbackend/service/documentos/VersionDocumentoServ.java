@@ -6,11 +6,11 @@ import essalud.gcpp.essaludgcppbackend.model.documentos.SolicitudAprobacionDocum
 import essalud.gcpp.essaludgcppbackend.model.documentos.TipoDocumento;
 import essalud.gcpp.essaludgcppbackend.model.documentos.VersionDocumento;
 import essalud.gcpp.essaludgcppbackend.model.documentos.VersionDocumentoArchivo;
-import essalud.gcpp.essaludgcppbackend.model.usuario.Users;
+import essalud.gcpp.essaludgcppbackend.model.usuario.Usuario;
 import essalud.gcpp.essaludgcppbackend.repositories.documentos.DocumentoRep;
 import essalud.gcpp.essaludgcppbackend.repositories.documentos.VersionDocumentoRep;
 import essalud.gcpp.essaludgcppbackend.repositories.documentos.VersionDocumentoArchivoRep;
-import essalud.gcpp.essaludgcppbackend.repositories.usuario.UsersRep;
+import essalud.gcpp.essaludgcppbackend.repositories.usuario.UsuarioRep;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,18 +30,18 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class VersionDocumentoServ {
-    private final UsersRep usersRep;
+    private final UsuarioRep usuarioRep;
     private final DocumentoRep documentoRep;
     private final VersionDocumentoRep versionDocumentoRep;
     private final VersionDocumentoArchivoRep versionDocumentoArchivoRep;
     private final SolicitudAprobacionDocumentoServ sads;
     private final AuditoriaDocumentariaRep auditoriaDocumentariaRep;
 
-    public VersionDocumentoServ(UsersRep usersRep, DocumentoRep documentoRep,
+    public VersionDocumentoServ(UsuarioRep usuarioRep, DocumentoRep documentoRep,
                                 VersionDocumentoRep versionDocumentoRep,
                                 VersionDocumentoArchivoRep versionDocumentoArchivoRep,
                                 SolicitudAprobacionDocumentoServ sads, AuditoriaDocumentariaRep auditoriaDocumentariaRep) {
-        this.usersRep = usersRep;
+        this.usuarioRep = usuarioRep;
         this.documentoRep = documentoRep;
         this.versionDocumentoRep = versionDocumentoRep;
         this.versionDocumentoArchivoRep = versionDocumentoArchivoRep;
@@ -76,7 +76,7 @@ public class VersionDocumentoServ {
 
     public void saveVersionDocumento(VersionDocumentoDto versionDocumentoDto) throws IOException {
         Documento documento = documentoRep.findById(versionDocumentoDto.getId_documento()).orElse(null);
-        Users user = usersRep.findById(versionDocumentoDto.getId_user_creation()).orElse(null);
+        Usuario user = usuarioRep.findById(versionDocumentoDto.getId_user_creation()).orElse(null);
 
         if (documento != null && user != null) {
             TipoDocumento tipo = documento.getTipo_documento();
@@ -157,7 +157,7 @@ public class VersionDocumentoServ {
                             "Acceso Denegado: La versión del documento no está aprobada.");
                 }
 
-                Users currentUser = usersRep.findByUsername(currentUsername);
+                Usuario currentUser = usuarioRep.findByUsername(currentUsername);
                 if (currentUser == null) {
                     throw new org.springframework.security.access.AccessDeniedException(
                             "Acceso Denegado: La versión del documento no está aprobada.");
@@ -186,7 +186,7 @@ public class VersionDocumentoServ {
 
         // Log Auditing
         String currentUsername = getCurrentUsername();
-        Users currentUser = currentUsername != null ? usersRep.findByUsername(currentUsername) : null;
+        Usuario currentUser = currentUsername != null ? usuarioRep.findByUsername(currentUsername) : null;
         String action = "VISUALIZAR";
         try {
             jakarta.servlet.http.HttpServletRequest request = ((org.springframework.web.context.request.ServletRequestAttributes) org.springframework.web.context.request.RequestContextHolder
@@ -286,7 +286,7 @@ public class VersionDocumentoServ {
 
     public void deleteVersionDocumento(Integer id, Integer userId) {
         VersionDocumento version = versionDocumentoRep.findById(id).orElse(null);
-        Users user = usersRep.findById(userId).orElse(null);
+        Usuario user = usuarioRep.findById(userId).orElse(null);
         if (version != null && user != null) {
             if (!version.getUser_version_documento().getId().equals(userId)) {
                 throw new org.springframework.security.access.AccessDeniedException(

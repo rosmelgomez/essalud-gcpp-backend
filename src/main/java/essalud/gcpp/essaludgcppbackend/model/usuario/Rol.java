@@ -38,6 +38,6 @@ public class Rol {
 
     /// relacion con usuario_rol
     @OneToMany(mappedBy = "rol_user" , fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<UserRol> roles_users;
+    private List<UsuarioRol> roles_users;
 
 }

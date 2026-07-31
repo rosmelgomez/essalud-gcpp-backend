@@ -1,8 +1,7 @@
-package essalud.gcpp.essaludgcppbackend.model;
+package essalud.gcpp.essaludgcppbackend.model.usuario;
 
 import java.time.LocalDateTime;
 
-import essalud.gcpp.essaludgcppbackend.model.usuario.Users;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -20,7 +19,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "log_user")
+@Table(name = "log_usuario")
 public class Log {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,7 +55,7 @@ public class Log {
     /// relacion con user.
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_user")
-    private Users user_log;
+    private Usuario user_log;
 
 
 }

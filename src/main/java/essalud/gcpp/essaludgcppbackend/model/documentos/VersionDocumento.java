@@ -1,6 +1,6 @@
 package essalud.gcpp.essaludgcppbackend.model.documentos;
 
-import essalud.gcpp.essaludgcppbackend.model.usuario.Users;
+import essalud.gcpp.essaludgcppbackend.model.usuario.Usuario;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -53,7 +53,7 @@ public class VersionDocumento {
     /// relacion con usuario creador
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_user_creation")
-    private Users user_version_documento;
+    private Usuario user_version_documento;
 
     /// relacion con documento
     @ManyToOne(fetch = FetchType.LAZY)

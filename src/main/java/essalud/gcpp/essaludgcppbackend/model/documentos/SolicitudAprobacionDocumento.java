@@ -1,6 +1,6 @@
 package essalud.gcpp.essaludgcppbackend.model.documentos;
 
-import essalud.gcpp.essaludgcppbackend.model.usuario.Users;
+import essalud.gcpp.essaludgcppbackend.model.usuario.Usuario;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -40,11 +40,11 @@ public class SolicitudAprobacionDocumento {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario_solicitante", nullable = false)
-    private Users userSolicitante;
+    private Usuario userSolicitante;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario_aprobador", nullable = false)
-    private Users userAprobador;
+    private Usuario userAprobador;
 
     @OneToMany(mappedBy = "solicitudAprobacion", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ResolucionAprobacionDocumento> resoluciones;

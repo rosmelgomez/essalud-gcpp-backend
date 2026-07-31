@@ -3,11 +3,11 @@ package essalud.gcpp.essaludgcppbackend.service;
 import essalud.gcpp.essaludgcppbackend.dtos.SolicitudAccesoDto;
 import essalud.gcpp.essaludgcppbackend.model.SolicitudAcceso;
 import essalud.gcpp.essaludgcppbackend.model.ResolucionSolicitudAcceso;
-import essalud.gcpp.essaludgcppbackend.model.usuario.Users;
+import essalud.gcpp.essaludgcppbackend.model.usuario.Usuario;
 import essalud.gcpp.essaludgcppbackend.repositories.acceso.SolicitudAccesoRep;
 import essalud.gcpp.essaludgcppbackend.repositories.acceso.ResolucionSolicitudAccesoRep;
-import essalud.gcpp.essaludgcppbackend.repositories.usuario.UsersRep;
-import essalud.gcpp.essaludgcppbackend.service.usuario.UsersServ;
+import essalud.gcpp.essaludgcppbackend.repositories.usuario.UsuarioRep;
+import essalud.gcpp.essaludgcppbackend.service.usuario.UsuarioServ;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,22 +23,22 @@ import java.util.Map;
 public class SolicitudAccesoServ {
 
     private final SolicitudAccesoRep solicitudAccesoRep;
-    private final UsersRep usersRep;
-    private final UsersServ usersServ;
+    private final UsuarioRep usuarioRep;
+    private final UsuarioServ usuarioServ;
     private final ResolucionSolicitudAccesoRep resolucionSolicitudAccesoRep;
 
-    public SolicitudAccesoServ(SolicitudAccesoRep solicitudAccesoRep, UsersRep usersRep, UsersServ usersServ, ResolucionSolicitudAccesoRep resolucionSolicitudAccesoRep) {
+    public SolicitudAccesoServ(SolicitudAccesoRep solicitudAccesoRep, UsuarioRep usuarioRep, UsuarioServ usuarioServ, ResolucionSolicitudAccesoRep resolucionSolicitudAccesoRep) {
         this.solicitudAccesoRep = solicitudAccesoRep;
-        this.usersRep = usersRep;
-        this.usersServ = usersServ;
+        this.usuarioRep = usuarioRep;
+        this.usuarioServ = usuarioServ;
         this.resolucionSolicitudAccesoRep = resolucionSolicitudAccesoRep;
     }
 
     public void saveSolicitudAcceso(SolicitudAccesoDto solicitudAccesoDto) {
-        Users user = usersRep.findByDni(solicitudAccesoDto.getDni());
+        Usuario user = usuarioRep.findByDni(solicitudAccesoDto.getDni());
 
         if (user == null) {
-            user = new Users();
+            user = new Usuario();
             PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String encodedPassword = passwordEncoder.encode("123456789");
 
@@ -53,7 +53,7 @@ public class SolicitudAccesoServ {
             user.setFirst_Login(true);
             user.setDate_creation(LocalDateTime.now());
             user.setDate_update(null);
-            user = usersRep.save(user);
+            user = usuarioRep.save(user);
         }
 
         SolicitudAcceso solicitudAcceso = new SolicitudAcceso();
@@ -74,7 +74,7 @@ public class SolicitudAccesoServ {
 
     @Transactional
     public void updateSolicitudAcceso(SolicitudAccesoDto solicitudAccesoDto) {
-        Users user = usersRep.findByDni(solicitudAccesoDto.getDni());
+        Usuario user = usuarioRep.findByDni(solicitudAccesoDto.getDni());
         SolicitudAcceso solicitudAcceso = solicitudAccesoRep.findById(solicitudAccesoDto.getId()).orElse(null);
         if (user != null && solicitudAcceso != null) {
             user.setCodcas(solicitudAccesoDto.getCodcas());
@@ -85,12 +85,12 @@ public class SolicitudAccesoServ {
             if ("APROBADO".equalsIgnoreCase(solicitudAccesoDto.getStatus())) {
                 user.setFlag(true);
                 // Asignar el rol en user_rol
-                usersServ.updateRolesUserByName(user, List.of(solicitudAccesoDto.getRol_solicitud()));
+                usuarioServ.updateRolesUserByName(user, List.of(solicitudAccesoDto.getRol_solicitud()));
             } else if ("RECHAZADO".equalsIgnoreCase(solicitudAccesoDto.getStatus())) {
                 user.setFlag(false);
             }
 
-            usersRep.save(user);
+            usuarioRep.save(user);
 
             solicitudAcceso.setStatus(solicitudAccesoDto.getStatus());
             solicitudAcceso.setRol_solicitud(solicitudAccesoDto.getRol_solicitud());
@@ -108,7 +108,7 @@ public class SolicitudAccesoServ {
                 } else if (principal != null) {
                     adminUsername = principal.toString();
                 }
-                Users adminRevisor = adminUsername != null ? usersRep.findByUsername(adminUsername) : null;
+                Usuario adminRevisor = adminUsername != null ? usuarioRep.findByUsername(adminUsername) : null;
 
                 if (adminRevisor != null) {
                     ResolucionSolicitudAcceso rsa = resolucionSolicitudAccesoRep
