@@ -87,7 +87,7 @@ public class DashboardPatoCon {
         return ResponseEntity.ok(service.queryAPACCIT());
     }
 
-    ///Diagnostico y servicios mas frecuentes por patologia
+    ///patologia -> area ->servicio
     @GetMapping("/queryAPACPAS")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryAPACPAS(@RequestParam("anios") List<String> anios) {
@@ -121,6 +121,13 @@ public class DashboardPatoCon {
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryAPACMCC(@RequestParam("anios") List<String> anios) {
         return ResponseEntity.ok(service.queryAPACMCC(anios));
+    }
+
+    ///ranking red
+    @GetMapping("/queryAPACRR")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
+    public ResponseEntity<List<Map<String, Object>>> queryAPACRR(@RequestParam("anios") List<String> anios) {
+        return ResponseEntity.ok(service.queryAPACRR(anios));
     }
 
 }

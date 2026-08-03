@@ -87,4 +87,8 @@ public class DashboardPatoServ {
         return repository.queryAPACMCC(anios);
     }
 
+    ///ranking red
+    public List<Map<String, Object>> queryAPACRR(List<String> anios){
+        return repository.queryAPACRR(anios);
+    }
 }

@@ -52,6 +52,9 @@ public class DashboardPatoRep {
         return secondJdbcTemplate.queryForList(sql);
     }
 
+    ///opcion grupo etario
+
+
     ///Analitica por patologia de alto costo
     /// pacientes totales
     public List<Map<String, Object>> queryAPACPT() {
@@ -181,7 +184,7 @@ public class DashboardPatoRep {
         /// ('2019'), ('2020)
         String placeholders = String.join(",", Collections.nCopies(anios.size(), "(?)"));
 
-        System.out.print(" anios DSFP :" + placeholders);
+        //System.out.print(" anios DSFP :" + placeholders);
 
         String sql = """
             SELECT patologia, redasisdes, SUM(pacientes) AS pacientes
@@ -202,7 +205,7 @@ public class DashboardPatoRep {
         /// ('2019'), ('2020)
         String placeholders = String.join(",", Collections.nCopies(anios.size(), "(?)"));
 
-        System.out.print(" anios DSFP :" + placeholders);
+        //System.out.print(" anios DSFP :" + placeholders);
 
         String sql = """
             SELECT patologia, cenasides, SUM(pacientes) AS pacientes
@@ -213,5 +216,24 @@ public class DashboardPatoRep {
         return secondJdbcTemplate.queryForList(sql, anios.toArray());
     }
 
+    ///ranking red
+    public List<Map<String, Object>> queryAPACRR(List<String> anios) {
+        if (anios == null || anios.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        /// ('2019'), ('2020)
+        String placeholders = String.join(",", Collections.nCopies(anios.size(), "(?)"));
+
+        System.out.print(" anios DSFP :" + placeholders);
+
+        String sql = """
+            SELECT redasisdes, patologia, SUM(pacientes) AS pacientes
+            FROM dssge.mv_ejec_pat_red
+            WHERE anio = ANY(VALUES %s ) AND patologia = ANY(VALUES ('Raras'),('Oncologico'), ('Renal')) AND redasisdes IS NOT NULL
+            GROUP BY redasisdes, patologia
+            """.formatted(placeholders);
+        return secondJdbcTemplate.queryForList(sql, anios.toArray());
+    }
 
 }
