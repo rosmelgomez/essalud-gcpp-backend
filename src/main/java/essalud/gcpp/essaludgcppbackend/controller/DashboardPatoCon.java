@@ -130,4 +130,12 @@ public class DashboardPatoCon {
         return ResponseEntity.ok(service.queryAPACRR(anios));
     }
 
+
+    /// Detalle por patología
+    /// total de pacientes
+    @GetMapping("/queryDPTP")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
+    public ResponseEntity<List<Map<String, Object>>> queryDPTP(@RequestParam("patologias") List<String> patologias, @RequestParam("anios") List<String> anios , @RequestParam("codreds") List<String> codreds, @RequestParam("codcens") List<String> codcens, @RequestParam("grupo_edades") List<String> grupo_edades) {
+        return ResponseEntity.ok(service.queryDPTP(patologias, anios, codreds, codcens, grupo_edades));
+    }
 }

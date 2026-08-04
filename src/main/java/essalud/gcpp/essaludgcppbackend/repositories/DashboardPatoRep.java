@@ -236,4 +236,37 @@ public class DashboardPatoRep {
         return secondJdbcTemplate.queryForList(sql, anios.toArray());
     }
 
+    /// Detalle por patología
+    /// total de pacientes
+    public List<Map<String, Object>> queryDPTP(List<String> patologias, List<String> anios, List<String> codreds, List<String> codcens, List<String> grupo_edades ) {
+        if (anios == null || anios.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        String placeholdersPatologia=String.join(",", Collections.nCopies(patologias.size(), "(?)"));
+
+        String placeholdersAnios = String.join(",", Collections.nCopies(anios.size(), "(?)"));
+
+        String placeholdersRedes= String.join(",", Collections.nCopies(codreds.size(), "(?)"));
+
+        String placeholdersCentros = String.join(",", Collections.nCopies(codcens.size(), "(?)"));
+
+        String placeholdersEdades= String.join(",", Collections.nCopies(grupo_edades.size(), "(?)"));
+
+        List<Object> union = new java.util.ArrayList<>();
+        union.addAll(patologias);
+        union.addAll(anios);
+        union.addAll(codreds);
+        union.addAll(codcens);
+        union.addAll(grupo_edades);
+
+        String sql = """
+            SELECT COALESCE(SUM(pacientes),0) AS pacientes
+            FROM dssge.mv_ejec_pat_detalle
+            WHERE patologia = ANY(VALUES %s) AND anio = ANY(VALUES %s) AND redasiscod = ANY(VALUES %s) AND cod_centro = ANY(VALUES %s) AND grupo_edad = ANY(VALUES %s);
+            """.formatted(placeholdersPatologia, placeholdersAnios, placeholdersRedes,placeholdersCentros,  placeholdersEdades);
+        return secondJdbcTemplate.queryForList(sql, union.toArray());
+    }
+
+
 }

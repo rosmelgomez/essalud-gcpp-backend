@@ -91,4 +91,12 @@ public class DashboardPatoServ {
     public List<Map<String, Object>> queryAPACRR(List<String> anios){
         return repository.queryAPACRR(anios);
     }
-}
+
+    /// Detalle por patología
+    /// total de pacientes
+    public List<Map<String, Object>> queryDPTP(List<String> patologias, List<String> anios, List<String> codreds, List<String> codcens, List<String> grupo_edades ) {
+        return repository.queryDPTP(patologias, anios, codreds, codcens, grupo_edades);
+    }
+
+
+    }
