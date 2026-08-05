@@ -98,5 +98,30 @@ public class DashboardPatoServ {
         return repository.queryDPTP(patologias, anios, codreds, codcens, grupo_edades);
     }
 
+    ///Total diagnosticos distintos
+    public List<Map<String, Object>> queryDPTDD(List<String> patologias, List<String> anios, List<String> codreds, List<String> codcens, List<String> grupo_edades ) {
+        return repository.queryDPTDD(patologias, anios, codreds, codcens, grupo_edades);
+    }
+
+    /// distribucion por sexo
+    public List<Map<String, Object>> queryDPDS(List<String> patologias, List<String> anios, List<String> codreds, List<String> codcens, List<String> grupo_edades ) {
+        return repository.queryDPDS(patologias, anios, codreds, codcens, grupo_edades);
+    }
+
+    ///Distribucion por grupo etario
+    public List<Map<String, Object>> queryDPDGE(List<String> patologias, List<String> anios, List<String> codreds, List<String> codcens) {
+        return repository.queryDPDGE(patologias, anios, codreds, codcens);
+    }
+
+    ///Tabla diagnosticos
+    public List<Map<String, Object>> queryDPTD(List<String> patologias, List<String> anios, List<String> codreds, List<String> codcens, List<String> grupo_edades ) {
+        return repository.queryDPTD(patologias, anios, codreds, codcens, grupo_edades);
+    }
+
+    ///evolucion anual
+    public List<Map<String, Object>> queryDPEA(List<String> patologias,  List<String> codreds, List<String> codcens, List<String> grupo_edades ) {
+        return repository.queryDPEA(patologias, codreds, codcens, grupo_edades);
+    }
+
 
     }

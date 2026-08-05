@@ -236,10 +236,10 @@ public class DashboardPatoRep {
         return secondJdbcTemplate.queryForList(sql, anios.toArray());
     }
 
-    /// Detalle por patología
+    /// detalle por patología
     /// total de pacientes
     public List<Map<String, Object>> queryDPTP(List<String> patologias, List<String> anios, List<String> codreds, List<String> codcens, List<String> grupo_edades ) {
-        if (anios == null || anios.isEmpty()) {
+        if ((anios == null || anios.isEmpty()) ) {
             return Collections.emptyList();
         }
 
@@ -267,6 +267,179 @@ public class DashboardPatoRep {
             """.formatted(placeholdersPatologia, placeholdersAnios, placeholdersRedes,placeholdersCentros,  placeholdersEdades);
         return secondJdbcTemplate.queryForList(sql, union.toArray());
     }
+
+    ///total diagnosticos distintos
+    public List<Map<String, Object>> queryDPTDD(List<String> patologias, List<String> anios, List<String> codreds, List<String> codcens, List<String> grupo_edades ) {
+        if (anios == null || anios.isEmpty()) return Collections.emptyList();
+
+        String placeholdersPatologia=String.join(",", Collections.nCopies(patologias.size(), "(?)"));
+
+        String placeholdersAnios = String.join(",", Collections.nCopies(anios.size(), "(?)"));
+
+        String placeholdersRedes= String.join(",", Collections.nCopies(codreds.size(), "(?)"));
+
+        String placeholdersCentros = String.join(",", Collections.nCopies(codcens.size(), "(?)"));
+
+        String placeholdersEdades= String.join(",", Collections.nCopies(grupo_edades.size(), "(?)"));
+
+        List<Object> union = new java.util.ArrayList<>();
+        union.addAll(patologias);
+        union.addAll(anios);
+        union.addAll(codreds);
+        union.addAll(codcens);
+        union.addAll(grupo_edades);
+
+        String sql = """
+            SELECT COUNT(DISTINCT cod_diagnostico) AS n
+            FROM dssge.mv_ejec_pat_diag
+            WHERE patologia = ANY(VALUES %s) AND anio = ANY(VALUES %s) AND redasiscod = ANY(VALUES %s) AND cod_centro = ANY(VALUES %s) AND grupo_edad = ANY(VALUES %s)
+
+            """.formatted(placeholdersPatologia, placeholdersAnios, placeholdersRedes,placeholdersCentros,  placeholdersEdades);
+        return secondJdbcTemplate.queryForList(sql, union.toArray());
+    }
+
+    /// distribucion por sexo
+    public List<Map<String, Object>> queryDPDS(List<String> patologias, List<String> anios, List<String> codreds, List<String> codcens, List<String> grupo_edades ) {
+        if (anios == null || anios.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        String placeholdersPatologia=String.join(",", Collections.nCopies(patologias.size(), "(?)"));
+
+        String placeholdersAnios = String.join(",", Collections.nCopies(anios.size(), "(?)"));
+
+        String placeholdersRedes= String.join(",", Collections.nCopies(codreds.size(), "(?)"));
+
+        String placeholdersCentros = String.join(",", Collections.nCopies(codcens.size(), "(?)"));
+
+        String placeholdersEdades= String.join(",", Collections.nCopies(grupo_edades.size(), "(?)"));
+
+        List<Object> union = new java.util.ArrayList<>();
+        union.addAll(patologias);
+        union.addAll(anios);
+        union.addAll(codreds);
+        union.addAll(codcens);
+        union.addAll(grupo_edades);
+
+        String sql = """
+            SELECT sexo, SUM(pacientes) AS pacientes
+            FROM dssge.mv_ejec_pat_sexo_edad
+            WHERE patologia = ANY(VALUES %s) AND anio = ANY(VALUES %s) AND redasiscod = ANY(VALUES %s) AND cod_centro = ANY(VALUES %s) AND grupo_edad = ANY(VALUES %s)
+             AND sexo <> 'TODOS'
+            GROUP BY sexo
+            """.formatted(placeholdersPatologia, placeholdersAnios, placeholdersRedes,placeholdersCentros,  placeholdersEdades);
+        return secondJdbcTemplate.queryForList(sql, union.toArray());
+    }
+
+    ///Distribucion por grupo etario
+    public List<Map<String, Object>> queryDPDGE(List<String> patologias, List<String> anios, List<String> codreds, List<String> codcens) {
+        if (anios == null || anios.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        String placeholdersPatologia=String.join(",", Collections.nCopies(patologias.size(), "(?)"));
+
+        String placeholdersAnios = String.join(",", Collections.nCopies(anios.size(), "(?)"));
+
+        String placeholdersRedes= String.join(",", Collections.nCopies(codreds.size(), "(?)"));
+
+        String placeholdersCentros = String.join(",", Collections.nCopies(codcens.size(), "(?)"));
+
+
+        List<Object> union = new java.util.ArrayList<>();
+        union.addAll(patologias);
+        union.addAll(anios);
+        union.addAll(codreds);
+        union.addAll(codcens);
+
+
+        String sql = """
+           SELECT grupo_edad, SUM(pacientes) AS pacientes
+           FROM dssge.mv_ejec_pat_sexo_edad
+           WHERE patologia = ANY(VALUES %s) AND anio = ANY(VALUES %s) AND redasiscod = ANY(VALUES %s) AND cod_centro = ANY(VALUES %s) AND sexo = 'TODOS' AND grupo_edad <> 'TODOS'
+           GROUP BY grupo_edad
+           """.formatted(placeholdersPatologia, placeholdersAnios, placeholdersRedes,placeholdersCentros);
+        return secondJdbcTemplate.queryForList(sql, union.toArray());
+    }
+
+    ///Tabla diagnosticos
+    public List<Map<String, Object>> queryDPTD(List<String> patologias, List<String> anios, List<String> codreds, List<String> codcens, List<String> grupo_edades ) {
+        if (anios == null || anios.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        String placeholdersPatologia=String.join(",", Collections.nCopies(patologias.size(), "(?)"));
+
+        String placeholdersAnios = String.join(",", Collections.nCopies(anios.size(), "(?)"));
+
+        String placeholdersRedes= String.join(",", Collections.nCopies(codreds.size(), "(?)"));
+
+        String placeholdersCentros = String.join(",", Collections.nCopies(codcens.size(), "(?)"));
+
+        String placeholdersEdades= String.join(",", Collections.nCopies(grupo_edades.size(), "(?)"));
+
+        List<Object> union = new java.util.ArrayList<>();
+        union.addAll(patologias);
+        union.addAll(anios);
+        union.addAll(codreds);
+        union.addAll(codcens);
+        union.addAll(grupo_edades);
+
+        String sql = """
+           SELECT cod_diagnostico, diagdes, tipodiagnom, SUM(pacientes) AS pacientes, SUM(registros) AS registros
+           FROM dssge.mv_ejec_pat_diag
+           WHERE patologia = ANY(VALUES %s) AND anio = ANY(VALUES %s) AND redasiscod = ANY(VALUES %s) AND cod_centro = ANY(VALUES %s) AND grupo_edad = ANY(VALUES %s)
+           GROUP BY cod_diagnostico, diagdes, tipodiagnom
+           ORDER BY pacientes DESC
+           """.formatted(placeholdersPatologia, placeholdersAnios, placeholdersRedes,placeholdersCentros,  placeholdersEdades);
+        return secondJdbcTemplate.queryForList(sql, union.toArray());
+    }
+
+    ///evolucion anual
+    public List<Map<String, Object>> queryDPEA(List<String> patologias, List<String> codreds, List<String> codcens, List<String> grupo_edades ) {
+        if (patologias == null || patologias.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        String placeholdersPatologia=String.join(",", Collections.nCopies(patologias.size(), "(?)"));
+
+        String placeholdersRedes= String.join(",", Collections.nCopies(codreds.size(), "(?)"));
+
+        String placeholdersCentros = String.join(",", Collections.nCopies(codcens.size(), "(?)"));
+
+        String placeholdersEdades= String.join(",", Collections.nCopies(grupo_edades.size(), "(?)"));
+
+        List<Object> union = new java.util.ArrayList<>();
+        union.addAll(patologias);
+        union.addAll(codreds);
+        union.addAll(codcens);
+        union.addAll(grupo_edades);
+
+        String sql = """
+           SELECT patologia, anio, SUM(pacientes) AS pacientes
+           FROM dssge.mv_ejec_pat_diag
+           WHERE patologia = ANY(VALUES %s) AND anio <> 'TODOS' AND redasiscod = ANY(VALUES %s) AND cod_centro = ANY(VALUES %s) AND grupo_edad = ANY(VALUES %s)
+           GROUP BY patologia, anio
+           ORDER BY anio
+           """.formatted(placeholdersPatologia,  placeholdersRedes,placeholdersCentros, placeholdersEdades);
+        return secondJdbcTemplate.queryForList(sql, union.toArray());
+    }
+
+
+    ////Comorbilidad del paciente
+    ///buscar pacientes
+    public List<Map<String, Object>> queryCPCP(String documento) {
+        String sql = """
+            SELECT anio, patologia, area, cenasides, servhosdes,
+                    cod_diagnostico, diagdes, tipodiagnom, sexo, anio_edad
+            FROM dssge.mv_ejec_base
+            WHERE doc_paciente = ?
+            ORDER BY anio, patologia, cod_diagnostico
+            """;
+        return secondJdbcTemplate.queryForList(sql, documento);
+    }
+
+
 
 
 }
