@@ -2,19 +2,16 @@ package essalud.gcpp.essaludgcppbackend.controller;
 
 
 import essalud.gcpp.essaludgcppbackend.service.DashboardPatoServ;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/patologia")
+@CrossOrigin
 public class DashboardPatoCon {
 
     private final DashboardPatoServ service;
@@ -171,6 +168,29 @@ public class DashboardPatoCon {
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDPEA(@RequestParam("patologias") List<String> patologias, @RequestParam("codreds") List<String> codreds, @RequestParam("codcens") List<String> codcens, @RequestParam("grupo_edades") List<String> grupo_edades) {
         return ResponseEntity.ok(service.queryDPEA(patologias, codreds, codcens, grupo_edades));
+    }
+
+    ///Pacientes por servicio
+    @GetMapping("/queryDPPS")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
+    public ResponseEntity<List<Map<String, Object>>> queryDPPS(@RequestParam("patologias") List<String> patologias, @RequestParam("anios") List<String> anios , @RequestParam("codreds") List<String> codreds, @RequestParam("codcens") List<String> codcens, @RequestParam("grupo_edades") List<String> grupo_edades) {
+        return ResponseEntity.ok(service.queryDPPS(patologias, anios, codreds, codcens, grupo_edades));
+    }
+
+    ///Ranking por centro
+    @GetMapping("/queryDPRC")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
+    public ResponseEntity<List<Map<String, Object>>> queryDPRC(@RequestParam("patologias") List<String> patologias, @RequestParam("anios") List<String> anios , @RequestParam("codreds") List<String> codreds) {
+        return ResponseEntity.ok(service.queryDPRC(patologias, anios, codreds));
+    }
+
+
+    ////Comorbilidad del paciente
+    ///buscar pacientes
+    @GetMapping("/queryCPCPD/{documento}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
+    public ResponseEntity<List<Map<String, Object>>> queryCPCPD(@PathVariable String documento) {
+        return ResponseEntity.ok(service.queryCPCPD( documento));
     }
 
 }

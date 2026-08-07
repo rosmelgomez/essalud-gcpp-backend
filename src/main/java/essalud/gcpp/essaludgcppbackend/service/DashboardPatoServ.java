@@ -118,10 +118,29 @@ public class DashboardPatoServ {
         return repository.queryDPTD(patologias, anios, codreds, codcens, grupo_edades);
     }
 
-    ///evolucion anual
+    ///Evolucion anual
     public List<Map<String, Object>> queryDPEA(List<String> patologias,  List<String> codreds, List<String> codcens, List<String> grupo_edades ) {
         return repository.queryDPEA(patologias, codreds, codcens, grupo_edades);
     }
 
-
+    ///Pacientes por servicio
+    public List<Map<String, Object>> queryDPPS(List<String> patologias, List<String> anios, List<String> codreds, List<String> codcens, List<String> grupo_edades ) {
+        return repository.queryDPPS(patologias, anios, codreds, codcens, grupo_edades);
     }
+
+    ///Ranking por centro
+    public List<Map<String, Object>> queryDPRC(List<String> patologias, List<String> anios, List<String> codreds ) {
+        return repository.queryDPRC(patologias, anios, codreds);
+    }
+
+
+
+
+    ////Comorbilidad del paciente
+    ///buscar pacientes
+    public List<Map<String, Object>> queryCPCPD(String documento) {
+        return repository.queryCPCPD(documento);
+    }
+
+
+}
