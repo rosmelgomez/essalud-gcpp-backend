@@ -127,8 +127,6 @@ public class DashboardPatoRep {
         //'2019','2020'
         String placeholders = String.join(",", Collections.nCopies(anios.size(), "?"));
 
-        System.out.print(" anios :" + placeholders);
-
         String sql = """
             SELECT patologia, area, servhosdes, SUM(pacientes) AS pacientes
             FROM dssge.mv_ejec_pat_area_servicio
@@ -146,8 +144,6 @@ public class DashboardPatoRep {
 
         /// ('2019'), ('2020)
         String placeholders = String.join(",", Collections.nCopies(anios.size(), "(?)"));
-
-        System.out.print(" anios DSFP :" + placeholders);
 
         String sql = """
             SELECT patologia, diagdes, servhosdes, SUM(pacientes) AS pacientes
@@ -184,8 +180,6 @@ public class DashboardPatoRep {
         /// ('2019'), ('2020)
         String placeholders = String.join(",", Collections.nCopies(anios.size(), "(?)"));
 
-        //System.out.print(" anios DSFP :" + placeholders);
-
         String sql = """
             SELECT patologia, redasisdes, SUM(pacientes) AS pacientes
             FROM dssge.mv_ejec_pat_red
@@ -205,8 +199,6 @@ public class DashboardPatoRep {
         /// ('2019'), ('2020)
         String placeholders = String.join(",", Collections.nCopies(anios.size(), "(?)"));
 
-        //System.out.print(" anios DSFP :" + placeholders);
-
         String sql = """
             SELECT patologia, cenasides, SUM(pacientes) AS pacientes
             FROM dssge.mv_ejec_pat_centro
@@ -224,8 +216,6 @@ public class DashboardPatoRep {
 
         /// ('2019'), ('2020)
         String placeholders = String.join(",", Collections.nCopies(anios.size(), "(?)"));
-
-        System.out.print(" anios DSFP :" + placeholders);
 
         String sql = """
             SELECT redasisdes, patologia, SUM(pacientes) AS pacientes
@@ -483,7 +473,6 @@ public class DashboardPatoRep {
             """.formatted(placeholdersPatologia, placeholdersAnios, placeholdersRedes);
         return secondJdbcTemplate.queryForList(sql, union.toArray());
     }
-
 
     ////Comorbilidad del paciente
     ///buscar pacientes por documento

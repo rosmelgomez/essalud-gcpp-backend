@@ -133,14 +133,10 @@ public class DashboardPatoServ {
         return repository.queryDPRC(patologias, anios, codreds);
     }
 
-
-
-
     ////Comorbilidad del paciente
     ///buscar pacientes
     public List<Map<String, Object>> queryCPCPD(String documento) {
         return repository.queryCPCPD(documento);
     }
-
 
 }
