@@ -1,6 +1,5 @@
-package essalud.gcpp.essaludgcppbackend.model;
+package essalud.gcpp.essaludgcppbackend.model.usuario;
 
-import essalud.gcpp.essaludgcppbackend.model.usuario.Usuario;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -2,7 +2,6 @@ package essalud.gcpp.essaludgcppbackend.model.usuario;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import essalud.gcpp.essaludgcppbackend.model.SolicitudAcceso;
 import essalud.gcpp.essaludgcppbackend.model.documentos.*;
 import essalud.gcpp.essaludgcppbackend.model.encuesta.Encuesta;
 import jakarta.persistence.*;

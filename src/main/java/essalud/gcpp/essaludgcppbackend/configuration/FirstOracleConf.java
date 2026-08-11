@@ -52,6 +52,7 @@ public class FirstOracleConf {
     @Bean(name = "firstOracleTransactionManager")
     public PlatformTransactionManager firstOracleTransactionManager(
             @Qualifier("firstOracleEntityManagerFactory") LocalContainerEntityManagerFactoryBean firstOracleEntityManagerFactory){
+        assert firstOracleEntityManagerFactory.getObject() != null;
         return new JpaTransactionManager(firstOracleEntityManagerFactory.getObject());
     }
 

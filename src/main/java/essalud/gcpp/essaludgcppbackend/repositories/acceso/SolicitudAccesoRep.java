@@ -1,6 +1,6 @@
 package essalud.gcpp.essaludgcppbackend.repositories.acceso;
 
-import essalud.gcpp.essaludgcppbackend.model.SolicitudAcceso;
+import essalud.gcpp.essaludgcppbackend.model.usuario.SolicitudAcceso;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -12,7 +12,7 @@ import java.util.Map;
 public interface SolicitudAccesoRep extends JpaRepository<SolicitudAcceso, Integer> {
 
     @Query(value = """
-    SELECT 
+    SELECT
         sa.id,
         us.name,
         us.lastname,

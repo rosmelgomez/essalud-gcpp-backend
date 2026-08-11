@@ -54,7 +54,8 @@ public class SecondConf {
 	@Bean(name = "secondTransactionManager")
 	public PlatformTransactionManager secondTransactionManager(
 			@Qualifier("secondEntityManagerFactory") LocalContainerEntityManagerFactoryBean secondEntityManagerFactory) {
-		return new JpaTransactionManager(secondEntityManagerFactory.getObject());
+        assert secondEntityManagerFactory.getObject() != null;
+        return new JpaTransactionManager(secondEntityManagerFactory.getObject());
 	}
 
 	@Bean(name = "secondJdbcTemplate")

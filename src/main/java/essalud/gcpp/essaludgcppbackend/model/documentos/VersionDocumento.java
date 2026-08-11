@@ -44,7 +44,7 @@ public class VersionDocumento {
     @Column(name = "date_delete")
     private LocalDateTime date_delete;
 
-    @OneToOne(mappedBy = "versionDocumento", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "versionDocumento", cascade = CascadeType.ALL)
     private VersionDocumentoArchivo archivoVersion;
 
     @Column(name = "visible", nullable = false)

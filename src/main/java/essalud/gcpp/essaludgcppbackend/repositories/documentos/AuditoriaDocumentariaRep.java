@@ -10,10 +10,10 @@ import java.util.Map;
 
 @Repository
 public interface AuditoriaDocumentariaRep extends JpaRepository<AuditoriaDocumentaria, Long> {
-    List<AuditoriaDocumentaria> findByDocumentoId(Integer documentoId);
+
 
     @Query(value = """
-            SELECT 
+            SELECT
                 ad.id AS id,
                 ad.accion AS accion,
                 ad.ip_address AS ip_address,

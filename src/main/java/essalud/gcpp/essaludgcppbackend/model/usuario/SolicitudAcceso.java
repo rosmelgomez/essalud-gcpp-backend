@@ -1,6 +1,5 @@
-package essalud.gcpp.essaludgcppbackend.model;
+package essalud.gcpp.essaludgcppbackend.model.usuario;
 
-import essalud.gcpp.essaludgcppbackend.model.usuario.Usuario;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -46,7 +45,7 @@ public class SolicitudAcceso {
     @JoinColumn(name = "id_user")
     private Usuario user_solicitud;
 
-    @OneToOne(mappedBy = "solicitudAcceso", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "solicitudAcceso", cascade = CascadeType.ALL)
     private ResolucionSolicitudAcceso resolucion;
 
 }

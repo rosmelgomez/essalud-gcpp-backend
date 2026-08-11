@@ -51,7 +51,7 @@ public class SolicitudAprobacionDocumentoServ {
         return limite;
     }
 
-    public void saveFlujoAprobacionDocumento(Integer id_user_aprobador, VersionDocumento versionDocumento, String prioridad, String comentarioSolicitud) throws IOException {
+    public void saveFlujoAprobacionDocumento(Integer id_user_aprobador, VersionDocumento versionDocumento, String prioridad, String comentarioSolicitud) {
         Usuario aprobador = usuarioRep.findById(id_user_aprobador).orElse(null);
         Usuario solicitante = versionDocumento.getUser_version_documento();
 
@@ -196,11 +196,7 @@ public class SolicitudAprobacionDocumentoServ {
                                     : ""),
                     userAccion);
         } else {
-            try {
-                saveFlujoAprobacionDocumento(idUserAprobador, versionDocumento, prioridad, comentarioSolicitud);
-            } catch (IOException e) {
-                throw new RuntimeException("Error al crear solicitud de aprobación en actualización", e);
-            }
+            saveFlujoAprobacionDocumento(idUserAprobador, versionDocumento, prioridad, comentarioSolicitud);
         }
     }
 

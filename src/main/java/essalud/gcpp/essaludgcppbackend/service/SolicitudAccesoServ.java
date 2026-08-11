@@ -1,8 +1,8 @@
 package essalud.gcpp.essaludgcppbackend.service;
 
 import essalud.gcpp.essaludgcppbackend.dtos.SolicitudAccesoDto;
-import essalud.gcpp.essaludgcppbackend.model.SolicitudAcceso;
-import essalud.gcpp.essaludgcppbackend.model.ResolucionSolicitudAcceso;
+import essalud.gcpp.essaludgcppbackend.model.usuario.SolicitudAcceso;
+import essalud.gcpp.essaludgcppbackend.model.usuario.ResolucionSolicitudAcceso;
 import essalud.gcpp.essaludgcppbackend.model.usuario.Usuario;
 import essalud.gcpp.essaludgcppbackend.repositories.acceso.SolicitudAccesoRep;
 import essalud.gcpp.essaludgcppbackend.repositories.acceso.ResolucionSolicitudAccesoRep;

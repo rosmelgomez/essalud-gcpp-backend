@@ -110,6 +110,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                     : jwtTokenUtil.validateAccessToken(jwtToken, userDetails);
 
             if (validToken) {
+                assert userDetails != null;
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 usernamePasswordAuthenticationToken

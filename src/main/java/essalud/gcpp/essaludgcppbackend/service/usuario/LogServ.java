@@ -1,7 +1,7 @@
 package essalud.gcpp.essaludgcppbackend.service.usuario;
 
-import essalud.gcpp.essaludgcppbackend.dtos.LogFilterDto;
-import essalud.gcpp.essaludgcppbackend.dtos.LogUsuarioDto;
+import essalud.gcpp.essaludgcppbackend.dtos.usuario.LogFilterDto;
+import essalud.gcpp.essaludgcppbackend.dtos.usuario.LogUsuarioDto;
 import essalud.gcpp.essaludgcppbackend.model.usuario.Log;
 import essalud.gcpp.essaludgcppbackend.model.usuario.Usuario;
 import essalud.gcpp.essaludgcppbackend.repositories.usuario.LogsRep;
