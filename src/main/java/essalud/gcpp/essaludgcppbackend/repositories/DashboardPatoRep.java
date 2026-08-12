@@ -260,7 +260,9 @@ public class DashboardPatoRep {
 
     ///total diagnosticos distintos
     public List<Map<String, Object>> queryDPTDD(List<String> patologias, List<String> anios, List<String> codreds, List<String> codcens, List<String> grupo_edades ) {
-        if (anios == null || anios.isEmpty()) return Collections.emptyList();
+        if (anios == null || anios.isEmpty()) {
+            return Collections.emptyList();
+        }
 
         String placeholdersPatologia=String.join(",", Collections.nCopies(patologias.size(), "(?)"));
 
