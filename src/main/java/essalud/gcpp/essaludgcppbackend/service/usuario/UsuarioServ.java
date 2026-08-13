@@ -24,6 +24,7 @@ public class UsuarioServ {
     private final UsuarioRep usuarioRep;
     private final RolRep rolRep;
     private final UsuarioRolRep usuarioRolRep;
+
     public UsuarioServ(UsuarioRep usuarioRep, RolRep rolRep, UsuarioRolRep usuarioRolRep) {
         this.usuarioRep = usuarioRep;
         this.rolRep = rolRep;
@@ -52,15 +53,15 @@ public class UsuarioServ {
             newUser = usuarioRep.save(newUser);
 
             /// obtener roles y registrar user_rol
-             for (String role : usuarioDto.getRoles()) {
-                 Rol rol = rolRep.findRol(role);
-                 UsuarioRol usuarioRol = new UsuarioRol();
-                 usuarioRol.setFlag(true);
-                 usuarioRol.setDate_creation(LocalDateTime.now());
-                 usuarioRol.setUsuario_rol(newUser);
-                 usuarioRol.setRol_user(rol);
-                 usuarioRolRep.save(usuarioRol);
-             }
+            for (String role : usuarioDto.getRoles()) {
+                Rol rol = rolRep.findRol(role);
+                UsuarioRol usuarioRol = new UsuarioRol();
+                usuarioRol.setFlag(true);
+                usuarioRol.setDate_creation(LocalDateTime.now());
+                usuarioRol.setUsuario_rol(newUser);
+                usuarioRol.setRol_user(rol);
+                usuarioRolRep.save(usuarioRol);
+            }
 
         }
     }
@@ -90,7 +91,6 @@ public class UsuarioServ {
             updateRolesUserByName(user, usuarioDto.getRoles());
         }
 
-
     }
 
     @Transactional
@@ -107,7 +107,8 @@ public class UsuarioServ {
         Set<String> nuevosNombres = (rolesNames != null) ? new HashSet<>(rolesNames) : new HashSet<>();
 
         // --- LÓGICA DE DESACTIVACIÓN ---
-        // Si el rol está en la DB pero NO está en la lista nueva, lo desactivamos (o eliminamos)
+        // Si el rol está en la DB pero NO está en la lista nueva, lo desactivamos (o
+        // eliminamos)
         for (UsuarioRol asignacion : asignacionesActuales) {
             if (!nuevosNombres.contains(asignacion.getRol_user().getName())) {
                 // Opción A: Desactivar (si usas borrado lógico)
@@ -146,21 +147,22 @@ public class UsuarioServ {
         if (user == null) {
             user = usuarioRep.findByEmail(username);
         }
-        List<Rol> roles =  rolRep.listaRolesByUsername(user.getUsername());
+        List<Rol> roles = rolRep.listaRolesByUsername(user.getUsername());
         return user(user, roles);
     }
 
     public UsuarioDto getUserByDni(String dni) {
         Usuario user = usuarioRep.findByDni(dni);
-        List<Rol> roles =  rolRep.listaRolesByUsername(user.getUsername());
+        List<Rol> roles = rolRep.listaRolesByUsername(user.getUsername());
         return user(user, roles);
     }
 
+    @SuppressWarnings("null")
     public List<UsuarioDto> getAllUsers() {
-        List<Usuario> users = usuarioRep.findAll(Sort.by(Sort.Direction.ASC, "id"));
+        List<Usuario> users = usuarioRep.findAll(Sort.by(Sort.Direction.ASC, Usuario::getId));
         List<UsuarioDto> usuarioDtos = new ArrayList<>();
         for (Usuario user : users) {
-            List<Rol> roles =  rolRep.listaRolesByUsername(user.getUsername());
+            List<Rol> roles = rolRep.listaRolesByUsername(user.getUsername());
             usuarioDtos.add(user(user, roles));
         }
         return usuarioDtos;
@@ -184,22 +186,22 @@ public class UsuarioServ {
         }
     }
 
-    public  List<UsuarioDto> getUsersByCod_red(String code_red) {
+    public List<UsuarioDto> getUsersByCod_red(String code_red) {
         List<UsuarioDto> usuarioDtos = new ArrayList<>();
-        List<Usuario> users= usuarioRep.findByCodred(code_red);
+        List<Usuario> users = usuarioRep.findByCodred(code_red);
         for (Usuario user : users) {
-            List<Rol> roles =  rolRep.listaRolesByUsername(user.getUsername());
-            usuarioDtos.add(user(user,roles));
+            List<Rol> roles = rolRep.listaRolesByUsername(user.getUsername());
+            usuarioDtos.add(user(user, roles));
         }
         return usuarioDtos;
     }
 
-    public  List<UsuarioDto> getUsersByCodcas(String codcas) {
+    public List<UsuarioDto> getUsersByCodcas(String codcas) {
         List<UsuarioDto> usuarioDtos = new ArrayList<>();
-        List<Usuario> users= usuarioRep.findByCodcas(codcas);
+        List<Usuario> users = usuarioRep.findByCodcas(codcas);
         for (Usuario user : users) {
-            List<Rol> roles =  rolRep.listaRolesByUsername(user.getUsername());
-            usuarioDtos.add(user(user,roles));
+            List<Rol> roles = rolRep.listaRolesByUsername(user.getUsername());
+            usuarioDtos.add(user(user, roles));
         }
         return usuarioDtos;
     }
@@ -207,11 +209,11 @@ public class UsuarioServ {
     public UsuarioDto getUserById(Integer id) {
         Usuario user = usuarioRep.findById(id).orElse(null);
         assert user != null;
-        List<Rol> roles =  rolRep.listaRolesByUsername(user.getUsername());
-        return user(user,roles);
+        List<Rol> roles = rolRep.listaRolesByUsername(user.getUsername());
+        return user(user, roles);
     }
 
-    private UsuarioDto user (Usuario user, List<Rol> roles) {
+    private UsuarioDto user(Usuario user, List<Rol> roles) {
         UsuarioDto usuarioDto = new UsuarioDto();
         usuarioDto.setId(user.getId());
         usuarioDto.setName(user.getName());
@@ -223,7 +225,7 @@ public class UsuarioServ {
         usuarioDto.setPassword("");
         List<String> roleNames = new ArrayList<>();
         for (Rol role : roles) {
-          roleNames.add(role.getName());
+            roleNames.add(role.getName());
         }
         usuarioDto.setRoles(roleNames);
         usuarioDto.setFlag(user.getFlag());
@@ -232,9 +234,5 @@ public class UsuarioServ {
         usuarioDto.setDate_update(user.getDate_update());
         return usuarioDto;
     }
-
-
-
-
 
 }

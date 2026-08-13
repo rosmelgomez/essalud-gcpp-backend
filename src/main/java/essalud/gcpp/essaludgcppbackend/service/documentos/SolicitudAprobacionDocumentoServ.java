@@ -15,7 +15,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +30,8 @@ public class SolicitudAprobacionDocumentoServ {
     private final UsuarioRep usuarioRep;
     private final HistorialAprobacionDocumentoRep historialAprobacionDocumentoRep;
 
-    public SolicitudAprobacionDocumentoServ(SolicitudAprobacionDocumentoRep sadr, ResolucionAprobacionDocumentoRep radr, UsuarioRep usuarioRep, HistorialAprobacionDocumentoRep historialAprobacionDocumentoRep) {
+    public SolicitudAprobacionDocumentoServ(SolicitudAprobacionDocumentoRep sadr, ResolucionAprobacionDocumentoRep radr,
+            UsuarioRep usuarioRep, HistorialAprobacionDocumentoRep historialAprobacionDocumentoRep) {
         this.sadr = sadr;
         this.radr = radr;
         this.usuarioRep = usuarioRep;
@@ -51,7 +51,8 @@ public class SolicitudAprobacionDocumentoServ {
         return limite;
     }
 
-    public void saveFlujoAprobacionDocumento(Integer id_user_aprobador, VersionDocumento versionDocumento, String prioridad, String comentarioSolicitud) {
+    public void saveFlujoAprobacionDocumento(Integer id_user_aprobador, VersionDocumento versionDocumento,
+            String prioridad, String comentarioSolicitud) {
         Usuario aprobador = usuarioRep.findById(id_user_aprobador).orElse(null);
         Usuario solicitante = versionDocumento.getUser_version_documento();
 
@@ -66,7 +67,9 @@ public class SolicitudAprobacionDocumentoServ {
             sad.setUserSolicitante(solicitante);
             sad.setVersionDocumento(versionDocumento);
             sad = sadr.save(sad);
-            saveHistorialAprobacion(sad, "Creado", "Pendiente", "Inicio del flujo de aprobación" + (comentarioSolicitud != null && !comentarioSolicitud.isEmpty() ? ": " + comentarioSolicitud : ""), solicitante);
+            saveHistorialAprobacion(sad, "Creado", "Pendiente", "Inicio del flujo de aprobación"
+                    + (comentarioSolicitud != null && !comentarioSolicitud.isEmpty() ? ": " + comentarioSolicitud : ""),
+                    solicitante);
         }
     }
 
@@ -79,7 +82,8 @@ public class SolicitudAprobacionDocumentoServ {
             sadr.save(sad); /// SolicitudAprobacionDocumentoRepository
 
             /// Obtener usuario que realiza la acción
-            Object principal = Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getPrincipal();
+            Object principal = Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication())
+                    .getPrincipal();
             String currentUsername = null;
             if (principal instanceof UserDetails) {
                 currentUsername = ((UserDetails) principal).getUsername();
@@ -105,7 +109,8 @@ public class SolicitudAprobacionDocumentoServ {
         }
     }
 
-    private void saveHistorialAprobacion(SolicitudAprobacionDocumento sad, String estadoAnterior, String estadoNuevo, String comentario, Usuario userAccion) {
+    private void saveHistorialAprobacion(SolicitudAprobacionDocumento sad, String estadoAnterior, String estadoNuevo,
+            String comentario, Usuario userAccion) {
         HistorialAprobacionDocumento hist = HistorialAprobacionDocumento.builder()
                 .solicitud_aprobacion(sad)
                 .estado_anterior(estadoAnterior)
@@ -162,7 +167,8 @@ public class SolicitudAprobacionDocumentoServ {
         return dtoList;
     }
 
-    public void resetFlujoAprobacion(VersionDocumento versionDocumento, Integer idUserAprobador, String prioridad, String comentarioSolicitud) {
+    public void resetFlujoAprobacion(VersionDocumento versionDocumento, Integer idUserAprobador, String prioridad,
+            String comentarioSolicitud) {
         Usuario aprobador = usuarioRep.findById(idUserAprobador).orElse(null);
         if (aprobador == null)
             return;
@@ -180,7 +186,8 @@ public class SolicitudAprobacionDocumentoServ {
             sadr.save(sad);
 
             // Registrar en historial
-            Object principal = Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getPrincipal();
+            Object principal = Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication())
+                    .getPrincipal();
             String currentUsername = null;
             if (principal instanceof UserDetails) {
                 currentUsername = ((UserDetails) principal).getUsername();
@@ -215,14 +222,15 @@ public class SolicitudAprobacionDocumentoServ {
         if (s.getUserAprobador() != null) {
             dto.setId_user_aprobador(s.getUserAprobador().getId());
         }
-        
-        // Obtener la última resolución para mapear el comentario del aprobador y fecha resolucion
+
+        // Obtener la última resolución para mapear el comentario del aprobador y fecha
+        // resolucion
         if (s.getResoluciones() != null && !s.getResoluciones().isEmpty()) {
             ResolucionAprobacionDocumento ultima = s.getResoluciones().getLast();
             dto.setComentarioAprobador(ultima.getComentario_aprobador());
             dto.setFechaResolucion(ultima.getFecha_resolucion());
         }
-        
+
         return dto;
     }
 }
