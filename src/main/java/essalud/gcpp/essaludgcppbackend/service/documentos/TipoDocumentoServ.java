@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,8 +33,8 @@ public class TipoDocumentoServ {
         tipoDocumento.setRequiere_aprobacion(tipoDocumentoDto.getRequiere_aprobacion());
         tipoDocumento.setMax_size_mb(tipoDocumentoDto.getMax_size_mb());
         tipoDocumento.setFlag(true);
-        tipoDocumento.setDate_creation(LocalDateTime.now());
-        tipoDocumento.setDate_update(LocalDateTime.now());
+        tipoDocumento.setDate_creation(LocalDateTime.now(ZoneId.of("America/Lima")));
+        tipoDocumento.setDate_update(LocalDateTime.now(ZoneId.of("America/Lima")));
 
         List<CatalogoExtension> exts = new ArrayList<>();
         if (tipoDocumentoDto.getId_extensiones() != null && !tipoDocumentoDto.getId_extensiones().isEmpty()) {
@@ -59,7 +60,7 @@ public class TipoDocumentoServ {
             tipoDocumento.setDescripcion(tipoDocumentoDto.getDescripcion());
             tipoDocumento.setMax_size_mb(tipoDocumentoDto.getMax_size_mb());
             tipoDocumento.setFlag(tipoDocumentoDto.getFlag());
-            tipoDocumento.setDate_update(LocalDateTime.now());
+            tipoDocumento.setDate_update(LocalDateTime.now(ZoneId.of("America/Lima")));
 
             if (tipoDocumento.getExtensionesPermitidas() != null) {
                 tipoDocumento.getExtensionesPermitidas().clear();

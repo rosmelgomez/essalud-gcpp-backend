@@ -21,6 +21,7 @@ import essalud.gcpp.essaludgcppbackend.model.documentos.AuditoriaDocumentaria;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -88,8 +89,8 @@ public class VersionDocumentoServ {
                 versionDocumento.setExtencion(versionDocumentoDto.getArchivo().getContentType());
                 versionDocumento.setVersion(versionDocumentoDto.getVersion());
                 versionDocumento.setSize((double) versionDocumentoDto.getArchivo().getSize() / 1048576);
-                versionDocumento.setDate_creation(LocalDateTime.now());
-                versionDocumento.setDate_update(LocalDateTime.now());
+                versionDocumento.setDate_creation(LocalDateTime.now(ZoneId.of("America/Lima")));
+                versionDocumento.setDate_update(LocalDateTime.now(ZoneId.of("America/Lima")));
                 versionDocumento.setUser_version_documento(user);
                 versionDocumento.setDocumento_version_documento(documento);
                 versionDocumento.setVisible(versionDocumentoDto.getVisible() != null ? versionDocumentoDto.getVisible() : true);
@@ -210,7 +211,7 @@ public class VersionDocumentoServ {
                     .accion(action)
                     .ip_address(ipAddress != null ? ipAddress : "unknown")
                     .user_agent(userAgent)
-                    .fecha_accion(LocalDateTime.now())
+                    .fecha_accion(LocalDateTime.now(ZoneId.of("America/Lima")))
                     .build();
 
             auditoriaDocumentariaRep.save(audit);
@@ -292,7 +293,7 @@ public class VersionDocumentoServ {
                 throw new org.springframework.security.access.AccessDeniedException(
                         "No tiene permisos para eliminar esta versión.");
             }
-            version.setDate_delete(LocalDateTime.now());
+            version.setDate_delete(LocalDateTime.now(ZoneId.of("America/Lima")));
             versionDocumentoRep.save(version);
         }
     }

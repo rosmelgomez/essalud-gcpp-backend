@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -61,8 +62,8 @@ public class SolicitudAprobacionDocumentoServ {
             sad.setComentario_solicitante(comentarioSolicitud != null ? comentarioSolicitud : "");
             sad.setEstado("Pendiente");
             sad.setPrioridad(prioridad != null ? prioridad : "MEDIA");
-            sad.setFecha_solicitud(LocalDateTime.now());
-            sad.setFecha_limite(calcularFechaLimite(LocalDateTime.now()));
+            sad.setFecha_solicitud(LocalDateTime.now(ZoneId.of("America/Lima")));
+            sad.setFecha_limite(calcularFechaLimite(LocalDateTime.now(ZoneId.of("America/Lima"))));
             sad.setUserAprobador(aprobador);
             sad.setUserSolicitante(solicitante);
             sad.setVersionDocumento(versionDocumento);
@@ -99,7 +100,7 @@ public class SolicitudAprobacionDocumentoServ {
                         .userRevisor(userAccion != null ? userAccion : sad.getUserAprobador())
                         .status(dto.getStatus())
                         .comentario_aprobador(dto.getComentario())
-                        .fecha_resolucion(LocalDateTime.now())
+                        .fecha_resolucion(LocalDateTime.now(ZoneId.of("America/Lima")))
                         .build();
                 radr.save(rad);
             }
@@ -116,7 +117,7 @@ public class SolicitudAprobacionDocumentoServ {
                 .estado_anterior(estadoAnterior)
                 .estado_nuevo(estadoNuevo)
                 .comentario(comentario)
-                .fecha_accion(LocalDateTime.now())
+                .fecha_accion(LocalDateTime.now(ZoneId.of("America/Lima")))
                 .user_accion(userAccion)
                 .build();
         historialAprobacionDocumentoRep.save(hist);
@@ -182,7 +183,7 @@ public class SolicitudAprobacionDocumentoServ {
             sad.setPrioridad(prioridad != null ? prioridad : "MEDIA");
             sad.setComentario_solicitante(
                     comentarioSolicitud != null ? comentarioSolicitud : "Versión modificada por el creador");
-            sad.setFecha_limite(calcularFechaLimite(LocalDateTime.now()));
+            sad.setFecha_limite(calcularFechaLimite(LocalDateTime.now(ZoneId.of("America/Lima"))));
             sadr.save(sad);
 
             // Registrar en historial

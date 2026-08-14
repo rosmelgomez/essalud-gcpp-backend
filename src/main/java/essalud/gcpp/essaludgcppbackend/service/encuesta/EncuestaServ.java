@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class EncuestaServ {
         encuesta.setCodcas(encuestaDto.getCodcas());
         encuesta.setStatus(encuestaDto.getStatus());
         encuesta.setComment(encuestaDto.getComment());
-        encuesta.setDate_creation(LocalDateTime.now());
+        encuesta.setDate_creation(LocalDateTime.now(ZoneId.of("America/Lima")));
         encuesta.setUser_encuesta(user);
         encuesta.setModulo_encuesta(modulo);
         encuesta.setCategoria_encuesta(categoria);

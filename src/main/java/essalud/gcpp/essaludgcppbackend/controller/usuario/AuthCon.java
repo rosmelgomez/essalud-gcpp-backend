@@ -53,31 +53,34 @@ public class AuthCon {
 
     @PostMapping("/login")
     public ResponseEntity<?> createAuthenticateUser(@RequestBody UsuarioLoginDto user) throws Exception {
-        authenticateUser(user.getUsername(), user.getPassword());
-        final UserDetails userDetails = jwtUserDetailsServ.loadUserByUsername(user.getUsername());
-        final String accessToken = jwtTokenUtil.generateAccessToken(userDetails);
-        final String apiToken = jwtTokenUtil.generateApiToken(userDetails);
+       if (user.getUsername() != null && user.getPassword() != null) {
+           authenticateUser(user.getUsername(), user.getPassword());
+           final UserDetails userDetails = jwtUserDetailsServ.loadUserByUsername(user.getUsername());
+           final String accessToken = jwtTokenUtil.generateAccessToken(userDetails);
+           final String apiToken = jwtTokenUtil.generateApiToken(userDetails);
 
-        ResponseCookie accessCookie = ResponseCookie.from(accessCookieName, accessToken)
-                .httpOnly(true)
-                .secure(secureCookie)
-                .path("/")
-                .sameSite(sameSite)
-                .maxAge(jwtTokenUtil.getAccessTokenValiditySeconds())
-                .build();
+           ResponseCookie accessCookie = ResponseCookie.from(accessCookieName, accessToken)
+                   .httpOnly(true)
+                   .secure(secureCookie)
+                   .path("/")
+                   .sameSite(sameSite)
+                   .maxAge(jwtTokenUtil.getAccessTokenValiditySeconds())
+                   .build();
 
-        ResponseCookie refreshCookie = ResponseCookie.from(apiCookieName, apiToken)
-                .httpOnly(true)
-                .secure(secureCookie)
-                .path(apiCookiePath)
-                .sameSite(sameSite)
-                .maxAge(jwtTokenUtil.getRefreshTokenValiditySeconds())
-                .build();
+           ResponseCookie refreshCookie = ResponseCookie.from(apiCookieName, apiToken)
+                   .httpOnly(true)
+                   .secure(secureCookie)
+                   .path(apiCookiePath)
+                   .sameSite(sameSite)
+                   .maxAge(jwtTokenUtil.getRefreshTokenValiditySeconds())
+                   .build();
 
-        return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, accessCookie.toString())
-                .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
-                .body("Login Successfull");
+           return ResponseEntity.ok()
+                   .header(HttpHeaders.SET_COOKIE, accessCookie.toString())
+                   .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
+                   .body("Login Successfull");
+       }
+       return null;
     }
 
     @GetMapping("/api-token")

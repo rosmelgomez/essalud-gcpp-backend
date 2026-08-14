@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +48,7 @@ public class DocumentoServ {
                 }
             } else {
                 documentoEntity = new Documento();
-                documentoEntity.setDate_creation(LocalDateTime.now());
+                documentoEntity.setDate_creation(LocalDateTime.now(ZoneId.of("America/Lima")));
                 documentoEntity.setUser_documento(user);
             }
             documentoEntity.setCodigo(documento.getCodigo());
@@ -55,7 +56,7 @@ public class DocumentoServ {
             documentoEntity.setDescripcion(documento.getDescripcion());
             documentoEntity.setCodred(documento.getCodred());
             documentoEntity.setCodcas(documento.getCodcas());
-            documentoEntity.setDate_update(LocalDateTime.now());
+            documentoEntity.setDate_update(LocalDateTime.now(ZoneId.of("America/Lima")));
             documentoEntity.setFlag(documento.getFlag() != null ? documento.getFlag() : true);
             documentoEntity.setPublico(documento.getPublico());
             documentoEntity.setSolo_mi_red(documento.getSolo_mi_red() != null ? documento.getSolo_mi_red() : false);
@@ -137,7 +138,7 @@ public class DocumentoServ {
                 throw new org.springframework.security.access.AccessDeniedException("No tiene permisos para eliminar este documento.");
             }
             doc.setFlag(false);
-            doc.setDate_delete(LocalDateTime.now());
+            doc.setDate_delete(LocalDateTime.now(ZoneId.of("America/Lima")));
             documentoRep.save(doc);
         }
     }

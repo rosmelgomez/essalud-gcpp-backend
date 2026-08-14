@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -45,7 +46,7 @@ public class UsuarioServ {
             newUser.setCodred(usuarioDto.getCodred());
             newUser.setUsername(usuarioDto.getUsername());
             newUser.setPassword(encodedPassword);
-            newUser.setDate_creation(LocalDateTime.now());
+            newUser.setDate_creation(LocalDateTime.now(ZoneId.of("America/Lima")));
             newUser.setDate_update(null);
             newUser.setFlag(usuarioDto.getFlag());
             newUser.setFirst_Login(true);
@@ -79,7 +80,7 @@ public class UsuarioServ {
             user.setCodred(usuarioDto.getCodred());
             user.setUsername(usuarioDto.getUsername());
             user.setFlag(usuarioDto.getFlag());
-            user.setDate_update(LocalDateTime.now());
+            user.setDate_update(LocalDateTime.now(ZoneId.of("America/Lima")));
 
             if (usuarioDto.getPassword() != null && !usuarioDto.getPassword().isEmpty()) {
                 PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -134,7 +135,7 @@ public class UsuarioServ {
                     UsuarioRol nuevoUsuarioRol = new UsuarioRol();
                     nuevoUsuarioRol.setUsuario_rol(user);
                     nuevoUsuarioRol.setRol_user(rol);
-                    nuevoUsuarioRol.setDate_creation(LocalDateTime.now());
+                    nuevoUsuarioRol.setDate_creation(LocalDateTime.now(ZoneId.of("America/Lima")));
                     nuevoUsuarioRol.setFlag(true);
                     usuarioRolRep.save(nuevoUsuarioRol);
                 }

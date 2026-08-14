@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,7 +58,7 @@ public class LogServ {
                 .http_method(request.getMethod())
                 .url(dto.getUrl())
                 .browser(browser + " (" + os + ")")
-                .date_creation(LocalDateTime.now())
+                .date_creation(LocalDateTime.now(ZoneId.of("America/Lima")))
                 .build();
 
         logsRep.save(log);
