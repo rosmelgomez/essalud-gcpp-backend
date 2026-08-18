@@ -136,11 +136,19 @@ public class DashboardPatoCon {
     }
 
     ///Total diagnosticos distintos
-    @GetMapping("/queryDPTDD")
+    @GetMapping("/queryDPTDDIS")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
-    public ResponseEntity<List<Map<String, Object>>> queryDPTDD(@RequestParam("patologias") List<String> patologias, @RequestParam("anios") List<String> anios , @RequestParam("codreds") List<String> codreds, @RequestParam("codcens") List<String> codcens, @RequestParam("grupo_edades") List<String> grupo_edades) {
-        return ResponseEntity.ok(service.queryDPTDD(patologias, anios, codreds, codcens, grupo_edades));
+    public ResponseEntity<List<Map<String, Object>>> queryDPTDDIS(@RequestParam("patologias") List<String> patologias, @RequestParam("anios") List<String> anios , @RequestParam("codreds") List<String> codreds, @RequestParam("codcens") List<String> codcens, @RequestParam("grupo_edades") List<String> grupo_edades) {
+        return ResponseEntity.ok(service.queryDPTDDIS(patologias, anios, codreds, codcens, grupo_edades));
     }
+
+    ///total diagnostico definitivo y presuntivo
+    @GetMapping("/queryDPTDDEFPRE")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
+    public ResponseEntity<List<Map<String, Object>>> queryDPTDDEFPRE(@RequestParam("patologias") List<String> patologias, @RequestParam("anios") List<String> anios , @RequestParam("codreds") List<String> codreds, @RequestParam("codcens") List<String> codcens, @RequestParam("grupo_edades") List<String> grupo_edades) {
+        return ResponseEntity.ok(service.queryDPTDDEFPRE(patologias, anios, codreds, codcens, grupo_edades));
+    }
+
 
     /// distribucion por sexo
     @GetMapping("/queryDPDS")

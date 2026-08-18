@@ -99,9 +99,16 @@ public class DashboardPatoServ {
     }
 
     ///Total diagnosticos distintos
-    public List<Map<String, Object>> queryDPTDD(List<String> patologias, List<String> anios, List<String> codreds, List<String> codcens, List<String> grupo_edades ) {
-        return repository.queryDPTDD(patologias, anios, codreds, codcens, grupo_edades);
+    public List<Map<String, Object>> queryDPTDDIS(List<String> patologias, List<String> anios, List<String> codreds, List<String> codcens, List<String> grupo_edades ) {
+        return repository.queryDPTDDIS(patologias, anios, codreds, codcens, grupo_edades);
     }
+
+    ///total diagnostico definitivo y presuntivo
+    public List<Map<String, Object>> queryDPTDDEFPRE(List<String> patologias, List<String> anios, List<String> codreds, List<String> codcens, List<String> grupo_edades ) {
+        return repository.queryDPTDDEFPRE(patologias, anios, codreds, codcens, grupo_edades);
+    }
+
+
 
     /// distribucion por sexo
     public List<Map<String, Object>> queryDPDS(List<String> patologias, List<String> anios, List<String> codreds, List<String> codcens, List<String> grupo_edades ) {

@@ -1,7 +1,7 @@
 package essalud.gcpp.essaludgcppbackend.controller;
 
 import essalud.gcpp.essaludgcppbackend.dtos.SolicitudAccesoDto;
-import essalud.gcpp.essaludgcppbackend.service.SolicitudAccesoServ;
+import essalud.gcpp.essaludgcppbackend.service.usuario.SolicitudAccesoServ;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;

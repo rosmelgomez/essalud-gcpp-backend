@@ -34,21 +34,21 @@ public class TablasHomologadasCon {
 
     ///Tabla homologada camas
     @GetMapping("/queryTHCAMA/{codcas}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public List<Map<String, Object>> queryTHCAMA(@PathVariable String codcas) {
         return THS.queryTHCAMA(codcas);
     }
 
     ///clasificar camas
     @PostMapping("/clasificar-cama")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'ADMIN_RED', 'USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public void clasificarCama(@RequestBody ClasificacionCamasDto clasificacion) {
         THS.insertClasificacionCamas(clasificacion);
     }
 
     ///modificacion de la clasificacion de camas
     @PutMapping("/update-clasificacion-cama")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'ADMIN_RED', 'USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public  void updateClasificacionCamas(@RequestBody ClasificacionCamasDto clasificacion) {
         THS.updateClasificacionCamas(clasificacion);
     }

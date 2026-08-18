@@ -1,4 +1,4 @@
-package essalud.gcpp.essaludgcppbackend.service;
+package essalud.gcpp.essaludgcppbackend.service.usuario;
 
 import essalud.gcpp.essaludgcppbackend.dtos.SolicitudAccesoDto;
 import essalud.gcpp.essaludgcppbackend.model.usuario.SolicitudAcceso;
@@ -7,7 +7,6 @@ import essalud.gcpp.essaludgcppbackend.model.usuario.Usuario;
 import essalud.gcpp.essaludgcppbackend.repositories.acceso.SolicitudAccesoRep;
 import essalud.gcpp.essaludgcppbackend.repositories.acceso.ResolucionSolicitudAccesoRep;
 import essalud.gcpp.essaludgcppbackend.repositories.usuario.UsuarioRep;
-import essalud.gcpp.essaludgcppbackend.service.usuario.UsuarioServ;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
