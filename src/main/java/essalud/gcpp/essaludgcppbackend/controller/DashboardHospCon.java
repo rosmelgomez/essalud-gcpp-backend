@@ -21,9 +21,15 @@ public class DashboardHospCon {
         this.dhs = dhs;
     }
 
+    /// Query Total Egresos
     @GetMapping("/queryDHE/{anio}/{periodo}/{codcas}/{codasegu}")
     public ResponseEntity<List<Map<String, Object>>> queryDHE(@PathVariable int anio, @PathVariable int periodo, @PathVariable String codcas, @PathVariable int codasegu) {
         return ResponseEntity.ok(dhs.queryDHE(anio, periodo, codcas, codasegu));
     }
 
+    /// pacientes mes
+    @GetMapping("/queryDHPM/{anio}/{periodo}/{codcas}")
+    public ResponseEntity<List<Map<String, Object>>> queryDHPM(@PathVariable int anio, @PathVariable int periodo, @PathVariable String codcas) {
+        return ResponseEntity.ok(dhs.queryDHPM(anio, periodo, codcas));
+    }
 }

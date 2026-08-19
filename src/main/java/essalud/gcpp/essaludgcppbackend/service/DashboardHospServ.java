@@ -20,4 +20,9 @@ public class DashboardHospServ {
         return dhqr.queryDHE(anio, periodo, codcas, codasegu);
     }
 
+    //////pacientes mes
+    public List<Map<String, Object>> queryDHPM(int anio, int periodo, String codcas) {
+        return dhqr.queryDHPM(anio, periodo, codcas);
+    }
+
 }

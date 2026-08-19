@@ -22,14 +22,14 @@ public class DashboardSegPaciCon {
 
     /// Query 1 atenciones
     @GetMapping("/query1SPA/{doc}/{tipo_doc}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<Map<String, Object>>> query1SPA(@PathVariable String doc, @PathVariable String tipo_doc) {
         return ResponseEntity.ok(servicio.query1SPA(doc, tipo_doc));
     }
 
     /// Query 2 atenciones
     @GetMapping("/query2SPA/{doc}/{tipo_doc}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<Map<String, Object>>> query2SPA(@PathVariable String doc, @PathVariable String tipo_doc) {
         return ResponseEntity.ok(servicio.query2SPA(doc, tipo_doc));
     }

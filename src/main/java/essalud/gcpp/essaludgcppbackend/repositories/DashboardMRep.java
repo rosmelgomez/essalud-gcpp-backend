@@ -850,7 +850,7 @@ public class DashboardMRep {
             FROM %s p
             LEFT JOIN dwsge.dim_agrupador ag ON p.cod_agrupador = ag.cod_agrupador
             WHERE p.clasificacion IN (2,4,6)
-            AND p.cod_centro=:codcas
+            AND p.cod_centro= ?
             AND p.cod_actividad IN ('B8', '91')
             AND p.cod_subactividad = '070'
             AND p.cod_servicio IN ('AB1', 'AM6')

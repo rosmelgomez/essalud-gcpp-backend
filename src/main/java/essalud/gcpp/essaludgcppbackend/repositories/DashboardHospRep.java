@@ -1,5 +1,7 @@
 package essalud.gcpp.essaludgcppbackend.repositories;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 
@@ -24,11 +26,18 @@ public class DashboardHospRep {
         };
     }
 
-    /// Query Egresos
+    private String periodo_str(int periodo) {
+        if (periodo < 10) {
+            return   "0" + periodo;
+        } else {
+            return String.valueOf(periodo);
+        }
+    }
+
+    /// Egresos
     public List<Map<String, Object>> queryDHE(int anio, int periodo, String codcas, int codasegu) {
 
-        String tabla = String.format("dwsge.dwe_hosp_egresos_%d_%02d", anio, periodo);
-
+        String tabla = "dwsge.dwe_hosp_egresos_" +  anio +"_"+ periodo;
         String code_asegurado = code_asegurado(codasegu);
 
         String sql = """
@@ -84,5 +93,91 @@ public class DashboardHospRep {
         return secondJdbcTemplate.queryForList(sql, codcas);
     }
 
-    
+
+    ///pacientes mes
+    public List<Map<String, Object>> queryDHPM(int anio, int periodo, String codcas) {
+
+        ///String dia_ultimo= ;
+        LocalDateTime fecha= LocalDateTime.now(ZoneId.of("America/Lima"));
+        System.out.print("\nfecha: "+ fecha);
+
+        String fecha_inicio = anio + "-" + periodo_str(periodo) + "-01";
+        String fecha_fin = anio + "-" + periodo_str(periodo) + "-30" ;
+
+        System.out.print("\nfecha_inicio: "+ fecha_inicio);
+        System.out.print("\nfecha_fin: "+ fecha_fin);
+
+        String sql = """
+            WITH parametros AS (
+                SELECT
+                    DATE '2026-01-01' AS fecha_inicio,
+                    DATE '2026-01-31' AS fecha_fin
+            ),
+
+            hospitalizacion AS (
+                SELECT
+                    h.cod_centro,
+                    h.doc_paciente,
+                    h.acto_med,
+                    h.cama,
+
+                    (h.fec_ingr::date + h.hor_ingr::time) AS fecha_hora_ingreso,
+
+                    CASE
+                        WHEN h.fec_egreso IS NOT NULL
+                        AND h.hor_egreso IS NOT NULL
+                        THEN (h.fec_egreso::date + h.hor_egreso::time)
+                        ELSE NULL
+                    END AS fecha_hora_egreso
+
+                FROM dssge.dw_hosp_v2 h
+                CROSS JOIN parametros p
+
+                WHERE h.cod_centro = ?
+                AND h.ubicacion = 'HOSPITALIZACION'
+                -- SOLO MES ACTUAL Y MES ANTERIOR
+                AND h.fec_ingr::date >= (
+                    date_trunc('month', p.fecha_inicio::date)
+                    - interval '1 month'
+                )::date
+
+                AND h.fec_ingr::date <= p.fecha_fin::date
+            ),
+
+            calendario AS (
+                SELECT
+                    (
+                        gs::date + time '06:00:00'
+                    ) AS fecha_censo
+                FROM parametros p,
+                generate_series(
+                    p.fecha_inicio,
+                    p.fecha_fin,
+                    interval '1 day'
+                ) gs
+            )
+
+            SELECT
+                c.fecha_censo::date AS fecha,
+
+                COUNT(DISTINCT h.doc_paciente)
+                    AS pacientes_hospitalizados
+
+            FROM calendario c
+            JOIN hospitalizacion h
+                ON h.fecha_hora_ingreso <= c.fecha_censo
+            AND (
+                    h.fecha_hora_egreso > c.fecha_censo
+                    OR h.fecha_hora_egreso IS NULL
+            )
+
+            GROUP BY c.fecha_censo
+            ORDER BY c.fecha_censo
+            """;
+
+        return secondJdbcTemplate.queryForList(sql, codcas);
+    }
+
+
+
 }

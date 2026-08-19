@@ -205,7 +205,7 @@ public class DashboardOdonResp {
     ///  sesiones odontologicas - total consultante atencion
     public List<Map<String, Object>> queryDOSOTCA(int anio, int periodo, String codcas, int codasegu) {
         String tabla = "dwsge.dw_consulta_externa_odonto_homologacion_" + anio;
-        String periodo_sql= String.valueOf(anio+periodo);
+        String periodo_sql= anio+periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 
@@ -236,7 +236,7 @@ public class DashboardOdonResp {
     ///  sesiones odontologicas - total consultante servicio
     public List<Map<String, Object>> queryDOSOTCS(int anio, int periodo, String codcas, int codasegu) {
         String tabla = "dwsge.dw_consulta_externa_odonto_homologacion_" + anio;
-        String periodo_sql= String.valueOf(anio+periodo);
+        String periodo_sql= anio+periodo_str(periodo);
 
         String code_asegurado = code_asegurado(codasegu);
 

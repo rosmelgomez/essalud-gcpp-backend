@@ -40,6 +40,12 @@ public class DashboardIQuirurgicasServ {
         return convertMap(data,"2");
     }
 
+    ///suspendidas
+    public List<Map<String, Object>> queryDIQS(int anio, int periodo, String codcas){
+        return diqr.queryDIQS(anio, periodo, codcas);
+    }
+
+
     /// Indicadores de grado de complejidad
     public List<Map<String, Object>> queryDIQIGC(int anio, int periodo, String codcas, int codasegu, String complejidad) {
         List<Map<String, Object>> data = diqr.queryDIQIGC(anio, periodo, codcas, codasegu);
