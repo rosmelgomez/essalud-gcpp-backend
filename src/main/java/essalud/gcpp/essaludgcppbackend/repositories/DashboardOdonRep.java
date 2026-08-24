@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class DashboardOdonResp {
+public class DashboardOdonRep {
     private final JdbcTemplate secondJdbcTemplate;
 
-    public DashboardOdonResp(@Qualifier("secondJdbcTemplate") JdbcTemplate secondJdbcTemplate) {
+    public DashboardOdonRep(@Qualifier("secondJdbcTemplate") JdbcTemplate secondJdbcTemplate) {
         this.secondJdbcTemplate = secondJdbcTemplate;
     }
     private String code_asegurado(int codasegu) {

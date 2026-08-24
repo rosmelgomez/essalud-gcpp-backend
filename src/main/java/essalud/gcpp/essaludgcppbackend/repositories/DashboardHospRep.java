@@ -37,7 +37,7 @@ public class DashboardHospRep {
     /// Egresos
     public List<Map<String, Object>> queryDHE(int anio, int periodo, String codcas, int codasegu) {
 
-        String tabla = "dwsge.dwe_hosp_egresos_" +  anio +"_"+ periodo;
+        String tabla = "dwsge.dwe_hosp_egresos_" +  anio +"_"+ periodo_str(periodo);
         String code_asegurado = code_asegurado(codasegu);
 
         String sql = """

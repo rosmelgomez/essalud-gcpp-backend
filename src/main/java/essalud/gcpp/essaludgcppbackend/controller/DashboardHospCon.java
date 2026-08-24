@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,12 +24,14 @@ public class DashboardHospCon {
 
     /// Query Total Egresos
     @GetMapping("/queryDHE/{anio}/{periodo}/{codcas}/{codasegu}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDHE(@PathVariable int anio, @PathVariable int periodo, @PathVariable String codcas, @PathVariable int codasegu) {
         return ResponseEntity.ok(dhs.queryDHE(anio, periodo, codcas, codasegu));
     }
 
     /// pacientes mes
     @GetMapping("/queryDHPM/{anio}/{periodo}/{codcas}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public ResponseEntity<List<Map<String, Object>>> queryDHPM(@PathVariable int anio, @PathVariable int periodo, @PathVariable String codcas) {
         return ResponseEntity.ok(dhs.queryDHPM(anio, periodo, codcas));
     }

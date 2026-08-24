@@ -1,6 +1,6 @@
 package essalud.gcpp.essaludgcppbackend.service;
 
-import essalud.gcpp.essaludgcppbackend.repositories.DashboardOdonResp;
+import essalud.gcpp.essaludgcppbackend.repositories.DashboardOdonRep;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,9 +9,9 @@ import java.util.Map;
 @Service
 public class DashboardOdonServ {
 
-    private final DashboardOdonResp DOR;
+    private final DashboardOdonRep DOR;
 
-    public DashboardOdonServ(DashboardOdonResp DOR) {
+    public DashboardOdonServ(DashboardOdonRep DOR) {
         this.DOR = DOR;
     }
 
