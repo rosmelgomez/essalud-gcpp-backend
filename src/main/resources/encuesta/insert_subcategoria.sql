@@ -13,4 +13,5 @@ INSERT INTO public.subcategoria(id, active, name_subcategoria, id_categoria)VALU
 INSERT INTO public.subcategoria(id, active, name_subcategoria, id_categoria)VALUES ('13', '1', 'CRED', '2') ON CONFLICT (id) DO NOTHING;
 INSERT INTO public.subcategoria(id, active, name_subcategoria, id_categoria)VALUES ('14', '0', 'Topicos', '4') ON CONFLICT (id) DO NOTHING;
 INSERT INTO public.subcategoria(id, active, name_subcategoria, id_categoria)VALUES ('15', '1', 'Sesiones odontológicas', '3') ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.subcategoria(id, active, name_subcategoria, id_categoria)VALUES ('16', '1', 'Intervenciones Quirurgicas', '5') ON CONFLICT (id) DO NOTHING;
 SELECT setval(pg_get_serial_sequence('subcategoria','id'), (SELECT MAX(id) FROM subcategoria));
