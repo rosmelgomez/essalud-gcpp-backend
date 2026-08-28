@@ -5,6 +5,7 @@ import essalud.gcpp.essaludgcppbackend.model.documentos.TipoDocumento;
 import essalud.gcpp.essaludgcppbackend.model.documentos.CatalogoExtension;
 import essalud.gcpp.essaludgcppbackend.repositories.documentos.TipoDocumentoRep;
 import essalud.gcpp.essaludgcppbackend.repositories.documentos.CatalogoExtensionRep;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -91,6 +92,10 @@ public class TipoDocumentoServ {
                     .map(CatalogoExtension::getId)
                     .collect(Collectors.toList());
         }
+        return createDocumentoDto(tipoDocumento, csv, idExtensions);
+    }
+
+    private static @NonNull TipoDocumentoDto createDocumentoDto(TipoDocumento tipoDocumento, String csv, List<Integer> idExtensions) {
         TipoDocumentoDto dto = new TipoDocumentoDto();
         dto.setId(tipoDocumento.getId());
         dto.setNombre(tipoDocumento.getNombre());

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("NullableProblems")
 @Service
 public class JwtUserDetailsServ implements UserDetailsService {
     private final UsuarioRep userRepository;
@@ -25,6 +26,7 @@ public class JwtUserDetailsServ implements UserDetailsService {
         this.rolRep = rolRep;
     }
 
+    @SuppressWarnings("NullableProblems")
     @Override
     public @Nullable UserDetails loadUserByUsername(@NonNull String username) throws UsernameNotFoundException {
         Usuario user = userRepository.findByUsername(username);

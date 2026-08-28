@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class SolicitudAccesoServ {
@@ -100,7 +101,7 @@ public class SolicitudAccesoServ {
 
             // Registrar la resolución de solicitud si se aprueba o rechaza
             if ("APROBADO".equalsIgnoreCase(solicitudAccesoDto.getStatus()) || "RECHAZADO".equalsIgnoreCase(solicitudAccesoDto.getStatus())) {
-                Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                Object principal = Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getPrincipal();
                 String adminUsername = null;
                 if (principal instanceof UserDetails) {
                     adminUsername = ((UserDetails) principal).getUsername();
