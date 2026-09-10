@@ -54,6 +54,9 @@ public class Usuario {
     @Column(name = "flag", nullable = false)
     private Boolean flag;
 
+    @Column(name = "access_tmi", nullable = false)
+    private Boolean access_tmi;
+
     @Column(name = "first_login", nullable = false)
     private Boolean first_Login = true;
 

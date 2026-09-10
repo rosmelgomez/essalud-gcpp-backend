@@ -34,7 +34,9 @@ public class UsuarioDto {
 
     private Boolean flag;
 
-    private Boolean firstLogin;
+    private Boolean access_tmi;
+
+    private Boolean first_Login;
 
     private List<String> roles;
 }

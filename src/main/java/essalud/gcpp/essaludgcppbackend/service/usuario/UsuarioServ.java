@@ -44,11 +44,13 @@ public class UsuarioServ {
             newUser.setDni(usuarioDto.getDni());
             newUser.setCodcas(usuarioDto.getCodcas());
             newUser.setCodred(usuarioDto.getCodred());
+            newUser.setEmail(usuarioDto.getEmail());
             newUser.setUsername(usuarioDto.getUsername());
             newUser.setPassword(encodedPassword);
             newUser.setDate_creation(LocalDateTime.now(ZoneId.of("America/Lima")));
             newUser.setDate_update(null);
             newUser.setFlag(usuarioDto.getFlag());
+            newUser.setAccess_tmi(usuarioDto.getAccess_tmi());
             newUser.setFirst_Login(true);
 
             newUser = usuarioRep.save(newUser);
@@ -78,8 +80,10 @@ public class UsuarioServ {
             user.setDni(usuarioDto.getDni());
             user.setCodcas(usuarioDto.getCodcas());
             user.setCodred(usuarioDto.getCodred());
+            user.setEmail(usuarioDto.getEmail());
             user.setUsername(usuarioDto.getUsername());
             user.setFlag(usuarioDto.getFlag());
+            user.setAccess_tmi(usuarioDto.getAccess_tmi());
             user.setDate_update(LocalDateTime.now(ZoneId.of("America/Lima")));
 
             if (usuarioDto.getPassword() != null && !usuarioDto.getPassword().isEmpty()) {
@@ -230,7 +234,8 @@ public class UsuarioServ {
         }
         usuarioDto.setRoles(roleNames);
         usuarioDto.setFlag(user.getFlag());
-        usuarioDto.setFirstLogin(user.getFirst_Login());
+        usuarioDto.setAccess_tmi(user.getAccess_tmi());
+        usuarioDto.setFirst_Login(user.getFirst_Login());
         usuarioDto.setDate_creation(user.getDate_creation());
         usuarioDto.setDate_update(user.getDate_update());
         return usuarioDto;
