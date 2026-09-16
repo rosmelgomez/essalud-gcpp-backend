@@ -106,7 +106,6 @@ public class AuthCon {
         return ResponseEntity.ok("Api token valido");
     }
 
-
     @PostMapping({ "/logout", "/logout-user" })
     public ResponseEntity<?> logoutUser() {
         ResponseCookie deleteAccessCookie = ResponseCookie.from(accessCookieName, "")
