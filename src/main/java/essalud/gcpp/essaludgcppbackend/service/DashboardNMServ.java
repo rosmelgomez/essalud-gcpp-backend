@@ -127,6 +127,11 @@ public class DashboardNMServ {
         return this.DNMR.queryDNMTST(anio, periodo, codcas, codasegu);
     }
 
+    ///Trabajo - social - total - procedimientos
+    public List<Map<String, Object>> queryDNMTSTP(int anio, int periodo, String codcas, int codasegu ){
+        return this.DNMR.queryDNMTSTP(anio, periodo, codcas, codasegu);
+    }
+
     /// CRED
     /// CRED -total
     public List<Map<String, Object>> queryDNMCREDT(int anio, int periodo, String codcas, int codasegu ){

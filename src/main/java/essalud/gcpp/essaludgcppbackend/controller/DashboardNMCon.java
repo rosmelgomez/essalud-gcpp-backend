@@ -183,6 +183,14 @@ public class DashboardNMCon {
         return ResponseEntity.ok(DNMR.queryDNMTST(anio, periodo, codcas, codasegu));
     }
 
+    ///Trabajo - social - total - procedimientos
+    @GetMapping("/queryDNMTSTP/{anio}/{periodo}/{codcas}/{codasegu}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
+    public ResponseEntity<List<Map<String, Object>>> queryDNMTSTP(@PathVariable int anio, @PathVariable int periodo, @PathVariable String codcas, @PathVariable int codasegu) {
+        return ResponseEntity.ok(DNMR.queryDNMTSTP(anio, periodo, codcas, codasegu));
+    }
+
+
     /// CRED
     /// CRED -total
     @GetMapping("/queryDNMCREDT/{anio}/{periodo}/{codcas}/{codasegu}")
