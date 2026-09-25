@@ -40,7 +40,7 @@ public interface DocumentoRep extends JpaRepository<Documento, Integer> {
                             CONCAT(u.name, ' ', u.lastname) AS nombre_usuario_creador,
                             d.id_tipo_documento AS id_tipo_documento
                         FROM documento d
-                        LEFT JOIN users u ON d.id_user_creation = u.id
+                        LEFT JOIN usuario u ON d.id_user_creation = u.id
                         WHERE d.flag = true AND d.date_delete IS NULL""", nativeQuery = true)
         List<Map<String, Object>> getDocumentosConDetalles();
 
@@ -61,7 +61,7 @@ public interface DocumentoRep extends JpaRepository<Documento, Integer> {
                             CONCAT(u.name, ' ', u.lastname) AS nombre_usuario_creador,
                             d.id_tipo_documento AS id_tipo_documento
                         FROM documento d
-                        LEFT JOIN users u ON d.id_user_creation = u.id
+                        LEFT JOIN usuario u ON d.id_user_creation = u.id
                         WHERE d.codred = :codred AND d.flag = true AND d.date_delete IS NULL""", nativeQuery = true)
         List<Map<String, Object>> getDocumentosConDetallesByCodred(@Param("codred") String codred);
 
@@ -82,7 +82,7 @@ public interface DocumentoRep extends JpaRepository<Documento, Integer> {
                             CONCAT(u.name, ' ', u.lastname) AS nombre_usuario_creador,
                             d.id_tipo_documento AS id_tipo_documento
                         FROM documento d
-                        LEFT JOIN users u ON d.id_user_creation = u.id
+                        LEFT JOIN usuario u ON d.id_user_creation = u.id
                         WHERE d.codcas = :codcas AND d.flag = true AND d.date_delete IS NULL""", nativeQuery = true)
         List<Map<String, Object>> getDocumentosConDetallesByCodcas(@Param("codcas") String codcas);
 
@@ -103,7 +103,7 @@ public interface DocumentoRep extends JpaRepository<Documento, Integer> {
                             CONCAT(u.name, ' ', u.lastname) AS nombre_usuario_creador,
                             d.id_tipo_documento AS id_tipo_documento
                         FROM documento d
-                        LEFT JOIN users u ON d.id_user_creation = u.id
+                        LEFT JOIN usuario u ON d.id_user_creation = u.id
                         WHERE d.id_user_creation = :iduser AND d.flag = true AND d.date_delete IS NULL""", nativeQuery = true)
         List<Map<String, Object>> getDocumentosConDetallesByUser(@Param("iduser") Integer iduser);
 }

@@ -7,6 +7,7 @@ import essalud.gcpp.essaludgcppbackend.model.usuario.Usuario;
 import essalud.gcpp.essaludgcppbackend.repositories.usuario.LogsRep;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -22,21 +23,33 @@ public class LogServ {
         this.logsRep = logsRep;
     }
 
+    @Transactional(readOnly = true)
     public List<LogFilterDto>  getLogFilters() {
-        List<Log> logs = logsRep.findAll();
-        List<LogFilterDto> logFilterDtos = new ArrayList<>();
+        List<Log> logs = logsRep.findAllWithUserFetched();
+        List<LogFilterDto> logFilterDtos = new ArrayList<>(logs.size());
         for (Log log : logs) {
             LogFilterDto logFilterDto = new LogFilterDto();
-            logFilterDto.setDni(log.getUser_log().getDni());
-            logFilterDto.setFull_name(log.getUser_log().getName()+ " "+log.getUser_log().getLastname());
+            logFilterDto.setId(log.getId());
             logFilterDto.setIp_user(log.getIp_user());
             logFilterDto.setUrl(log.getUrl());
             logFilterDto.setBrowser(log.getBrowser());
             logFilterDto.setUser_role(log.getRol_user());
-            logFilterDto.setCodcas(log.getUser_log().getCodcas());
-            logFilterDto.setCode_red(log.getUser_log().getCodred());
+            logFilterDto.setAction(log.getAction());
+            logFilterDto.setHttp_method(log.getHttp_method());
+            logFilterDto.setStatus(log.getStatus());
             logFilterDto.setDate(log.getDate_creation());
-            logFilterDto.setId_user(log.getUser_log().getId());
+
+            // Un log puede quedar sin usuario (usuario eliminado): no debe romper el listado
+            Usuario user = log.getUser_log();
+            if (user != null) {
+                String fullName = ((user.getName() == null ? "" : user.getName()) + " "
+                        + (user.getLastname() == null ? "" : user.getLastname())).trim();
+                logFilterDto.setDni(user.getDni());
+                logFilterDto.setFull_name(fullName);
+                logFilterDto.setCodcas(user.getCodcas());
+                logFilterDto.setCode_red(user.getCodred());
+                logFilterDto.setId_user(user.getId());
+            }
             logFilterDtos.add(logFilterDto);
         }
         return logFilterDtos;

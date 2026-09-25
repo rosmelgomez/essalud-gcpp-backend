@@ -16,4 +16,8 @@ public interface LogsRep extends JpaRepository<Log, Integer> {
              WHERE us.id=:id_user
             """, nativeQuery = true)
     List<Log> findAllWithUser(@Param("id_user") Integer id_user);
+
+    /// Todos los logs con su usuario cargado en la misma consulta (evita LazyInitializationException y N+1).
+    @Query("SELECT l FROM Log l LEFT JOIN FETCH l.user_log ORDER BY l.date_creation DESC")
+    List<Log> findAllWithUserFetched();
 }

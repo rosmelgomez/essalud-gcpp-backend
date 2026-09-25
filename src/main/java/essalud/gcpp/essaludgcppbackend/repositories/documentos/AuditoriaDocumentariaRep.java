@@ -25,7 +25,7 @@ public interface AuditoriaDocumentariaRep extends JpaRepository<AuditoriaDocumen
             FROM auditoria_documentaria ad
             LEFT JOIN documento d ON ad.id_documento = d.id
             LEFT JOIN version_documento vd ON ad.id_version_documento = vd.id
-            LEFT JOIN users u ON ad.id_usuario = u.id
+            LEFT JOIN usuario u ON ad.id_usuario = u.id
             ORDER BY ad.fecha_accion DESC""", nativeQuery = true)
     List<Map<String, Object>> getAuditoriaConDetalles();
 }

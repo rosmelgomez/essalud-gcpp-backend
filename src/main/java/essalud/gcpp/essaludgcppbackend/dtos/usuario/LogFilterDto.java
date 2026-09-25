@@ -9,6 +9,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Data
 public class LogFilterDto {
+    private Integer id;
+    private String action;
+    private String http_method;
+    private String status;
     private String dni;
     private String full_name;
     private String ip_user;

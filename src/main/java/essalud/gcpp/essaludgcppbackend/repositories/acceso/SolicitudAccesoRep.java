@@ -27,9 +27,9 @@ public interface SolicitudAccesoRep extends JpaRepository<SolicitudAcceso, Integ
                 rsa.date_resolution,
                 CONCAT(rev.name, ' ', rev.lastname) AS nombre_revisor
             FROM solicitud_acceso sa
-            JOIN users us ON sa.id_user = us.id
+            JOIN usuario us ON sa.id_user = us.id
             LEFT JOIN resolucion_solicitud_acceso rsa ON sa.id = rsa.id_solicitud
-            LEFT JOIN users rev ON rsa.id_user_revisor = rev.id
+            LEFT JOIN usuario rev ON rsa.id_user_revisor = rev.id
             ORDER BY sa.date_creation DESC""", nativeQuery = true)
     List<Map<String, Object>> listSolicitudes();
 }

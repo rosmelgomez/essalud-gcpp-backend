@@ -27,9 +27,9 @@ public interface SolicitudAprobacionDocumentoRep extends JpaRepository<Solicitud
                         usa.lastname as lastanme_aprobador
                         FROM version_documento vd
                         LEFT JOIN documento doc ON vd.id_documento=doc.id
-                        LEFT JOIN users us ON vd.id_user_creation = us.id
+                        LEFT JOIN usuario us ON vd.id_user_creation = us.id
                         LEFT JOIN solicitud_aprobacion_documento sad ON vd.id = sad.id_version_documento
-                        LEFT JOIN users usa ON sad.id_usuario_aprobador = usa.id
+                        LEFT JOIN usuario usa ON sad.id_usuario_aprobador = usa.id
                         WHERE sad.id_usuario_aprobador=:id""", nativeQuery = true)
         List<Map<String, Object>> findByUser(@Param("id") Integer id);
 
