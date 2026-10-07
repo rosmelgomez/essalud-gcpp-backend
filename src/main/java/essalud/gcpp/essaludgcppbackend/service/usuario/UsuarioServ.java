@@ -50,7 +50,9 @@ public class UsuarioServ {
             newUser.setDate_creation(LocalDateTime.now(ZoneId.of("America/Lima")));
             newUser.setDate_update(null);
             newUser.setFlag(usuarioDto.getFlag());
-            newUser.setAccess_tmi(usuarioDto.getAccess_tmi());
+            if (usuarioDto.getAccess_tmi() != null) {
+                newUser.setAccess_tmi(usuarioDto.getAccess_tmi());
+            }
             newUser.setFirst_Login(true);
 
             newUser = usuarioRep.save(newUser);
@@ -82,8 +84,14 @@ public class UsuarioServ {
             user.setCodred(usuarioDto.getCodred());
             user.setEmail(usuarioDto.getEmail());
             user.setUsername(usuarioDto.getUsername());
-            user.setFlag(usuarioDto.getFlag());
-            user.setAccess_tmi(usuarioDto.getAccess_tmi());
+            // Actualización parcial: los campos que no llegan (null) conservan su valor actual.
+            // El perfil del usuario no envía access_tmi y la columna es NOT NULL.
+            if (usuarioDto.getFlag() != null) {
+                user.setFlag(usuarioDto.getFlag());
+            }
+            if (usuarioDto.getAccess_tmi() != null) {
+                user.setAccess_tmi(usuarioDto.getAccess_tmi());
+            }
             user.setDate_update(LocalDateTime.now(ZoneId.of("America/Lima")));
 
             if (usuarioDto.getPassword() != null && !usuarioDto.getPassword().isEmpty()) {
@@ -93,7 +101,10 @@ public class UsuarioServ {
 
             usuarioRep.save(user);
 
-            updateRolesUserByName(user, usuarioDto.getRoles());
+            // Sin roles en el payload no se tocan: una lista nula desactivaría todos los roles del usuario.
+            if (usuarioDto.getRoles() != null) {
+                updateRolesUserByName(user, usuarioDto.getRoles());
+            }
         }
 
     }

@@ -54,8 +54,10 @@ public class Usuario {
     @Column(name = "flag", nullable = false)
     private Boolean flag;
 
-    @Column(name = "access_tmi", nullable = false)
-    private Boolean access_tmi;
+    // Por defecto sin acceso a TMI: la columna es NOT NULL y varios flujos
+    // (solicitud de acceso, registro desde el panel) no envían este dato.
+    @Column(name = "access_tmi", nullable = false, columnDefinition = "boolean default false")
+    private Boolean access_tmi = false;
 
     @Column(name = "first_login", nullable = false)
     private Boolean first_Login = true;
@@ -95,4 +97,13 @@ public class Usuario {
     ///relacion con aprobacionDocumento
     @OneToMany(mappedBy = "userRevisor", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ResolucionAprobacionDocumento> resolucionesRealizadas;
+
+    /** Garantiza el valor por defecto aunque algún flujo asigne null explícitamente. */
+    @PrePersist
+    @PreUpdate
+    private void applyDefaults() {
+        if (access_tmi == null) {
+            access_tmi = false;
+        }
+    }
 }
