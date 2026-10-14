@@ -6,7 +6,6 @@ import essalud.gcpp.essaludgcppbackend.model.usuario.Usuario;
 import essalud.gcpp.essaludgcppbackend.repositories.usuario.UsuarioRep;
 import essalud.gcpp.essaludgcppbackend.service.usuario.LogServ;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -17,11 +16,16 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/log")
-@RequiredArgsConstructor
 public class LogCon {
 
     private final UsuarioRep userRepository;
     private final LogServ logServ;
+
+    public LogCon(UsuarioRep userRepository, LogServ logServ) {
+        this.userRepository = userRepository;
+        this.logServ = logServ;
+    }
+
 
     @PostMapping("/register")
     @PreAuthorize("hasAnyAuthority('ADMIN','USER','ADMIN_RED')")
