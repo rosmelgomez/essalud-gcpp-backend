@@ -4,8 +4,7 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Data
+
 public class ClasificacionCamasDto {
     private Integer id;
     private String cenasicod;

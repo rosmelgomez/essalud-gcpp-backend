@@ -5,8 +5,7 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Data
+
 public class LogUsuarioDto {
     String action;
     String status;

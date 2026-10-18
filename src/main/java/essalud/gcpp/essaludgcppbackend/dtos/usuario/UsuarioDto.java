@@ -7,8 +7,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Data
+
 public class UsuarioDto {
     private Integer id;
 

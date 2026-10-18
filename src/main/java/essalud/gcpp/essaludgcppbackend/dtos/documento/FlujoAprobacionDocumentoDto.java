@@ -7,8 +7,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Data
+
 public class FlujoAprobacionDocumentoDto {
     private Integer id;
     private String comentario;

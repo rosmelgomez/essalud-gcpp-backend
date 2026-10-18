@@ -7,8 +7,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Data
+
 public class EncuestaDto {
     private Integer id;
     private String codcas;

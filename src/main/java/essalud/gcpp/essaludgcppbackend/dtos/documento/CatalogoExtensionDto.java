@@ -5,8 +5,6 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @Data
 public class CatalogoExtensionDto {
     private Integer id;

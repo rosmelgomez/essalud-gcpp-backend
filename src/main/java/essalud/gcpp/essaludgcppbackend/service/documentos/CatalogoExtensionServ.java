@@ -23,7 +23,11 @@ public class CatalogoExtensionServ {
         List<CatalogoExtension> list = cer.findAll();
         List<CatalogoExtensionDto> dtos = new ArrayList<>();
         for (CatalogoExtension entity : list) {
-            dtos.add(new CatalogoExtensionDto(entity.getId(), entity.getNombre(), entity.getMimeType()));
+            CatalogoExtensionDto dto = new CatalogoExtensionDto();
+            dto.setId(entity.getId());
+            dto.setNombre(entity.getNombre());
+            dto.setMimeType(entity.getMimeType());
+            dtos.add(dto);
         }
         return dtos;
     }

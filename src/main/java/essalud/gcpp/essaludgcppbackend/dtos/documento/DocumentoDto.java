@@ -8,8 +8,6 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Data
 public class DocumentoDto {
     private Integer id;
     private String codigo;

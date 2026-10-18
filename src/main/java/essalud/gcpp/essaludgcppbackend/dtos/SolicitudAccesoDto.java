@@ -6,8 +6,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Data
+
 public class SolicitudAccesoDto {
 
     private Integer id;

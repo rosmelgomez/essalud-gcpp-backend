@@ -6,8 +6,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Data
+
 public class LogFilterDto {
     private Integer id;
     private String action;

@@ -5,8 +5,7 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Data
+
 public class SubCategoriaDto {
     private Integer id;
     private String name_categoria;

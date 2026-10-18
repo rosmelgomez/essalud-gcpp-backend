@@ -8,8 +8,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Data
+
 public class TipoDocumentoDto {
     private Integer id;
     private String nombre;

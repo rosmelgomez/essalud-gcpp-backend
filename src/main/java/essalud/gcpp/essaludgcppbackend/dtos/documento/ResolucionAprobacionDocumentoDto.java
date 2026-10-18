@@ -6,8 +6,6 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Data
 public class ResolucionAprobacionDocumentoDto {
     private Integer id;

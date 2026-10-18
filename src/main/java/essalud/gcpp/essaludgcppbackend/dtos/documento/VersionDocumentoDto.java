@@ -8,8 +8,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Data
+
 public class VersionDocumentoDto {
     private Integer id;
     private String nombre;
