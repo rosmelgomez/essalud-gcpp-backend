@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.1.1</version>
+        <version>4.1.2</version>
         <relativePath/>
     </parent>
     <groupId>essalud.gcpp</groupId>
@@ -28,7 +28,26 @@
     </scm>
     <properties>
         <java.version>21</java.version>
+        <!-- Boot 4.1.2 gestiona logback 1.5.38, afectado por CVE-2026-19880 (corregido en 1.6.3) -->
+        <logback.version>1.6.5</logback.version>
+        <!-- Boot 4.1.2 gestiona Jackson 3.1.7, afectado por CVE-2026-110879 (corregido en 3.1.8) -->
+        <jackson-bom.version>3.1.8</jackson-bom.version>
+        <!-- Jackson 2 (lo usa jjwt-jackson): 2.21.7 tambien afectado por CVE-2026-110879, corregido en 2.21.8 -->
+        <jackson-2-bom.version>2.21.8</jackson-2-bom.version>
+        <lombok.version>1.18.48</lombok.version>
+        <!-- asm 9.7.1 (via json-smart, solo test) afectado por CVE-2026-110257/58/60/61/63 y 110591, corregidos en 9.11 -->
+        <asm.version>9.11.1</asm.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.ow2.asm</groupId>
+                <artifactId>asm</artifactId>
+                <version>${asm.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
 
@@ -53,7 +72,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.46</version>
+            <version>${lombok.version}</version>
             <optional>true</optional>
         </dependency>
 
@@ -62,6 +81,20 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+            <!-- json-smart <= 2.6.0 afectado por CVE-2026-113602 sin version corregida. Solo lo usa JsonPath:
+                 si un test necesita jsonPath(), configurar JacksonJsonProvider en lugar de reincorporarlo. -->
+            <exclusions>
+                <exclusion>
+                    <groupId>net.minidev</groupId>
+                    <artifactId>json-smart</artifactId>
+                </exclusion>
+                <!-- android-json (unica version 0.0.20131108) afectado por CVE-2026-110974 sin version corregida.
+                     Solo lo usa JSONassert: si un test lo necesita, agregar org.json:json en scope test. -->
+                <exclusion>
+                    <groupId>com.vaadin.external.google</groupId>
+                    <artifactId>android-json</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!--dependencia para el manejo de base de datos postgresql-->
@@ -87,7 +120,7 @@
         <dependency>
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>
-            <version>3.0.0</version>
+            <version>3.2.8</version>
         </dependency>
 
         <!--dependencia para el manejo de seguridad-->
@@ -103,31 +136,30 @@
             <scope>test</scope>
         </dependency>
 
-        <!--dependencia para el manejo de jwt-->
+        <!--dependencia para el manejo de jwt (jjwt 0.9.1 esta abandonada y arrastra jackson-databind vulnerable)-->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
-            <version>0.9.1</version>
+            <artifactId>jjwt-api</artifactId>
+            <version>0.13.0</version>
         </dependency>
-
-        <!--dependencia para el manejo de jaxb-api-->
         <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-            <version>2.3.1</version>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>0.13.0</version>
+            <scope>runtime</scope>
         </dependency>
-
-        <!--dependencia para el manejo de jaxb-runtime-->
         <dependency>
-            <groupId>org.glassfish.jaxb</groupId>
-            <artifactId>jaxb-runtime</artifactId>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>0.13.0</version>
+            <scope>runtime</scope>
         </dependency>
 
         <!--dependencia para la lectura del tipo de archivo-->
         <dependency>
             <groupId>org.apache.tika</groupId>
             <artifactId>tika-core</artifactId>
-            <version>3.2.2</version>
+            <version>3.3.3</version>
         </dependency>
 
         <!--dependencia para el manejo de swagger-annotations-->
@@ -158,7 +190,7 @@
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
-                            <version>1.18.46</version>
+                            <version>${lombok.version}</version>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>

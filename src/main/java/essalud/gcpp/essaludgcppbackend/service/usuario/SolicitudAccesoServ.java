@@ -7,6 +7,7 @@ import essalud.gcpp.essaludgcppbackend.model.usuario.Usuario;
 import essalud.gcpp.essaludgcppbackend.repositories.acceso.SolicitudAccesoRep;
 import essalud.gcpp.essaludgcppbackend.repositories.acceso.ResolucionSolicitudAccesoRep;
 import essalud.gcpp.essaludgcppbackend.repositories.usuario.UsuarioRep;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,12 +27,16 @@ public class SolicitudAccesoServ {
     private final UsuarioRep usuarioRep;
     private final UsuarioServ usuarioServ;
     private final ResolucionSolicitudAccesoRep resolucionSolicitudAccesoRep;
+    // Contrasena inicial de los usuarios creados por solicitud (se fuerza su cambio en el primer login).
+    private final String defaultPassword;
 
-    public SolicitudAccesoServ(SolicitudAccesoRep solicitudAccesoRep, UsuarioRep usuarioRep, UsuarioServ usuarioServ, ResolucionSolicitudAccesoRep resolucionSolicitudAccesoRep) {
+    public SolicitudAccesoServ(SolicitudAccesoRep solicitudAccesoRep, UsuarioRep usuarioRep, UsuarioServ usuarioServ, ResolucionSolicitudAccesoRep resolucionSolicitudAccesoRep,
+                               @Value("${app.security.solicitud.default-password}") String defaultPassword) {
         this.solicitudAccesoRep = solicitudAccesoRep;
         this.usuarioRep = usuarioRep;
         this.usuarioServ = usuarioServ;
         this.resolucionSolicitudAccesoRep = resolucionSolicitudAccesoRep;
+        this.defaultPassword = defaultPassword;
     }
 
     public void saveSolicitudAcceso(SolicitudAccesoDto solicitudAccesoDto) {
@@ -40,7 +45,7 @@ public class SolicitudAccesoServ {
         if (user == null) {
             user = new Usuario();
             PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            String encodedPassword = passwordEncoder.encode("123456789");
+            String encodedPassword = passwordEncoder.encode(defaultPassword);
 
             user.setName(solicitudAccesoDto.getName());
             user.setLastname(solicitudAccesoDto.getLastname());

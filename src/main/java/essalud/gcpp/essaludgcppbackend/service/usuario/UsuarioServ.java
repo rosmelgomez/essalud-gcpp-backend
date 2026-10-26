@@ -1,6 +1,5 @@
 package essalud.gcpp.essaludgcppbackend.service.usuario;
 
-import essalud.gcpp.essaludgcppbackend.dtos.usuario.UsuarioLoginDto;
 import essalud.gcpp.essaludgcppbackend.dtos.usuario.UsuarioDto;
 import essalud.gcpp.essaludgcppbackend.model.usuario.Rol;
 import essalud.gcpp.essaludgcppbackend.model.usuario.UsuarioRol;
@@ -167,10 +166,15 @@ public class UsuarioServ {
         return user(user, roles);
     }
 
-    public UsuarioDto getUserByDni(String dni) {
+    public UsuarioDto getPublicUserByDni(String dni) {
         Usuario user = usuarioRep.findByDni(dni);
-        List<Rol> roles = rolRep.listaRolesByUsername(user.getUsername());
-        return user(user, roles);
+        if (user == null) {
+            return null;
+        }
+        UsuarioDto usuarioDto = new UsuarioDto();
+        usuarioDto.setName(user.getName());
+        usuarioDto.setLastname(user.getLastname());
+        return usuarioDto;
     }
 
     @SuppressWarnings("null")
@@ -184,10 +188,16 @@ public class UsuarioServ {
         return usuarioDtos;
     }
 
-    public void changePassword(UsuarioLoginDto usuarioLoginDto) {
-        Usuario user = usuarioRep.findByUsername(usuarioLoginDto.getUsername());
+    public void changePassword(String username, String newPassword) {
+        if (username == null || newPassword == null || newPassword.isBlank()) {
+            throw new IllegalArgumentException("Contrasena invalida");
+        }
+        Usuario user = usuarioRep.findByUsername(username);
+        if (user == null) {
+            throw new IllegalArgumentException("Usuario no encontrado");
+        }
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String encodedPassword = passwordEncoder.encode(usuarioLoginDto.getPassword());
+        String encodedPassword = passwordEncoder.encode(newPassword);
         user.setPassword(encodedPassword);
         user.setFirst_Login(false);
         user.setDate_update(LocalDateTime.now());

@@ -1,5 +1,7 @@
 package essalud.gcpp.essaludgcppbackend.service.documentos;
 
+import essalud.gcpp.essaludgcppbackend.security.CurrentUser;
+
 import essalud.gcpp.essaludgcppbackend.dtos.documento.DocumentoDto;
 import essalud.gcpp.essaludgcppbackend.model.documentos.Documento;
 import essalud.gcpp.essaludgcppbackend.model.documentos.TipoDocumento;
@@ -36,14 +38,15 @@ public class DocumentoServ {
     }
 
     public void saveDocumento(DocumentoDto documento)  {
-        Usuario user= usuarioRep.findById(documento.getId_user_creation()).orElse(null);
+        // El creador/editor es el usuario autenticado, no el id que envia el cliente.
+        Usuario user = currentUser();
         TipoDocumento tipoDocumento = tipoDocumentoRep.findById(documento.getId_tipo_documento()).orElse(null);
 
         if (user != null && tipoDocumento != null) {
             Documento documentoEntity;
             if (documento.getId() != null && documento.getId() > 0) {
                 documentoEntity = documentoRep.findById(documento.getId()).orElse(new Documento());
-                if (documentoEntity.getUser_documento() != null && !documentoEntity.getUser_documento().getId().equals(documento.getId_user_creation())) {
+                if (documentoEntity.getUser_documento() != null && !documentoEntity.getUser_documento().getId().equals(user.getId())) {
                     throw new org.springframework.security.access.AccessDeniedException("No tiene permisos para modificar este documento.");
                 }
             } else {
@@ -130,17 +133,22 @@ public class DocumentoServ {
         return documentoDto(documento);
     }
 
-    public void deleteDocumento(Integer id, Integer userId) {
+    public void deleteDocumento(Integer id) {
         Documento doc = documentoRep.findById(id).orElse(null);
-        Usuario user = usuarioRep.findById(userId).orElse(null);
+        Usuario user = currentUser();
         if (doc != null && user != null) {
-            if (!doc.getUser_documento().getId().equals(userId)) {
+            if (!doc.getUser_documento().getId().equals(user.getId())) {
                 throw new org.springframework.security.access.AccessDeniedException("No tiene permisos para eliminar este documento.");
             }
             doc.setFlag(false);
             doc.setDate_delete(LocalDateTime.now(ZoneId.of("America/Lima")));
             documentoRep.save(doc);
         }
+    }
+
+    private Usuario currentUser() {
+        String username = CurrentUser.username();
+        return username != null ? usuarioRep.findByUsername(username) : null;
     }
 
     private DocumentoDto documentoDto(Documento documento){

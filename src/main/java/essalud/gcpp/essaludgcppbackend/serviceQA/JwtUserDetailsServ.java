@@ -18,6 +18,9 @@ import java.util.List;
 @SuppressWarnings("NullableProblems")
 @Service
 public class JwtUserDetailsServ implements UserDetailsService {
+    /// Autoridad extra para usuarios que aun no cambian la contrasena inicial; JwtRequestFilter limita sus rutas.
+    public static final String PASSWORD_CHANGE_REQUIRED = "PASSWORD_CHANGE_REQUIRED";
+
     private final UsuarioRep userRepository;
     private final RolRep rolRep;
 
@@ -41,6 +44,9 @@ public class JwtUserDetailsServ implements UserDetailsService {
             List<GrantedAuthority> grantedAuthorities=new ArrayList<>();
             for (Rol rol : roles) {
                 grantedAuthorities.add(new SimpleGrantedAuthority(rol.getName()));
+            }
+            if (Boolean.TRUE.equals(user.getFirst_Login())) {
+                grantedAuthorities.add(new SimpleGrantedAuthority(PASSWORD_CHANGE_REQUIRED));
             }
             return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(),true,true,true,true,grantedAuthorities);
         }

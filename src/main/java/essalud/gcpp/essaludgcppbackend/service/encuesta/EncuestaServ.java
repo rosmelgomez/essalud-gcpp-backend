@@ -5,6 +5,7 @@ import essalud.gcpp.essaludgcppbackend.model.encuesta.*;
 import essalud.gcpp.essaludgcppbackend.model.usuario.Usuario;
 import essalud.gcpp.essaludgcppbackend.repositories.encuesta.*;
 import essalud.gcpp.essaludgcppbackend.repositories.usuario.UsuarioRep;
+import essalud.gcpp.essaludgcppbackend.security.CurrentUser;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +38,9 @@ public class EncuestaServ {
     }
 
     public void registrarEncuesta(EncuestaDto encuestaDto) {
-        Usuario user = UR.findById(encuestaDto.getId_user()).orElse(null);
+        // La encuesta se atribuye al usuario autenticado, no al id que envia el cliente.
+        String username = CurrentUser.username();
+        Usuario user = username != null ? UR.findByUsername(username) : null;
         Modulo modulo = MR.findById(encuestaDto.getId_modulo()).orElse(null);
         Categoria categoria = CR.findById(encuestaDto.getId_categoria()).orElse(null);
         SubCategoria subCategoria = SCR.findById(encuestaDto.getId_subcategoria()).orElse(null);

@@ -10,6 +10,7 @@ import essalud.gcpp.essaludgcppbackend.repositories.documentos.SolicitudAprobaci
 import essalud.gcpp.essaludgcppbackend.repositories.documentos.ResolucionAprobacionDocumentoRep;
 import essalud.gcpp.essaludgcppbackend.repositories.documentos.HistorialAprobacionDocumentoRep;
 import essalud.gcpp.essaludgcppbackend.repositories.usuario.UsuarioRep;
+import essalud.gcpp.essaludgcppbackend.security.CurrentUser;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -78,10 +79,6 @@ public class SolicitudAprobacionDocumentoServ {
         SolicitudAprobacionDocumento sad = sadr.findById(dto.getId()).orElse(null);
 
         if (sad != null) {
-            String estadoAnterior = sad.getEstado();
-            sad.setEstado(dto.getStatus());
-            sadr.save(sad); /// SolicitudAprobacionDocumentoRepository
-
             /// Obtener usuario que realiza la acción
             Object principal = Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication())
                     .getPrincipal();
@@ -92,6 +89,18 @@ public class SolicitudAprobacionDocumentoServ {
                 currentUsername = principal.toString();
             }
             Usuario userAccion = currentUsername != null ? usuarioRep.findByUsername(currentUsername) : null;
+
+            // Solo el aprobador asignado (o un ADMIN) puede resolver el flujo.
+            boolean isAssignedApprover = userAccion != null && sad.getUserAprobador() != null
+                    && Objects.equals(sad.getUserAprobador().getId(), userAccion.getId());
+            if (!isAssignedApprover && !CurrentUser.hasAnyAuthority("ADMIN")) {
+                throw new org.springframework.security.access.AccessDeniedException(
+                        "No tiene permisos para resolver esta solicitud de aprobación.");
+            }
+
+            String estadoAnterior = sad.getEstado();
+            sad.setEstado(dto.getStatus());
+            sadr.save(sad); /// SolicitudAprobacionDocumentoRepository
 
             // Guardar Resolución Aprobación
             if ("Aprobado".equalsIgnoreCase(dto.getStatus()) || "Rechazado".equalsIgnoreCase(dto.getStatus())) {

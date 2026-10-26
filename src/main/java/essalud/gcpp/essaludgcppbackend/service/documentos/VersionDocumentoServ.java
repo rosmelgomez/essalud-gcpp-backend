@@ -77,7 +77,8 @@ public class VersionDocumentoServ {
 
     public void saveVersionDocumento(VersionDocumentoDto versionDocumentoDto) throws IOException {
         Documento documento = documentoRep.findById(versionDocumentoDto.getId_documento()).orElse(null);
-        Usuario user = usuarioRep.findById(versionDocumentoDto.getId_user_creation()).orElse(null);
+        String currentUsername = getCurrentUsername();
+        Usuario user = currentUsername != null ? usuarioRep.findByUsername(currentUsername) : null;
 
         if (documento != null && user != null) {
             TipoDocumento tipo = documento.getTipo_documento();
@@ -285,11 +286,12 @@ public class VersionDocumentoServ {
         }
     }
 
-    public void deleteVersionDocumento(Integer id, Integer userId) {
+    public void deleteVersionDocumento(Integer id) {
         VersionDocumento version = versionDocumentoRep.findById(id).orElse(null);
-        Usuario user = usuarioRep.findById(userId).orElse(null);
+        String currentUsername = getCurrentUsername();
+        Usuario user = currentUsername != null ? usuarioRep.findByUsername(currentUsername) : null;
         if (version != null && user != null) {
-            if (!version.getUser_version_documento().getId().equals(userId)) {
+            if (!version.getUser_version_documento().getId().equals(user.getId())) {
                 throw new org.springframework.security.access.AccessDeniedException(
                         "No tiene permisos para eliminar esta versión.");
             }

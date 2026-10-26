@@ -2,7 +2,6 @@ package essalud.gcpp.essaludgcppbackend.security;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.nio.charset.StandardCharsets;
 
 import java.util.Base64;
 import java.util.Date;
@@ -21,7 +20,8 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import javax.crypto.SecretKey;
 
 @Component
 public class JwtTokenUtil implements Serializable {
@@ -48,9 +48,6 @@ public class JwtTokenUtil implements Serializable {
 
     @Value(value = "${app.security.jwt.api-secret:}")
     private String apiSecretBase64;
-
-    @Value(value = "${jwt.secret:}")
-    private String legacySecret;
 
     @Value(value = "${app.security.jwt.issuer}")
     private String issuer;
@@ -124,12 +121,13 @@ public class JwtTokenUtil implements Serializable {
     private String doGenerateToken(Map<String, Object> claims, String subject, long validityMs) {
 
         String tokenType = claims.get(TOKEN_TYPE_CLAIM).toString();
-        byte[] signingKey = resolveSigningKey(tokenType);
+        SecretKey signingKey = resolveSigningKey(tokenType);
 
-        return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setIssuer(issuer)
-                .setExpiration(new Date(System.currentTimeMillis() + validityMs))
-                .signWith(SignatureAlgorithm.HS512, signingKey).compact();
+        // El algoritmo HMAC se elige segun el tamano de la clave (HS256 para 256 bits, HS512 para 512 bits).
+        return Jwts.builder().claims(claims).subject(subject).issuedAt(new Date(System.currentTimeMillis()))
+                .issuer(issuer)
+                .expiration(new Date(System.currentTimeMillis() + validityMs))
+                .signWith(signingKey).compact();
     }
 
     public Boolean validateAccessToken(String token, UserDetails userDetails) {
@@ -145,7 +143,7 @@ public class JwtTokenUtil implements Serializable {
         final Claims claims;
         try {
             claims = parseClaimsWithKey(token, resolveSigningKey(expectedType));
-        } catch (JwtException e) {
+        } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
 
@@ -160,19 +158,17 @@ public class JwtTokenUtil implements Serializable {
                 && issuer.equals(tokenIssuer);
     }
 
-    private Claims parseClaimsWithKey(String token, byte[] signingKey) {
-        return Jwts.parser().setSigningKey(signingKey).parseClaimsJws(token).getBody();
+    private Claims parseClaimsWithKey(String token, SecretKey signingKey) {
+        return Jwts.parser().verifyWith(signingKey).requireIssuer(issuer).build()
+                .parseSignedClaims(token).getPayload();
     }
 
-    private byte[] resolveSigningKey(String tokenType) {
+    // Access y api token usan claves distintas; se exige un minimo de 256 bits (Keys.hmacShaKeyFor).
+    private SecretKey resolveSigningKey(String tokenType) {
         String configuredKey = ACCESS_TOKEN_TYPE.equals(tokenType) ? accessSecretBase64 : apiSecretBase64;
 
         if (configuredKey != null && !configuredKey.isBlank()) {
-            return Base64.getDecoder().decode(configuredKey);
-        }
-
-        if (legacySecret != null && !legacySecret.isBlank()) {
-            return legacySecret.getBytes(StandardCharsets.UTF_8);
+            return Keys.hmacShaKeyFor(Base64.getDecoder().decode(configuredKey));
         }
 
         throw new IllegalStateException("No se encontro una clave JWT configurada");

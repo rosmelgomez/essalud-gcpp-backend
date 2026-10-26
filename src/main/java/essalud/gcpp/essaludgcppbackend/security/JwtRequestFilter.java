@@ -55,10 +55,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (jwtToken != null) {
             try {
                 username = jwtTokenUtil.getUsernameFromToken(jwtToken);
-            } catch (IllegalArgumentException e) {
-                System.out.println("no se puede encontrar el token");
             } catch (ExpiredJwtException e) {
-                System.out.println("el token es expired");
+                logger.debug("JWT expirado");
             } catch (Exception e) {
                 logger.warn("JWT invalido");
             }
@@ -92,8 +90,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                             // Autenticamos al usuario para la peticion actual
                             username = refreshUsername;
                             jwtToken = newAccessToken;
-                            System.out.println(
-                                    "Access token regenerado y refrescado de forma transparente en el Backend.");
                         }
                     }
                 } catch (Exception ex) {
@@ -117,9 +113,36 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                         .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+
+                // Hasta cambiar la contrasena inicial solo se permiten las rutas del flujo de primer login.
+                boolean passwordChangeRequired = userDetails.getAuthorities().stream()
+                        .anyMatch(a -> JwtUserDetailsServ.PASSWORD_CHANGE_REQUIRED.equals(a.getAuthority()));
+                if (passwordChangeRequired && !isAllowedBeforePasswordChange(request)) {
+                    // Se escribe la respuesta directamente: sendError re-despacha a /error sin autenticacion (401).
+                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                    response.setContentType("text/plain;charset=UTF-8");
+                    response.getWriter().write("Debe cambiar su contrasena");
+                    return;
+                }
             }
         }
         filterChain.doFilter(request, response);
+    }
+
+    private boolean isAllowedBeforePasswordChange(HttpServletRequest request) {
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            return true;
+        }
+        String requestPath = request.getRequestURI().substring(request.getContextPath().length());
+        return requestPath.equals("/login")
+                || requestPath.equals("/user/me")
+                || requestPath.equals("/user/changepassword")
+                || requestPath.startsWith("/user/getbyusername/")
+                || requestPath.equals("/log/register")
+                || requestPath.equals("/solicitud/register")
+                || requestPath.startsWith("/user/getbydni/")
+                || requestPath.startsWith("/establecimiento/getredes")
+                || requiresApiToken(request);
     }
 
     private @Nullable String resolveToken(HttpServletRequest request, boolean useApiToken) {

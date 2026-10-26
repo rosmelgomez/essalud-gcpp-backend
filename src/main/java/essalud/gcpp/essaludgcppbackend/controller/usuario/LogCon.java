@@ -12,7 +12,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/log")
@@ -47,17 +46,6 @@ public class LogCon {
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<LogFilterDto>> getLogUsers(){
         return ResponseEntity.ok(logServ.getLogFilters());
-    }
-
-    @GetMapping("/debug-ip")
-    @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
-    public Map<String, String> debug(HttpServletRequest request) {
-
-        return Map.of(
-                "remoteAddr", request.getRemoteAddr(),
-                "xRealIp", request.getHeader("X-Real-IP"),
-                "xForwardedFor", request.getHeader("X-Forwarded-For")
-        );
     }
 }
 

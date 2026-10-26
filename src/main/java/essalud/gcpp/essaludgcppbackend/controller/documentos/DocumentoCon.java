@@ -62,6 +62,7 @@ public class DocumentoCon {
     @DeleteMapping("/delete/{id}/{userid}")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER')")
     public void deleteDocumento(@PathVariable Integer id, @PathVariable Integer userid){
-        documentoServ.deleteDocumento(id, userid);
+        // userid se mantiene en la ruta por compatibilidad; el servicio usa el usuario autenticado.
+        documentoServ.deleteDocumento(id);
     }
 }

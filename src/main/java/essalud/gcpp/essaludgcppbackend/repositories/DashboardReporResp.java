@@ -5,9 +5,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @Repository
 public class DashboardReporResp {
@@ -97,7 +97,8 @@ public class DashboardReporResp {
     /// Dashboard Reporteador query
     public List<Map<String, Object>> queryDRQ(ReporteadorDto repDto) {
         String tabla = "dwsge.dwe_consulta_externa_homologacion_" + repDto.getAnio() + "_" +periodo_str(repDto.getPeriodo()) ;
-        String filtro = filter(repDto);
+        List<Object> params = new ArrayList<>();
+        String filtro = filter(repDto, params);
 
         String sql = """
         ( WITH report_data AS
@@ -138,43 +139,37 @@ public class DashboardReporResp {
         WHERE %s )
         """.formatted(tabla, filtro);
 
-        return secondJdbcTemplate.queryForList(sql);
+        return secondJdbcTemplate.queryForList(sql, params.toArray());
     }
 
 
-    private String filter (ReporteadorDto repDto) {
-        String filtro = "";
+    /// Construye el WHERE con placeholders; los valores van en params para evitar inyeccion SQL.
+    private String filter(ReporteadorDto repDto, List<Object> params) {
+        List<String> condiciones = new ArrayList<>();
         if (repDto.getAnio() != 0) {
-            filtro = "anio = " + "'" + repDto.getAnio() + "'";
+            condiciones.add("anio = ?");
+            params.add(String.valueOf(repDto.getAnio()));
         }
         if (repDto.getPeriodo() != 0) {
-            filtro = filtro + " AND periodo = " + "'"+repDto.getAnio() + repDto.getPeriodo() + "'";
+            condiciones.add("periodo = ?");
+            params.add(String.valueOf(repDto.getAnio()) + repDto.getPeriodo());
         }
-        if (!Objects.equals(repDto.getRedasiscod(), "")) {
-            filtro = filtro + "AND redasiscod = " + "'" + repDto.getRedasiscod() + "'";
+        addFiltro(condiciones, params, "redasiscod", repDto.getRedasiscod());
+        addFiltro(condiciones, params, "cod_centro", repDto.getCod_centro());
+        addFiltro(condiciones, params, "cod_servicio", repDto.getCod_servicio());
+        addFiltro(condiciones, params, "cod_actividad", repDto.getCod_actividad());
+        addFiltro(condiciones, params, "cod_subactividad", repDto.getCod_subactividad());
+        addFiltro(condiciones, params, "sexo", repDto.getSexo());
+        addFiltro(condiciones, params, "cod_diag", repDto.getCapitulo());
+        addFiltro(condiciones, params, "cod_variable", repDto.getVariable());
+        return condiciones.isEmpty() ? "TRUE" : String.join(" AND ", condiciones);
+    }
+
+    private void addFiltro(List<String> condiciones, List<Object> params, String columna, String valor) {
+        if (valor != null && !valor.isEmpty()) {
+            condiciones.add(columna + " = ?");
+            params.add(valor);
         }
-        if (!Objects.equals(repDto.getCod_centro(), "")) {
-            filtro = filtro + "AND cod_centro = " + "'" + repDto.getCod_centro() + "'";
-        }
-        if (!Objects.equals(repDto.getCod_servicio(), "")) {
-            filtro = filtro + "AND cod_servicio = " + "'" + repDto.getCod_servicio() + "'";
-        }
-        if (!Objects.equals(repDto.getCod_actividad(), "")) {
-            filtro = filtro + "AND cod_actividad = " + "'" + repDto.getCod_actividad() + "'";
-        }
-        if (!Objects.equals(repDto.getCod_subactividad(), "")) {
-            filtro = filtro + "AND cod_subactividad = " + "'" + repDto.getCod_subactividad() + "'";
-        }
-        if (!Objects.equals(repDto.getSexo(), "")) {
-            filtro = filtro + "AND sexo = " + "'" + repDto.getSexo() + "'";
-        }
-        if ( !Objects.equals(repDto.getCapitulo(), "")){
-            filtro = filtro + "AND cod_diag = " + "'" + repDto.getCapitulo() + "'";
-        }
-        if (!Objects.equals(repDto.getVariable(),"")){
-            filtro = filtro + "AND cod_variable = " + "'" + repDto.getVariable() + "'";
-        }
-        return filtro;
     }
 
 

@@ -3,6 +3,7 @@ package essalud.gcpp.essaludgcppbackend.controller.usuario;
 import essalud.gcpp.essaludgcppbackend.dtos.usuario.RolDto;
 import essalud.gcpp.essaludgcppbackend.dtos.usuario.UsuarioLoginDto;
 import essalud.gcpp.essaludgcppbackend.dtos.usuario.UsuarioDto;
+import essalud.gcpp.essaludgcppbackend.security.CurrentUser;
 import essalud.gcpp.essaludgcppbackend.service.usuario.RolServ;
 import essalud.gcpp.essaludgcppbackend.service.usuario.UsuarioServ;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -43,9 +44,10 @@ public class UsuarioCon {
         return usuarioServ.getUserByUsernameOrEmail(Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getName());
     }
 
+    /// Endpoint publico (formulario de solicitud de acceso): solo expone nombre y apellidos.
     @GetMapping("/getbydni/{dni}")
     public UsuarioDto getUser(@PathVariable String dni) {
-        return usuarioServ.getUserByDni(dni);
+        return usuarioServ.getPublicUserByDni(dni);
     }
 
     @PostMapping("/register")
@@ -75,13 +77,15 @@ public class UsuarioCon {
     @PostMapping("/verifypassword")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public void verifyPassword(@RequestBody UsuarioLoginDto user) throws Exception {
-        authenticateUser(user.getUsername(), user.getPassword());
+        // Solo se verifica la contrasena del usuario autenticado, nunca la de un tercero.
+        authenticateUser(CurrentUser.username(), user.getPassword());
     }
 
     @PutMapping("/changepassword")
     @PreAuthorize("hasAnyAuthority('ADMIN','ADMIN_RED','USER','CONSULTA')")
     public void changePassword(@RequestBody UsuarioLoginDto user) {
-        usuarioServ.changePassword(user);
+        // El usuario se toma del token: el username del body se ignora.
+        usuarioServ.changePassword(CurrentUser.username(), user.getPassword());
     }
 
     private void authenticateUser(String username, String password) throws Exception {

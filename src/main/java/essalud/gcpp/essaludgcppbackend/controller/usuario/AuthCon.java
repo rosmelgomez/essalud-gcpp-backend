@@ -7,9 +7,8 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import essalud.gcpp.essaludgcppbackend.dtos.usuario.UsuarioLoginDto;
 import essalud.gcpp.essaludgcppbackend.security.JwtTokenUtil;
+import essalud.gcpp.essaludgcppbackend.security.LoginAttemptService;
 import essalud.gcpp.essaludgcppbackend.serviceQA.JwtUserDetailsServ;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -43,18 +43,30 @@ public class AuthCon {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
     private final JwtUserDetailsServ jwtUserDetailsServ;
+    private final LoginAttemptService loginAttemptService;
 
     public AuthCon(AuthenticationManager authenticationManager, JwtTokenUtil jwtTokenUtil,
-                   JwtUserDetailsServ jwtUserDetailsServ) {
+                   JwtUserDetailsServ jwtUserDetailsServ, LoginAttemptService loginAttemptService) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenUtil = jwtTokenUtil;
         this.jwtUserDetailsServ = jwtUserDetailsServ;
+        this.loginAttemptService = loginAttemptService;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> createAuthenticateUser(@RequestBody UsuarioLoginDto user) throws Exception {
+    public ResponseEntity<?> createAuthenticateUser(@RequestBody UsuarioLoginDto user) {
        if (user.getUsername() != null && user.getPassword() != null) {
-           authenticateUser(user.getUsername(), user.getPassword());
+           if (loginAttemptService.isBlocked(user.getUsername())) {
+               return ResponseEntity.status(429).body("Demasiados intentos fallidos. Intente mas tarde.");
+           }
+           try {
+               authenticationManager.authenticate(
+                       new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+           } catch (AuthenticationException e) {
+               loginAttemptService.loginFailed(user.getUsername());
+               return ResponseEntity.status(401).body("Credenciales invalidas");
+           }
+           loginAttemptService.loginSucceeded(user.getUsername());
            final UserDetails userDetails = jwtUserDetailsServ.loadUserByUsername(user.getUsername());
            final String accessToken = jwtTokenUtil.generateAccessToken(userDetails);
            final String apiToken = jwtTokenUtil.generateApiToken(userDetails);
@@ -80,7 +92,7 @@ public class AuthCon {
                    .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
                    .body("Login Successfull");
        }
-       return null;
+       return ResponseEntity.badRequest().body("Usuario y contrasena requeridos");
     }
 
     @GetMapping("/api-token")
@@ -143,16 +155,5 @@ public class AuthCon {
         }
 
         return null;
-    }
-
-    private void authenticateUser(String username, String password) throws Exception {
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        } catch (DisabledException e) {
-            throw new Exception("USER_DISABLED", e);
-        } catch (BadCredentialsException e) {
-            throw new Exception("INVALID_CREDENTIALS", e);
-        }
-
     }
 }
