@@ -179,7 +179,7 @@ public class UsuarioServ {
 
     @SuppressWarnings("null")
     public List<UsuarioDto> getAllUsers() {
-        List<Usuario> users = usuarioRep.findAll(Sort.by(Sort.Direction.ASC, Usuario::getId));
+        List<Usuario> users = usuarioRep.findAll(Sort.by(Sort.Direction.ASC, "id"));
         List<UsuarioDto> usuarioDtos = new ArrayList<>();
         for (Usuario user : users) {
             List<Rol> roles = rolRep.listaRolesByUsername(user.getUsername());
