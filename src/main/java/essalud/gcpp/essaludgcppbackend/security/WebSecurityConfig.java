@@ -71,8 +71,8 @@ public class WebSecurityConfig {
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/solicitud/register").permitAll()
                         .requestMatchers("/user/getbydni/**").permitAll()
-                        .requestMatchers("/establecimiento/getredes", "/establecimiento/getredeswithcentros")
-                        .permitAll()
+                        .requestMatchers("/establecimiento/getredes", "/establecimiento/getredeswithcentros").permitAll()
+                        .requestMatchers("/tmi/dinamico/dashboard/**").permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(
                         authentication -> authentication.authenticationEntryPoint(jwtAuthenticationEntryPoint))
