@@ -20,6 +20,8 @@ import java.util.List;
 public class JwtUserDetailsServ implements UserDetailsService {
     /// Autoridad extra para usuarios que aun no cambian la contrasena inicial; JwtRequestFilter limita sus rutas.
     public static final String PASSWORD_CHANGE_REQUIRED = "PASSWORD_CHANGE_REQUIRED";
+    /// Autoridad extra para usuarios con usuario.access_tmi = true; el backend del TMI la exige para modificar.
+    public static final String ACCESS_TMI = "ACCESS_TMI";
 
     private final UsuarioRep userRepository;
     private final RolRep rolRep;
@@ -44,6 +46,9 @@ public class JwtUserDetailsServ implements UserDetailsService {
             List<GrantedAuthority> grantedAuthorities=new ArrayList<>();
             for (Rol rol : roles) {
                 grantedAuthorities.add(new SimpleGrantedAuthority(rol.getName()));
+            }
+            if (Boolean.TRUE.equals(user.getAccess_tmi())) {
+                grantedAuthorities.add(new SimpleGrantedAuthority(ACCESS_TMI));
             }
             if (Boolean.TRUE.equals(user.getFirst_Login())) {
                 grantedAuthorities.add(new SimpleGrantedAuthority(PASSWORD_CHANGE_REQUIRED));
