@@ -55,7 +55,7 @@ public class Usuario {
     private Boolean flag;
 
     // Por defecto sin acceso a TMI: la columna es NOT NULL y varios flujos
-    // (solicitud de acceso, registro desde el panel) no envían este dato.
+    // (como el registro desde el panel) no envían este dato.
     @Column(name = "access_tmi", nullable = false, columnDefinition = "boolean default false")
     private Boolean access_tmi = false;
 
@@ -73,10 +73,6 @@ public class Usuario {
     /// relacion con encuesta
     @OneToMany(mappedBy = "user_encuesta", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Encuesta> encuestas;
-
-    /// relacion con solicitud acceso
-    @OneToMany(mappedBy = "user_solicitud", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<SolicitudAcceso> solicitudes;
 
     ///relacion con documento
     @OneToMany(mappedBy = "user_documento", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

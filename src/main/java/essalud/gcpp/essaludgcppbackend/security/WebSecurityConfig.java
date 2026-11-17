@@ -69,10 +69,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/login").permitAll()
-                        .requestMatchers("/solicitud/register").permitAll()
-                        .requestMatchers("/user/getbydni/**").permitAll()
-                        .requestMatchers("/establecimiento/getredes", "/establecimiento/getredeswithcentros").permitAll()
-                        .requestMatchers("/tmi/dinamico/dashboard/**").permitAll()
+                        .requestMatchers("/tmi/dashboard/**").permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(
                         authentication -> authentication.authenticationEntryPoint(jwtAuthenticationEntryPoint))

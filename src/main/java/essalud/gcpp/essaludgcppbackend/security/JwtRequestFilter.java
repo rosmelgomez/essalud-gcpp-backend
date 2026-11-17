@@ -137,10 +137,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         return requestPath.equals("/login")
                 || requestPath.equals("/user/me")
                 || requestPath.equals("/user/changepassword")
+                // el perfil confirma la contraseña actual antes de cambiarla
+                || requestPath.equals("/user/verifypassword")
                 || requestPath.startsWith("/user/getbyusername/")
                 || requestPath.equals("/log/register")
-                || requestPath.equals("/solicitud/register")
-                || requestPath.startsWith("/user/getbydni/")
                 || requestPath.startsWith("/establecimiento/getredes")
                 || requiresApiToken(request);
     }
@@ -170,7 +170,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private boolean requiresApiToken(HttpServletRequest request) {
         String requestPath = request.getRequestURI();
         return requestPath.endsWith("/api-token")
-                || requestPath.endsWith("/refresh-token")
                 || requestPath.endsWith("/logout")
                 || requestPath.endsWith("/logout-user");
     }
